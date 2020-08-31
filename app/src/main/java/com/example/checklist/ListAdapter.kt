@@ -1,31 +1,25 @@
 package com.example.checklist
 
-import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.add_checklist.view.*
 
-class ListAdapter(context: Context, var List: List<SampleData>):
-    ArrayAdapter<SampleData>(context,0, List){
+class ListAdapter(private val list: List<SampleData>):
+    RecyclerView.Adapter<ListViewHolder>(){
 
-    private val layoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {
+        val layoutInflater = LayoutInflater.from(parent.context)
+        val view = layoutInflater.inflate(R.layout.add_checklist, parent, false)
+        return ListViewHolder(view)
+    }
 
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+    override fun getItemCount(): Int {
+        return  list.size
+    }
 
-        val list = List[position]
-        var view = convertView
-        if (convertView == null){
-            view = layoutInflater.inflate(R.layout.add_checklist, parent, false)
-        }
-        val item = view?.findViewById<TextView>(R.id.Item)
-        item?.text = list.item
-
-        //val remark = view?.findViewById<TextView>(R.id.Remark)
-        //remark?.text = list.remark
-
-        return view!!
+    override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
+        holder.view.CheckBox.isChecked = list[position].check
+        holder.view.Item.text = list[position].item
     }
 }
