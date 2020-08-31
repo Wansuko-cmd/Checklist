@@ -16,11 +16,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val test1 = SampleData(true, "HomeWork")
-        val test2 = SampleData(true, "Watch")
-        val test3 = SampleData(false, "Laptop")
-        val test4 = SampleData(false,"Money")
-        val testList = arrayListOf(test1, test2, test3, test4)
+        val testList = Datas().getAll()
 
         val adapter = ListAdapter(testList)
         val layoutManager = LinearLayoutManager(this)
