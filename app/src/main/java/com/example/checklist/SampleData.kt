@@ -10,6 +10,7 @@ class Datas(){
     private val test2 = SampleData(true, "Watch")
     private val test3 = SampleData(false, "Laptop")
     private val test4 = SampleData(false,"Money")
+
     private var testList = mutableListOf(test1, test2, test3, test4)
 
     fun insert(check: Boolean, item: String){
