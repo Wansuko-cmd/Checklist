@@ -9,7 +9,7 @@ import kotlinx.android.synthetic.main.add_checklist.view.*
 class ListAdapter(private val viewModel: AppViewModel):
     RecyclerView.Adapter<ListViewHolder>(){
 
-    private val list = viewModel.infoList.toMutableList()
+    private val list = viewModel.infoList
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -25,7 +25,7 @@ class ListAdapter(private val viewModel: AppViewModel):
         holder.view.CheckBox.isChecked = list[position].check
         holder.view.Item.text = list[position].item
         holder.check.setOnClickListener{
-            AppViewModel().changeCheck(holder)
+            viewModel.changeCheck(holder)
         }
     }
 }

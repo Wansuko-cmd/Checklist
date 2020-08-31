@@ -17,7 +17,7 @@ class Datas(){
         testList.add(SampleData(check, item))
     }
 
-    fun getAll():List<SampleData>{
+    fun getAll():MutableList<SampleData>{
         return testList
     }
 }
