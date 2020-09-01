@@ -8,12 +8,12 @@ import androidx.room.Query
 
 @Dao
 interface InfoListDao {
-    @Query("SELECT * FROM infoList_table")
+    @Query("SELECT * from info_list_table")
     fun getAll(): LiveData<MutableList<InfoList>>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(check: Boolean, item: String)
 
-    @Query("DELETE FROM infoList_table")
-    suspend fun deleteAll()
+    //@Query("DELETE FROM infoList_table")
+    //suspend fun deleteAll()
 }
