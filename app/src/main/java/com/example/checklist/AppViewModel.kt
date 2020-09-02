@@ -3,25 +3,21 @@ package com.example.checklist
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import kotlinx.android.synthetic.main.add_checklist.view.*
 
-//viewModelScopeを使用するために、継承するクラスをViewModelからAndroidViewModelに変更
-class AppViewModel(application: Application): AndroidViewModel(application) {
-
-    //各種変数の初期化
-    private val repository: AppRepository
-    var infoList: LiveData<MutableList<InfoList>>
-
+class AppViewModel(application: Application) : AndroidViewModel(application) {
+    var infoList : LiveData<MutableList<SampleData>>
+    val datas: Datas
     init{
-        val infoListDao = InfoListDatabase.getDatabase(application, viewModelScope).infoListDao()
-        repository = AppRepository(infoListDao)
-        infoList = repository.infoList
+        datas = Datas.getDatabase()
+        infoList = datas.getAll()
     }
 
-    //Repository経由でInfoListDatabaseにデータを送り込むための関数
-    fun insert(check: Boolean, item: String) = viewModelScope.launch(Dispatchers.IO){
-        repository.insert(check, item)
+
+    fun insert(holder: ListViewHolder){
+        datas.insert(holder)
+        //infoList[holder.adapterPosition] = infoList[holder.adapterPosition].copy(check = holder.check.CheckBox.isChecked)
     }
 }
