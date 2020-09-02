@@ -10,7 +10,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 
-@Database(entities = arrayOf(InfoList::class), version = 1, exportSchema = false)//将来的にexportSchemaに対応したい
+@Database(entities = [InfoList::class], version = 1, exportSchema = false)//将来的にexportSchemaに対応したい
 public abstract class InfoListDatabase : RoomDatabase() {
 
     abstract fun infoListDao(): InfoListDao
@@ -31,7 +31,7 @@ public abstract class InfoListDatabase : RoomDatabase() {
 
         //内部のリストを常に同じものに保つ
         suspend fun populateDatabase(infoListDao: InfoListDao) {
-            //infoListDao.deleteAll()
+            infoListDao.deleteAll()
             infoListDao.insert(true, "HomeWord")
             infoListDao.insert(true, "Watch")
             infoListDao.insert(false, "Laptop")
