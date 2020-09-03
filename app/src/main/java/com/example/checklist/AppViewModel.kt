@@ -9,15 +9,17 @@ import kotlinx.coroutines.launch
 class AppViewModel(application: Application) : AndroidViewModel(application) {
 
     private val repository: InfoListRepository
-    var infoList : LiveData<MutableList<SampleData>>
+    var infoList : LiveData<MutableList<InfoList>>
     init{
-        val datas: Datas = Datas.getDatabase()
-        repository = InfoListRepository(datas)
+        val db = InfoListDatabase.getDatabase(application)
+        //val infoListDao: InfoListDao = InfoListDatabase.getDatabase(application).infoListDao()
+        val infoListDao: InfoListDao = db.infoListDao()
+        repository = InfoListRepository(infoListDao)
         infoList = repository.infoList
     }
 
 
-    fun insert(holder: ListViewHolder) = viewModelScope.launch(Dispatchers.IO){
-        repository.insert(holder)
+    fun insert(infoList: InfoList) = viewModelScope.launch(Dispatchers.IO){
+        repository.insert(infoList)
     }
 }
