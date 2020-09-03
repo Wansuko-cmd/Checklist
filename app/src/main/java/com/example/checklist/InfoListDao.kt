@@ -12,6 +12,6 @@ interface InfoListDao {
     @Query("SELECT * FROM info_list_table")
     fun getAll(): LiveData<MutableList<InfoList>>
 
-    //@Insert(onConflict = OnConflictStrategy.IGNORE)
-    //suspend fun insert(infoList: InfoList)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insert(infoList: InfoList)
 }

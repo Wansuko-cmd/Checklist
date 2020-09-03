@@ -6,6 +6,6 @@ class InfoListRepository(private val infoListDao: InfoListDao) {
     val infoList: LiveData<MutableList<InfoList>> = infoListDao.getAll()
 
     suspend fun insert(list: InfoList){
-        //infoListDao.insert(list)
+        infoListDao.insert(list)
     }
 }
