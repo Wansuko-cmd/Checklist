@@ -26,7 +26,8 @@ class ListAdapter(private val viewModel: AppViewModel):
         holder.view.CheckBox.isChecked = list[position].check
         holder.item.text = list[position].item
         holder.check.setOnClickListener{
-            viewModel.insert(InfoList(holder.check.isChecked, list[position].item))
+            viewModel.changeCheck(holder.check.isChecked, list[position].item)
+            //viewModel.insert(InfoList(holder.check.isChecked, list[position].item))
         }
     }
 

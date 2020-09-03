@@ -5,7 +5,11 @@ import androidx.lifecycle.LiveData
 class AppRepository(private val infoListDao: InfoListDao) {
     val infoList: LiveData<MutableList<InfoList>> = infoListDao.getAll()
 
-    fun insert(list: InfoList){
-        infoListDao.insert(list)
+    fun insert(infoList: InfoList){
+        infoListDao.insert(infoList)
+    }
+
+    fun changeCheck(check: Boolean, item: String){
+        infoListDao.changeCheck(check, item)
     }
 }
