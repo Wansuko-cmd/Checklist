@@ -29,7 +29,7 @@ class Datas(){
         val lst = testList.value
         if (lst != null){
             lst[holder.adapterPosition] = lst[holder.adapterPosition].copy(check = holder.check.isChecked)
-            testList.value = lst
+            testList.postValue(lst)
         }
     }
 

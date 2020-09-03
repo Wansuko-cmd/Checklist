@@ -1,11 +1,10 @@
 package com.example.checklist
 
 import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import kotlinx.android.synthetic.main.add_checklist.view.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class AppViewModel(application: Application) : AndroidViewModel(application) {
     var infoList : LiveData<MutableList<SampleData>>
@@ -16,8 +15,7 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
     }
 
 
-    fun insert(holder: ListViewHolder){
+    fun insert(holder: ListViewHolder) = viewModelScope.launch(Dispatchers.IO){
         datas.insert(holder)
-        //infoList[holder.adapterPosition] = infoList[holder.adapterPosition].copy(check = holder.check.CheckBox.isChecked)
     }
 }
