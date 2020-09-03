@@ -8,13 +8,13 @@ import kotlinx.coroutines.launch
 
 class AppViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val repository: InfoListRepository
+    private val repository: AppRepository
     var infoList : LiveData<MutableList<InfoList>>
     init{
         val db = InfoListDatabase.getDatabase(application)
         //val infoListDao: InfoListDao = InfoListDatabase.getDatabase(application).infoListDao()
         val infoListDao: InfoListDao = db.infoListDao()
-        repository = InfoListRepository(infoListDao)
+        repository = AppRepository(infoListDao)
         infoList = repository.infoList
     }
 
