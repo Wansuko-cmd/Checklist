@@ -13,13 +13,17 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-
+        //インスタンス形成
         val viewModel: AppViewModel = ViewModelProviders.of(this).get(AppViewModel::class.java)
         val adapter = ListAdapter(viewModel)
         val layoutManager = LinearLayoutManager(this)
+
+        //RecyclerViewの設定
         RecyclerView.adapter = adapter
         RecyclerView.layoutManager = layoutManager
         RecyclerView.setHasFixedSize(true)
+
+        //LiveDataの監視、値が変更した際に実行する関数の設定
         viewModel.infoList.observe(this, Observer{list ->
             list?.let{adapter.setInfoList(it)}
         })

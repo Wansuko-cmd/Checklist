@@ -12,13 +12,14 @@ import io.reactivex.schedulers.Schedulers.io
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-@Database(entities = arrayOf(InfoList::class), version = 1, exportSchema = false)
+@Database(entities = [InfoList::class], version = 1, exportSchema = false)
 public abstract class InfoListDatabase : RoomDatabase(){
 
     abstract fun infoListDao(): InfoListDao
 
     private class InfoListDatabaseCallback(private val scope: CoroutineScope) : RoomDatabase.Callback() {
 
+        //データベースがインスタンス化した際に実行される処理
         override fun onOpen(db: SupportSQLiteDatabase){
             super.onOpen(db)
             INSTANCE?.let{ database ->
@@ -32,7 +33,6 @@ public abstract class InfoListDatabase : RoomDatabase(){
             Completable.fromAction{
                 infoListDao.deleteAll()
                 infoListDao.insert(InfoList(false, "Homework"))
-                Thread.sleep(1000)
                 infoListDao.insert(InfoList(false, "Watch"))
                 infoListDao.insert(InfoList(false, "Laptop"))
                 infoListDao.insert(InfoList(false, "Money"))
@@ -47,6 +47,8 @@ public abstract class InfoListDatabase : RoomDatabase(){
         @Volatile
         private var INSTANCE: InfoListDatabase? = null
 
+        //データベースのインスタンスを提供する関数
+        //インスタンスがなければ形成し、あればそのインスタンスを渡す
         fun getDatabase(context: Context, scope: CoroutineScope): InfoListDatabase{
             val tempInstance = INSTANCE
             if (tempInstance != null){
