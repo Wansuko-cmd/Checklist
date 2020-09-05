@@ -18,8 +18,8 @@ interface InfoListDao {
     fun insert(infoList: InfoList)
 
     //チェックの有り無しのデータのみ変更するための関数
-    @Query("UPDATE info_list_table SET 'check' = :Check WHERE item = :Item")
-    fun changeCheck(Check: Boolean, Item: String)
+    @Query("UPDATE info_list_table SET 'check' = :Check WHERE id = :UUID")
+    fun changeCheck(UUID: String, Check: Boolean)
 
     //全データを削除するための関数
     @Query("DELETE FROM info_list_table")

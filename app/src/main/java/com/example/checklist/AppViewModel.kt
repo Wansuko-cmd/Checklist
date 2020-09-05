@@ -24,7 +24,7 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     //チェックの有り無しのみを記録するための関数
-    fun changeCheck(check: Boolean, item: String) = viewModelScope.launch(Dispatchers.IO){
-        repository.changeCheck(check, item)
+    fun changeCheck(id: String, check: Boolean) = viewModelScope.launch(Dispatchers.IO){
+        repository.changeCheck(id, check)
     }
 }

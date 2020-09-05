@@ -9,7 +9,7 @@ class AppRepository(private val infoListDao: InfoListDao) {
         infoListDao.insert(infoList)
     }
 
-    fun changeCheck(check: Boolean, item: String){
-        infoListDao.changeCheck(check, item)
+    fun changeCheck(id: String, check: Boolean){
+        infoListDao.changeCheck(id, check)
     }
 }
