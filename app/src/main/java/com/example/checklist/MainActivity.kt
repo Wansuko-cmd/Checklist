@@ -15,7 +15,7 @@ class MainActivity : AppCompatActivity() {
 
         //インスタンス形成
         val viewModel: AppViewModel = ViewModelProviders.of(this).get(AppViewModel::class.java)
-        val adapter = ListAdapter(viewModel)
+        val adapter = ListAdapter(this, viewModel)
         val layoutManager = LinearLayoutManager(this)
 
         //RecyclerViewの設定
