@@ -1,4 +1,4 @@
-package com.example.checklist
+package com.wsr.checklist
 
 import org.junit.Test
 

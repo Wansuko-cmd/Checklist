@@ -1,11 +1,11 @@
-package com.example.checklist.view_model
+package com.wsr.checklist.view_model
 
 import android.app.Application
 import androidx.lifecycle.*
-import com.example.checklist.info_list_database.InfoList
-import com.example.checklist.info_list_database.InfoListDao
-import com.example.checklist.info_list_database.InfoListDatabase
-import com.example.checklist.repository.AppRepository
+import com.wsr.checklist.info_list_database.InfoList
+import com.wsr.checklist.info_list_database.InfoListDao
+import com.wsr.checklist.info_list_database.InfoListDatabase
+import com.wsr.checklist.repository.AppRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 

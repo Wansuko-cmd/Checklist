@@ -1,4 +1,4 @@
-package com.example.checklist.view
+package com.wsr.checklist.view
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -6,9 +6,9 @@ import android.os.Bundle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.checklist.view_model.AppViewModel
-import com.example.checklist.adapter.MainAdapter
-import com.example.checklist.R
+import com.wsr.checklist.view_model.AppViewModel
+import com.wsr.checklist.adapter.MainAdapter
+import com.wsr.checklist.R
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {

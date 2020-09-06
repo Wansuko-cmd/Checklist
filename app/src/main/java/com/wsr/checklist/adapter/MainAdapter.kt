@@ -1,11 +1,11 @@
-package com.example.checklist.adapter
+package com.wsr.checklist.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.checklist.view_holder.MainViewHolder
-import com.example.checklist.R
-import com.example.checklist.info_list_database.InfoList
+import com.wsr.checklist.view_holder.MainViewHolder
+import com.wsr.checklist.R
+import com.wsr.checklist.info_list_database.InfoList
 
 class MainAdapter():
     RecyclerView.Adapter<MainViewHolder>(){

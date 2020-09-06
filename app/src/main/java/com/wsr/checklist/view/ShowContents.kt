@@ -1,4 +1,4 @@
-package com.example.checklist.view
+package com.wsr.checklist.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -6,9 +6,9 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.checklist.view_model.AppViewModel
-import com.example.checklist.adapter.ListAdapter
-import com.example.checklist.R
+import com.wsr.checklist.view_model.AppViewModel
+import com.wsr.checklist.adapter.ListAdapter
+import com.wsr.checklist.R
 
 class ShowContents : AppCompatActivity() {
 

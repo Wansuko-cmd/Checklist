@@ -1,4 +1,4 @@
-package com.example.checklist.info_list_database
+package com.wsr.checklist.info_list_database
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

@@ -1,4 +1,4 @@
-package com.example.checklist.info_list_database
+package com.wsr.checklist.info_list_database
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao

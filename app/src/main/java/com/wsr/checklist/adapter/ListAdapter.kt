@@ -1,14 +1,14 @@
-package com.example.checklist.adapter
+package com.wsr.checklist.adapter
 
 import android.app.AlertDialog
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.checklist.view_model.AppViewModel
-import com.example.checklist.view_holder.ListViewHolder
-import com.example.checklist.R
-import com.example.checklist.info_list_database.InfoList
+import com.wsr.checklist.view_model.AppViewModel
+import com.wsr.checklist.view_holder.ListViewHolder
+import com.wsr.checklist.R
+import com.wsr.checklist.info_list_database.InfoList
 
 class ListAdapter(context: Context, private val viewModel: AppViewModel):
     RecyclerView.Adapter<ListViewHolder>(){

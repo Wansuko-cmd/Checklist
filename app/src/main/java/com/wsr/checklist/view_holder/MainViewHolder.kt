@@ -1,4 +1,4 @@
-package com.example.checklist.view_holder
+package com.wsr.checklist.view_holder
 
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
