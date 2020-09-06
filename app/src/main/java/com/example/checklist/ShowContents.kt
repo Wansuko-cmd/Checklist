@@ -1,39 +1,33 @@
 package com.example.checklist
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
-import android.widget.Button
-import android.widget.TextView
-import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_main.*
-import org.w3c.dom.Text
 
-class MainActivity : AppCompatActivity() {
+class ShowContents : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_show_contents)
 
+        //インスタンス形成
         val viewModel: AppViewModel = ViewModelProviders.of(this).get(AppViewModel::class.java)
-        val adapter = MainAdapter()
+        val adapter = ListAdapter(this, viewModel)
         val layoutManager = LinearLayoutManager(this)
 
-        MainRecyclerView.adapter = adapter
-        MainRecyclerView.layoutManager = layoutManager
-        MainRecyclerView.setHasFixedSize(true)
+        //RecyclerViewの設定
+        val recyclerView = findViewById<RecyclerView>(R.id.ContentRecyclerView)
+        recyclerView.adapter = adapter
+        recyclerView.layoutManager = layoutManager
+        recyclerView.setHasFixedSize(true)
 
+        //LiveDataの監視、値が変更した際に実行する関数の設定
         viewModel.infoList.observe(this, Observer{list ->
             list?.let{adapter.setInfoList(it)}
         })
-
-        adapter.clickTitleOnListener = {
-            val intent = Intent(this, ShowContents::class.java)
-            startActivity(intent)
-        }
     }
 }

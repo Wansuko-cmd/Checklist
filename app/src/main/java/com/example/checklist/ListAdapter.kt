@@ -32,9 +32,9 @@ class ListAdapter(context: Context, private val viewModel: AppViewModel):
         holder.check.isChecked = list[position].check
         holder.item.text = list[position].item
         holder.check.setOnClickListener{
-            if (!holder.check.isChecked) {
+            /*if (!holder.check.isChecked) {
                 makeSureCheckOut(holder, position)
-            }
+            }*/
             viewModel.changeCheck(list[position].id, holder.check.isChecked)
         }
     }
