@@ -10,10 +10,13 @@ import com.example.checklist.info_list_database.InfoList
 class MainAdapter():
     RecyclerView.Adapter<MainViewHolder>(){
 
+    //LiveDataの内容を代入
     private var list = emptyList<InfoList>()
 
+    //Titleをクリックされたときに実行される関数名
     var clickTitleOnListener: () -> Unit = {}
 
+    //ViewHolderのインスタンス化
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         val view = layoutInflater.inflate(R.layout.show_title, parent, false)
@@ -24,6 +27,7 @@ class MainAdapter():
         return  list.size
     }
 
+    //インスタンス化したViewHolderの中の値の変更
     override fun onBindViewHolder(holder: MainViewHolder, position: Int) {
 
         holder.title.setOnClickListener{
@@ -31,6 +35,7 @@ class MainAdapter():
         }
     }
 
+    //LiveDataの内容をMainAdapterのインスタンスに反映させる関数
     internal fun setInfoList(lists: MutableList<InfoList>){
         this.list = lists
         notifyDataSetChanged()
