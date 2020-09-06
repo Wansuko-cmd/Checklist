@@ -1,9 +1,11 @@
-package com.example.checklist
+package com.example.checklist.view_model
 
 import android.app.Application
-import android.icu.text.IDNA
 import androidx.lifecycle.*
-import kotlinx.android.synthetic.main.add_checklist.view.*
+import com.example.checklist.info_list_database.InfoList
+import com.example.checklist.info_list_database.InfoListDao
+import com.example.checklist.info_list_database.InfoListDatabase
+import com.example.checklist.repository.AppRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 

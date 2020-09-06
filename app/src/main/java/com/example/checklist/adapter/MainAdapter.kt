@@ -1,14 +1,11 @@
-package com.example.checklist
+package com.example.checklist.adapter
 
-import android.content.Context
-import android.content.Intent
-import android.icu.text.IDNA
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
+import com.example.checklist.view_holder.MainViewHolder
+import com.example.checklist.R
+import com.example.checklist.info_list_database.InfoList
 
 class MainAdapter():
     RecyclerView.Adapter<MainViewHolder>(){

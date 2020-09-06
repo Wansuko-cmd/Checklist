@@ -1,4 +1,4 @@
-package com.example.checklist
+package com.example.checklist.view_holder
 
 import android.view.View
 import android.widget.CheckBox

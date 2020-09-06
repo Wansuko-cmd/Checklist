@@ -1,4 +1,4 @@
-package com.example.checklist
+package com.example.checklist.info_list_database
 
 import android.content.Context
 import androidx.room.Database
@@ -6,9 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
 import io.reactivex.Completable
-import io.reactivex.Scheduler
 import io.reactivex.schedulers.Schedulers
-import io.reactivex.schedulers.Schedulers.io
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import java.util.*
@@ -51,7 +49,7 @@ public abstract class InfoListDatabase : RoomDatabase(){
 
         //データベースのインスタンスを提供する関数
         //インスタンスがなければ形成し、あればそのインスタンスを渡す
-        fun getDatabase(context: Context, scope: CoroutineScope): InfoListDatabase{
+        fun getDatabase(context: Context, scope: CoroutineScope): InfoListDatabase {
             val tempInstance = INSTANCE
             if (tempInstance != null){
                 return tempInstance
