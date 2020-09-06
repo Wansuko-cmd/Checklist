@@ -1,3 +1,4 @@
+
 package com.wsr.checklist.view
 
 import androidx.appcompat.app.AppCompatActivity
@@ -16,11 +17,13 @@ class ShowContents : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_show_contents)
 
+        //MainActivityからの引数を代入
+        val title = intent.getStringExtra("TITLE")
+
         //インスタンス形成
         val viewModel: AppViewModel = ViewModelProviders.of(this).get(AppViewModel::class.java)
-        val adapter = ListAdapter(this, viewModel)
+        val adapter = ListAdapter(this, title!!, viewModel)
         val layoutManager = LinearLayoutManager(this)
-
         //RecyclerViewの設定
         val recyclerView = findViewById<RecyclerView>(R.id.ContentRecyclerView)
         recyclerView.adapter = adapter

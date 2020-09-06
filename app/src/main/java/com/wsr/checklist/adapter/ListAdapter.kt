@@ -10,7 +10,7 @@ import com.wsr.checklist.view_holder.ListViewHolder
 import com.wsr.checklist.R
 import com.wsr.checklist.info_list_database.InfoList
 
-class ListAdapter(context: Context, private val viewModel: AppViewModel):
+class ListAdapter(context: Context, private val title: String,  private val viewModel: AppViewModel):
     RecyclerView.Adapter<ListViewHolder>(){
 
     //Activityを変数に代入
@@ -44,7 +44,13 @@ class ListAdapter(context: Context, private val viewModel: AppViewModel):
 
     //LiveDataの値が変更した際に実行される関数
     internal fun setInfoList(lists: MutableList<InfoList>){
-        this.list = lists
+        var tempList = mutableListOf<InfoList>()
+        for (numOfTitle in lists){
+            if (numOfTitle.title == title){
+                tempList.add(numOfTitle)
+            }
+        }
+        list = tempList
         notifyDataSetChanged()
     }
 
@@ -62,5 +68,4 @@ class ListAdapter(context: Context, private val viewModel: AppViewModel):
             .setCancelable(false)
             .show()
     }
-
 }

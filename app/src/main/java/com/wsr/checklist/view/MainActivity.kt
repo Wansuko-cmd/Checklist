@@ -17,7 +17,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        //インスタンス化
+        //インスタンス形成
         val viewModel: AppViewModel = ViewModelProviders.of(this).get(AppViewModel::class.java)
         val adapter = MainAdapter()
         val layoutManager = LinearLayoutManager(this)
@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity() {
         MainRecyclerView.layoutManager = layoutManager
         MainRecyclerView.setHasFixedSize(true)
 
-        //監視するLiveDataの設定
+        //LiveDataの監視、値が変更した際に実行する関数の設定
         viewModel.infoList.observe(this, Observer{list ->
             list?.let{adapter.setInfoList(it)}
         })
@@ -35,6 +35,7 @@ class MainActivity : AppCompatActivity() {
         //MainAdapterにあるclickTitleOnListener関数の設定
         adapter.clickTitleOnListener = {
             val intent = Intent(this, ShowContents::class.java)
+            intent.putExtra("TITLE", it)
             startActivity(intent)
         }
     }
