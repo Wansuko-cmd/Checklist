@@ -25,6 +25,7 @@ class ListAdapter(context: Context, private val viewModel: AppViewModel):
         return ListViewHolder(view)
     }
 
+    //LiveDataの入っている変数の長さを返す関数
     override fun getItemCount(): Int {
         return  list.size
     }

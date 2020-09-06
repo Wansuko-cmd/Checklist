@@ -23,6 +23,7 @@ class MainAdapter():
         return MainViewHolder(view)
     }
 
+    //LiveDataの入っている変数の長さを返す関数
     override fun getItemCount(): Int {
         return  list.size
     }
