@@ -35,7 +35,6 @@ class MainActivity : AppCompatActivity() {
         //MainAdapterにあるclickTitleOnListener関数の設定
         adapter.clickTitleOnListener = {
             val intent = Intent(this, ShowContents::class.java)
-            intent.putExtra("TITLE", it)
             startActivity(intent)
         }
     }

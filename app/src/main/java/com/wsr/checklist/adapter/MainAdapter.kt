@@ -12,10 +12,9 @@ class MainAdapter():
 
     //LiveDataの内容を代入
     private var list = emptyList<InfoList>()
-    private var titleList: MutableList<String> = mutableListOf()
 
     //Titleをクリックされたときに実行される関数名
-    var clickTitleOnListener: (title: String) -> Unit = {}
+    var clickTitleOnListener: () -> Unit = {}
 
     //ViewHolderのインスタンス化
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainViewHolder {
@@ -26,24 +25,20 @@ class MainAdapter():
 
     //LiveDataの入っている変数の長さを返す関数
     override fun getItemCount(): Int {
-        return  titleList.size
+        return  list.size
     }
 
     //インスタンス化したViewHolderの中の値の変更
     override fun onBindViewHolder(holder: MainViewHolder, position: Int) {
-        holder.title.text = titleList[position]
+
         holder.title.setOnClickListener{
-            clickTitleOnListener(holder.title.text.toString())
+            clickTitleOnListener()
         }
     }
 
     //LiveDataの内容をMainAdapterのインスタンスに反映させる関数
     internal fun setInfoList(lists: MutableList<InfoList>){
-        for (numOfTitle in lists){
-            if (!titleList.contains(numOfTitle.title)){
-                titleList.add(numOfTitle.title)
-            }
-        }
+        this.list = lists
         notifyDataSetChanged()
     }
 }
