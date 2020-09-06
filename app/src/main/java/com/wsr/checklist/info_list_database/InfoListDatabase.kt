@@ -63,7 +63,7 @@ public abstract class InfoListDatabase : RoomDatabase(){
                     InfoListDatabase::class.java,
                     "info_list_database"
                 )
-                    .addCallback(InfoListDatabaseCallback(scope))
+                    //.addCallback(InfoListDatabaseCallback(scope))
                     .build()
                 INSTANCE = instance
                 return instance

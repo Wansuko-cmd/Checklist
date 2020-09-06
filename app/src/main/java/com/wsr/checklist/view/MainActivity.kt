@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.wsr.checklist.view_model.AppViewModel
 import com.wsr.checklist.adapter.MainAdapter
 import com.wsr.checklist.R
@@ -36,6 +37,12 @@ class MainActivity : AppCompatActivity() {
         adapter.clickTitleOnListener = {
             val intent = Intent(this, ShowContents::class.java)
             intent.putExtra("TITLE", it)
+            startActivity(intent)
+        }
+
+        val fab = findViewById<FloatingActionButton>(R.id.fab)
+        fab.setOnClickListener{
+            val intent = Intent(this,  EditCheckList::class.java)
             startActivity(intent)
         }
     }
