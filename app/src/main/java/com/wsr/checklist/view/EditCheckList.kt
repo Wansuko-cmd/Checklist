@@ -3,13 +3,11 @@ package com.wsr.checklist.view
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
-import android.widget.EditText
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.wsr.checklist.R
 import com.wsr.checklist.adapter.EditAdapter
-import com.wsr.checklist.adapter.MainAdapter
-import com.wsr.checklist.view_model.AppViewModel
+import com.wsr.checklist.view_model.EditViewModel
 import kotlinx.android.synthetic.main.activity_edit_check_list.*
 
 class EditCheckList : AppCompatActivity() {
@@ -18,13 +16,14 @@ class EditCheckList : AppCompatActivity() {
         setContentView(R.layout.activity_edit_check_list)
 
         val saveButton = findViewById<Button>(R.id.save_button)
-        val viewModel: AppViewModel = ViewModelProviders.of(this).get(AppViewModel::class.java)
-        val adapter = EditAdapter()
-        val layoutManager = LinearLayoutManager(this)
+        val viewModel: EditViewModel = ViewModelProviders.of(this).get(EditViewModel::class.java)
+        val editAdapter = EditAdapter(viewModel)
+        val LayoutManager = LinearLayoutManager(this)
 
-        content_recyclerView.adapter = adapter
-        content_recyclerView.layoutManager = layoutManager
+        content_recyclerView.adapter = editAdapter
+        content_recyclerView.layoutManager = LayoutManager
         content_recyclerView.setHasFixedSize(true)
+
 
         saveButton.setOnClickListener{
 
