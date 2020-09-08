@@ -1,9 +1,11 @@
 
 package com.wsr.checklist.view
 
+import android.app.AlertDialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.EditText
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -12,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.wsr.checklist.view_model.AppViewModel
 import com.wsr.checklist.adapter.ListAdapter
 import com.wsr.checklist.R
+import com.wsr.checklist.adapter.MainAdapter
 import kotlinx.android.synthetic.main.activity_show_contents.*
 
 class ShowContents : AppCompatActivity() {
@@ -23,21 +26,6 @@ class ShowContents : AppCompatActivity() {
         //MainActivityからの引数を代入
         val title = intent.getStringExtra("TITLE")
 
-        show_toolbar.title = title
-        show_toolbar.setNavigationIcon(R.drawable.ic_back_arrow)
-        show_toolbar.setNavigationOnClickListener{
-            finish()
-        }
-        show_toolbar.inflateMenu(R.menu.menu_for_show)
-        show_toolbar.setOnMenuItemClickListener{menuItem ->
-            if(menuItem.itemId == R.id.edit){
-                val intent = Intent(this, EditCheckList::class.java)
-                intent.putExtra("TITLE", title)
-                startActivity(intent)
-            }
-            true
-        }
-
         //インスタンス形成
         val viewModel: AppViewModel = ViewModelProviders.of(this).get(AppViewModel::class.java)
         val adapter = ListAdapter(this, title!!, viewModel)
@@ -48,6 +36,48 @@ class ShowContents : AppCompatActivity() {
         recyclerView.adapter = adapter
         recyclerView.layoutManager = layoutManager
         recyclerView.setHasFixedSize(true)
+
+        //ToolBarの設定
+        show_toolbar.title = title
+        show_toolbar.setNavigationIcon(R.drawable.ic_back_arrow)
+
+        //Backボタンを押した際の処理
+        show_toolbar.setNavigationOnClickListener{
+            finish()
+        }
+        show_toolbar.inflateMenu(R.menu.menu_for_show)
+
+        //Menuバーを押した際の処理
+        show_toolbar.setOnMenuItemClickListener{menuItem ->
+
+            //editを押したとき
+            if(menuItem.itemId == R.id.edit){
+                val intent = Intent(this, EditCheckList::class.java)
+                intent.putExtra("TITLE", title)
+                startActivity(intent)
+            }
+
+            //Rename titleを押したとき
+            else if(menuItem.itemId == R.id.rename){
+                val editText = EditText(this)
+                val mainAdapter = MainAdapter()
+                AlertDialog.Builder(this)
+                    .setTitle("Title")
+                    .setMessage("Input the title")
+                    .setView(editText)
+                    .setPositiveButton("OK") { dialog, which ->
+                        //新しく作成するチェックリストのタイトルの入った変数
+                        val title = MainActivity().checkTitle(editText.text.toString(), mainAdapter)
+                        for (i in adapter.list){
+                            viewModel.changeTitle(i.id, title)
+                        }
+                    }
+                    .setNegativeButton("Cancel"){dialog, which ->}
+                    .setCancelable(false)
+                    .show()
+            }
+            true
+        }
 
         //LiveDataの監視、値が変更した際に実行する関数の設定
         viewModel.infoList.observe(this, Observer{list ->

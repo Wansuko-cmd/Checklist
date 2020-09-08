@@ -15,6 +15,10 @@ class AppRepository(private val infoListDao: InfoListDao) {
         infoListDao.changeCheck(id, check)
     }
 
+    fun changeTitle(id: String, title: String){
+        infoListDao.changeTitle(id, title)
+    }
+
     fun deleteWithTitle(title:String){
         infoListDao.deleteWithTitle(title)
     }

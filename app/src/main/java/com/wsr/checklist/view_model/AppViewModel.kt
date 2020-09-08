@@ -30,6 +30,10 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
         repository.changeCheck(id, check)
     }
 
+    fun changeTitle(id: String, title: String) = viewModelScope.launch(Dispatchers.IO){
+        repository.changeTitle(id, title)
+    }
+
     fun deleteWithTitle(title: String) = viewModelScope.launch(Dispatchers.IO){
         repository.deleteWithTitle(title)
     }

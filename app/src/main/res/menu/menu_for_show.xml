@@ -7,7 +7,7 @@
         android:title="Edit" />
 
     <item
-        android:id="@+id/change"
-        android:title="Change"/>
+        android:id="@+id/rename"
+        android:title="Rename title"/>
 
 </menu>

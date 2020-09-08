@@ -70,7 +70,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     //同じ名前のタイトルがないかを確認する関数
-    private fun checkTitle(title: String, adapter: MainAdapter): String{
+    fun checkTitle(title: String, adapter: MainAdapter): String{
         val titleList = adapter.titleList
         var title = title
         if (title == "") title = "Non-Title"

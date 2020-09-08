@@ -36,7 +36,7 @@ public abstract class InfoListDatabase : RoomDatabase(){
                 infoListDao.insert(InfoList(UUID.randomUUID().toString(), "Tes2", false, "Watch"))
                 infoListDao.insert(InfoList(UUID.randomUUID().toString(), "Tes2",false, "Watch"))
 
-                infoListDao.deleteWithTitle("Te")
+                //infoListDao.deleteWithTitle("Te")*/
 
                 /*infoListDao.insert(InfoList(false, "Watch"))
                 infoListDao.insert(InfoList(false, "Laptop"))

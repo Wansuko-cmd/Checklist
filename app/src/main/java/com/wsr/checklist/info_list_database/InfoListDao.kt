@@ -18,6 +18,9 @@ interface InfoListDao {
     @Query("UPDATE info_list_table SET 'check' = :Check WHERE id = :UUID")
     fun changeCheck(UUID: String, Check: Boolean)
 
+    @Query("UPDATE info_list_table SET 'title' = :Title WHERE id = :UUID")
+    fun changeTitle(UUID: String, Title: String)
+
     @Delete
     fun delete(infoList: InfoList)
 
