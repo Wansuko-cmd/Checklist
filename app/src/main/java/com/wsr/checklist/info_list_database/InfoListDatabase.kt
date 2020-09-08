@@ -31,10 +31,12 @@ public abstract class InfoListDatabase : RoomDatabase(){
         fun populateDatabase(infoListDao: InfoListDao){
             Completable.fromAction{
                 infoListDao.deleteAll()
-                /*infoListDao.insert(InfoList(UUID.randomUUID().toString(), "Test", false, "Homework"))
+                infoListDao.insert(InfoList(UUID.randomUUID().toString(), "Test", false, "Homework"))
                 infoListDao.insert(InfoList(UUID.randomUUID().toString(), "Test",false, "Homework"))
                 infoListDao.insert(InfoList(UUID.randomUUID().toString(), "Tes2", false, "Watch"))
-                infoListDao.insert(InfoList(UUID.randomUUID().toString(), "Tes2",false, "Watch"))*/
+                infoListDao.insert(InfoList(UUID.randomUUID().toString(), "Tes2",false, "Watch"))
+
+                infoListDao.deleteWithTitle("Tes2")
 
                 /*infoListDao.insert(InfoList(false, "Watch"))
                 infoListDao.insert(InfoList(false, "Laptop"))

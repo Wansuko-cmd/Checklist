@@ -6,6 +6,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 /*
+id:UUIDを用いて一対一のidを記録
 title:チェックリストの題名を記録
 check:チェックの有り無しを記録
 item:チェックする項目を記録

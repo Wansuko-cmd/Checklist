@@ -1,10 +1,7 @@
 package com.wsr.checklist.info_list_database
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 
 @Dao
 interface InfoListDao {
@@ -20,6 +17,13 @@ interface InfoListDao {
     //チェックの有り無しのデータのみ変更するための関数
     @Query("UPDATE info_list_table SET 'check' = :Check WHERE id = :UUID")
     fun changeCheck(UUID: String, Check: Boolean)
+
+    @Delete
+    fun delete(infoList: InfoList)
+
+    @Query("Delete From info_list_table WHERE title = :Title")
+    fun deleteWithTitle(Title: String)
+
 
     //全データを削除するための関数
     @Query("DELETE FROM info_list_table")

@@ -46,14 +46,19 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        //新しくチェックリストを作成するためのfabの形成
         fab.setOnClickListener{
+            //タイトルを入力するアラートダイアログを出力
             val editText = EditText(this)
                 AlertDialog.Builder(this)
                     .setTitle("Title")
                     .setMessage("Input the title")
                     .setView(editText)
                     .setPositiveButton("OK") { dialog, which ->
+                        //新しく作成するチェックリストのタイトルの入った変数
                         val title = checkTitle(editText.text.toString(), adapter)
+                        
+                        //新しく作成するチェックリストの中身を記入するためのインテント
                         val intent = Intent(this, EditCheckList::class.java)
                         intent.putExtra("TITLE", title)
                         startActivity(intent)
@@ -64,6 +69,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    //同じ名前のタイトルがないかを確認する関数
     private fun checkTitle(title: String, adapter: MainAdapter): String{
         val titleList = adapter.titleList
         var title = title
@@ -74,6 +80,7 @@ class MainActivity : AppCompatActivity() {
         return title
     }
 
+    //タイトルの後ろに、同じ名前にならないように数字をつける関数
     private fun addNumber(title: String, adapter: MainAdapter) : String{
         var tempTitle: String
         var num = 1
