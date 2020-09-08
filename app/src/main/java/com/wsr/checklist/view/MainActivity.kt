@@ -57,7 +57,7 @@ class MainActivity : AppCompatActivity() {
                     .setPositiveButton("OK") { dialog, which ->
                         //新しく作成するチェックリストのタイトルの入った変数
                         val title = checkTitle(editText.text.toString(), adapter)
-                        
+
                         //新しく作成するチェックリストの中身を記入するためのインテント
                         val intent = Intent(this, EditCheckList::class.java)
                         intent.putExtra("TITLE", title)

@@ -4,6 +4,7 @@ import android.app.Activity
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.wsr.checklist.R
@@ -19,12 +20,14 @@ class EditCheckList : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_check_list)
 
-        setResult(Activity.RESULT_CANCELED)
-
         val title = intent.getStringExtra("TITLE")
         val saveButton = findViewById<Button>(R.id.save_button)
+
         val viewModel: EditViewModel = ViewModelProviders.of(this).get(EditViewModel::class.java)
-        val editAdapter = EditAdapter(viewModel)
+        val appViewModel: AppViewModel = ViewModelProviders.of(this).get(AppViewModel::class.java)
+
+        val editAdapter = EditAdapter(title!!, viewModel)
+
         val layoutManager = LinearLayoutManager(this)
 
         content_recyclerView.adapter = editAdapter
@@ -32,10 +35,15 @@ class EditCheckList : AppCompatActivity() {
         content_recyclerView.setHasFixedSize(true)
 
 
+        appViewModel.infoList.observe(this, Observer{list ->
+            list?.let{editAdapter.setInfoList(list)}
+        })
+
+
         saveButton.setOnClickListener{
-            val appViewModel: AppViewModel = ViewModelProviders.of(this).get(AppViewModel::class.java)
+            appViewModel.deleteWithTitle(title)
             for (i in viewModel.editList){
-                appViewModel.insert(InfoList(UUID.randomUUID().toString(), title!!, false, i.item.toString()))
+                if (i.item != "") appViewModel.insert(InfoList(UUID.randomUUID().toString(), title!!, false, i.item))
             }
             finish()
         }
