@@ -1,9 +1,13 @@
 package com.wsr.checklist.view
 
 import android.app.Activity
+import android.app.AlertDialog
+import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.EditText
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -12,6 +16,7 @@ import com.wsr.checklist.view_model.AppViewModel
 import com.wsr.checklist.adapter.MainAdapter
 import com.wsr.checklist.R
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.coroutines.runBlocking
 
 class MainActivity : AppCompatActivity() {
 
@@ -41,10 +46,62 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        val fab = findViewById<FloatingActionButton>(R.id.fab)
         fab.setOnClickListener{
-            val intent = Intent(this,  EditCheckList::class.java)
-            startActivity(intent)
+            val editText = EditText(this)
+                AlertDialog.Builder(this)
+                    .setTitle("Title")
+                    .setMessage("Input the title")
+                    .setView(editText)
+                    .setPositiveButton("OK") { dialog, which ->
+                        val title = checkTitle(editText.text.toString(), adapter)
+                        val intent = Intent(this, EditCheckList::class.java)
+                        intent.putExtra("TITLE", title)
+                        startActivity(intent)
+                    }
+                    .setNegativeButton("Cancel"){dialog, which ->}
+                    .setCancelable(false)
+                    .show()
         }
     }
+
+    private fun checkTitle(title: String, adapter: MainAdapter): String{
+        val titleList = adapter.titleList
+        var title = title
+        if (title == "") title = "Non-Title"
+        for (i in titleList) {
+            if (title == i) title = addNumber(title, adapter)
+        }
+        return title
+    }
+
+    private fun addNumber(title: String, adapter: MainAdapter) : String{
+        var tempTitle: String
+        var num = 1
+        while(true) {
+            var result: Boolean = true
+            tempTitle = "$title($num)"
+            for (i in adapter.titleList) {
+                if (tempTitle == i) result = false
+            }
+            if (result) break
+            num++
+        }
+        return tempTitle
+    }
 }
+
+/*if (result){
+    AlertDialog.Builder(this)
+        .setTitle("Waring")
+        .setMessage("You input same name as the title exist in the app. Do you want to use it with number?")
+        .setPositiveButton("Yes") {dialog, which ->
+             title = addNumber(editText.text.toString(), adapter)
+            result = false
+        }
+        .setNegativeButton("No"){dialog, which ->}
+        .setCancelable(false)
+        .show()
+}*/
+/*title = enterTitle(this, adapter)
+val intent = Intent(this,  EditCheckList::class.java)
+startActivity(intent)*/

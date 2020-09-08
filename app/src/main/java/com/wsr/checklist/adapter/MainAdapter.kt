@@ -11,8 +11,7 @@ class MainAdapter():
     RecyclerView.Adapter<MainViewHolder>(){
 
     //LiveDataの内容を代入
-    private var list = emptyList<InfoList>()
-    private var titleList: MutableList<String> = mutableListOf()
+    var titleList: MutableList<String> = mutableListOf()
 
     //Titleをクリックされたときに実行される関数名
     var clickTitleOnListener: (title: String) -> Unit = {}

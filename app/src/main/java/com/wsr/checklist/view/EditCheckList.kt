@@ -21,6 +21,7 @@ class EditCheckList : AppCompatActivity() {
 
         setResult(Activity.RESULT_CANCELED)
 
+        val title = intent.getStringExtra("TITLE")
         val saveButton = findViewById<Button>(R.id.save_button)
         val viewModel: EditViewModel = ViewModelProviders.of(this).get(EditViewModel::class.java)
         val editAdapter = EditAdapter(viewModel)
@@ -34,7 +35,7 @@ class EditCheckList : AppCompatActivity() {
         saveButton.setOnClickListener{
             val appViewModel: AppViewModel = ViewModelProviders.of(this).get(AppViewModel::class.java)
             for (i in viewModel.editList){
-                appViewModel.insert(InfoList(UUID.randomUUID().toString(), "TITLE", false, i.item.toString()))
+                appViewModel.insert(InfoList(UUID.randomUUID().toString(), title!!, false, i.item.toString()))
             }
             finish()
         }

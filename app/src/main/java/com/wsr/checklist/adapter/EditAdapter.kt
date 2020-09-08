@@ -43,9 +43,7 @@ class EditAdapter(private val viewModel: EditViewModel):
                         break
                     }
                 }
-                if (removeValue != null) {
-                    list.remove(removeValue)
-                }
+                if (removeValue != null) list.remove(removeValue)
                 list.add(EditList(position, p0))
             }
         })

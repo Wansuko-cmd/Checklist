@@ -16,7 +16,7 @@ class ListAdapter(context: Context, private val title: String,  private val view
     //Activityを変数に代入
     private val context: Context = context
     //LiveDataから得られた値を収納する変数
-    private var list = emptyList<InfoList>()
+    var list = emptyList<InfoList>()
 
     //ViewHolderのインスタンスを形成
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {
@@ -44,7 +44,7 @@ class ListAdapter(context: Context, private val title: String,  private val view
 
     //LiveDataの値が変更した際に実行される関数
     internal fun setInfoList(lists: MutableList<InfoList>){
-        var tempList = mutableListOf<InfoList>()
+        val tempList = mutableListOf<InfoList>()
         for (numOfTitle in lists){
             if (numOfTitle.title == title){
                 tempList.add(numOfTitle)
