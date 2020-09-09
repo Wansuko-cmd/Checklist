@@ -42,6 +42,7 @@ class EditCheckList : AppCompatActivity() {
         //saveButtonが押された際に実行される関数
         save_button.setOnClickListener{
             appViewModel.deleteWithTitle(title)
+            viewModel.editList.sortBy{it.id}
             for (i in viewModel.editList){
                 if (i.item != "") appViewModel.insert(InfoList(UUID.randomUUID().toString(), title, false, i.item))
             }

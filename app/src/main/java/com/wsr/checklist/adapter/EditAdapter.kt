@@ -32,6 +32,7 @@ class EditAdapter(private val title: String, viewModel: EditViewModel):
     //インスタンス化したViewHolderの中の値の変更
     override fun onBindViewHolder(holder: EditViewHolder, position: Int) {
         if (list.size > position) {
+            list.sortBy{it.id}
             holder.edit.setText(list[position].item)
         }
 
