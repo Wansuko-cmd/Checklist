@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:clickable="true"
-        android:text="TITLE"
+        android:text="@string/title"
         android:focusable="true" />
 
 </LinearLayout>

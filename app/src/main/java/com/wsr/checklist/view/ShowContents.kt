@@ -6,7 +6,6 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.EditText
-import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.wsr.checklist.view_model.AppViewModel
 import com.wsr.checklist.adapter.ListAdapter
 import com.wsr.checklist.R
-import com.wsr.checklist.adapter.MainAdapter
 import kotlinx.android.synthetic.main.activity_show_contents.*
 
 class ShowContents : AppCompatActivity() {
@@ -60,14 +58,16 @@ class ShowContents : AppCompatActivity() {
             //Rename titleを押したとき
             else if(menuItem.itemId == R.id.rename){
                 val editText = EditText(this)
-                val mainAdapter = MainAdapter()
+
+                //Renameのためのアラートダイアログの表示
                 AlertDialog.Builder(this)
                     .setTitle("Title")
                     .setMessage("Input the title")
                     .setView(editText)
                     .setPositiveButton("OK") { dialog, which ->
-                        //新しく作成するチェックリストのタイトルの入った変数
-                        val title = MainActivity().checkTitle(editText.text.toString(), mainAdapter)
+
+                        //新しいチェックリストのタイトルの入った変数
+                        val title = MainActivity().checkTitle(editText.text.toString(), adapter.titleList)
                         for (i in adapter.list){
                             viewModel.changeTitle(i.id, title)
                         }

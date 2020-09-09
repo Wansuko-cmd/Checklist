@@ -14,9 +14,10 @@
         android:layout_height="wrap_content"
         android:minHeight="48dp"
         android:fontFamily="sans-serif-light"
-        android:hint="Item"
+        android:hint="@string/item"
         android:inputType="textAutoComplete"
         android:layout_margin="16dp"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        android:autofillHints="" />
 
 </LinearLayout>

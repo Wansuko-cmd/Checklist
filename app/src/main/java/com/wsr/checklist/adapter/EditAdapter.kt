@@ -10,30 +10,32 @@ import com.wsr.checklist.type_file.CustomTextWatcher
 import com.wsr.checklist.type_file.EditList
 import com.wsr.checklist.view_holder.EditViewHolder
 import com.wsr.checklist.view_model.EditViewModel
-import java.util.*
 
-class EditAdapter(private val title: String, private val viewModel: EditViewModel):
+class EditAdapter(private val title: String, viewModel: EditViewModel):
     RecyclerView.Adapter<EditViewHolder>() {
 
+    //編集するチェックリストの中身をidと共に保存するためのリスト
     private val list = viewModel.editList
 
+    //ViewHolderのインスタンス化
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EditViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         val view = layoutInflater.inflate(R.layout.edit_contents, parent, false)
         return EditViewHolder(view)
     }
 
+    //listのサイズを返す関数。変数positionに影響
     override fun getItemCount(): Int {
-        if (list.size <= 0) {
-            return 1
-        }
         return list.size + 1
     }
 
+    //インスタンス化したViewHolderの中の値の変更
     override fun onBindViewHolder(holder: EditViewHolder, position: Int) {
         if (list.size > position) {
             holder.edit.setText(list[position].item)
         }
+
+        //編集内容をlistに代入するための関数
         holder.edit.addTextChangedListener(object : CustomTextWatcher {
             override fun afterTextChanged(p0: Editable?) {
                 var removeValue: EditList? = null
@@ -49,9 +51,9 @@ class EditAdapter(private val title: String, private val viewModel: EditViewMode
         })
     }
 
+    //LiveDataの内容をEditAdapterのインスタンスのlistに反映させる関数
     internal fun setInfoList(lists: MutableList<InfoList>){
-        val tempList = lists
-        for (i in tempList){
+        for (i in lists){
             if(i.title == title) list.add(EditList(list.size, i.item))
         }
         notifyDataSetChanged()

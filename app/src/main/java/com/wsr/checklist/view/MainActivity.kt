@@ -1,9 +1,6 @@
 package com.wsr.checklist.view
 
-import android.app.Activity
 import android.app.AlertDialog
-import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -11,12 +8,10 @@ import android.widget.EditText
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.wsr.checklist.view_model.AppViewModel
 import com.wsr.checklist.adapter.MainAdapter
 import com.wsr.checklist.R
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.coroutines.runBlocking
 
 class MainActivity : AppCompatActivity() {
 
@@ -56,7 +51,7 @@ class MainActivity : AppCompatActivity() {
                     .setView(editText)
                     .setPositiveButton("OK") { dialog, which ->
                         //新しく作成するチェックリストのタイトルの入った変数
-                        val title = checkTitle(editText.text.toString(), adapter)
+                        val title = checkTitle(editText.text.toString(), adapter.titleList)
 
                         //新しく作成するチェックリストの中身を記入するためのインテント
                         val intent = Intent(this, EditCheckList::class.java)
@@ -70,24 +65,23 @@ class MainActivity : AppCompatActivity() {
     }
 
     //同じ名前のタイトルがないかを確認する関数
-    fun checkTitle(title: String, adapter: MainAdapter): String{
-        val titleList = adapter.titleList
+    fun checkTitle(title: String, titleList: List<String>): String{
         var title = title
         if (title == "") title = "Non-Title"
         for (i in titleList) {
-            if (title == i) title = addNumber(title, adapter)
+            if (title == i) title = addNumber(title, titleList)
         }
         return title
     }
 
     //タイトルの後ろに、同じ名前にならないように数字をつける関数
-    private fun addNumber(title: String, adapter: MainAdapter) : String{
+    private fun addNumber(title: String, titleList: List<String>) : String{
         var tempTitle: String
         var num = 1
         while(true) {
-            var result: Boolean = true
+            var result = true
             tempTitle = "$title($num)"
-            for (i in adapter.titleList) {
+            for (i in titleList) {
                 if (tempTitle == i) result = false
             }
             if (result) break
@@ -96,19 +90,3 @@ class MainActivity : AppCompatActivity() {
         return tempTitle
     }
 }
-
-/*if (result){
-    AlertDialog.Builder(this)
-        .setTitle("Waring")
-        .setMessage("You input same name as the title exist in the app. Do you want to use it with number?")
-        .setPositiveButton("Yes") {dialog, which ->
-             title = addNumber(editText.text.toString(), adapter)
-            result = false
-        }
-        .setNegativeButton("No"){dialog, which ->}
-        .setCancelable(false)
-        .show()
-}*/
-/*title = enterTitle(this, adapter)
-val intent = Intent(this,  EditCheckList::class.java)
-startActivity(intent)*/

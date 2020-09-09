@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 import java.util.*
 
 @Database(entities = [InfoList::class], version = 1, exportSchema = false)
-public abstract class InfoListDatabase : RoomDatabase(){
+abstract class InfoListDatabase : RoomDatabase(){
 
     abstract fun infoListDao(): InfoListDao
 

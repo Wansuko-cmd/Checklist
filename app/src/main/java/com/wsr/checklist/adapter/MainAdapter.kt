@@ -7,10 +7,10 @@ import com.wsr.checklist.view_holder.MainViewHolder
 import com.wsr.checklist.R
 import com.wsr.checklist.info_list_database.InfoList
 
-class MainAdapter():
+class MainAdapter:
     RecyclerView.Adapter<MainViewHolder>(){
 
-    //LiveDataの内容を代入
+    //LiveDataのから抽出したタイトルのみのリスト代入
     var titleList: MutableList<String> = mutableListOf()
 
     //Titleをクリックされたときに実行される関数名

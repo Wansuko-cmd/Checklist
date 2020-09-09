@@ -18,12 +18,15 @@ interface InfoListDao {
     @Query("UPDATE info_list_table SET 'check' = :Check WHERE id = :UUID")
     fun changeCheck(UUID: String, Check: Boolean)
 
+    //タイトルのみを変更するための関数
     @Query("UPDATE info_list_table SET 'title' = :Title WHERE id = :UUID")
     fun changeTitle(UUID: String, Title: String)
 
+    //特定のエンティティを消すための関数
     @Delete
     fun delete(infoList: InfoList)
 
+    //タイトル名が一致するものをすべて消すための関数
     @Query("Delete From info_list_table WHERE title = :Title")
     fun deleteWithTitle(Title: String)
 

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+<menu
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
         android:id="@+id/edit"
-        android:title="Edit" />
+        android:title="@string/edit" />
 
     <item
         android:id="@+id/rename"
-        android:title="Rename title"/>
+        android:title="@string/rename_title"/>
 
 </menu>

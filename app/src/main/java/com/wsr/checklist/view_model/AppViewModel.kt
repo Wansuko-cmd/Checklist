@@ -30,10 +30,12 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
         repository.changeCheck(id, check)
     }
 
+    //タイトルのみを変更するための関数
     fun changeTitle(id: String, title: String) = viewModelScope.launch(Dispatchers.IO){
         repository.changeTitle(id, title)
     }
 
+    //タイトル名が一致するものをすべて消すための関数
     fun deleteWithTitle(title: String) = viewModelScope.launch(Dispatchers.IO){
         repository.deleteWithTitle(title)
     }

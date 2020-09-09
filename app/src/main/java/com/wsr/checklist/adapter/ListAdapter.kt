@@ -10,13 +10,12 @@ import com.wsr.checklist.view_holder.ListViewHolder
 import com.wsr.checklist.R
 import com.wsr.checklist.info_list_database.InfoList
 
-class ListAdapter(context: Context, private val title: String,  private val viewModel: AppViewModel):
+class ListAdapter(private val context: Context, private val title: String,  private val viewModel: AppViewModel):
     RecyclerView.Adapter<ListViewHolder>(){
 
-    //Activityを変数に代入
-    private val context: Context = context
     //LiveDataから得られた値を収納する変数
     var list = emptyList<InfoList>()
+    var titleList = mutableListOf<String>()
 
     //ViewHolderのインスタンスを形成
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {
@@ -44,6 +43,11 @@ class ListAdapter(context: Context, private val title: String,  private val view
 
     //LiveDataの値が変更した際に実行される関数
     internal fun setInfoList(lists: MutableList<InfoList>){
+        for (numOfTitle in lists){
+            if (!titleList.contains(numOfTitle.title)){
+                titleList.add(numOfTitle.title)
+            }
+        }
         val tempList = mutableListOf<InfoList>()
         for (numOfTitle in lists){
             if (numOfTitle.title == title){
