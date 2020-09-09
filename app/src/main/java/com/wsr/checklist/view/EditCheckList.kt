@@ -44,7 +44,7 @@ class EditCheckList : AppCompatActivity() {
             appViewModel.deleteWithTitle(title)
             viewModel.editList.sortBy{it.id}
             for (i in viewModel.editList){
-                if (i.item != "") appViewModel.insert(InfoList(UUID.randomUUID().toString(), title, false, i.item))
+                if (i.item != "") appViewModel.insert(InfoList(UUID.randomUUID().toString(), i.id, title, false, i.item))
             }
             finish()
         }

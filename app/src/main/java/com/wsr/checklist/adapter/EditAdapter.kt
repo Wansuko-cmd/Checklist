@@ -11,7 +11,7 @@ import com.wsr.checklist.type_file.EditList
 import com.wsr.checklist.view_holder.EditViewHolder
 import com.wsr.checklist.view_model.EditViewModel
 
-class EditAdapter(private val title: String, viewModel: EditViewModel):
+class EditAdapter(private val title: String, private var viewModel: EditViewModel):
     RecyclerView.Adapter<EditViewHolder>() {
 
     //編集するチェックリストの中身をidと共に保存するためのリスト
@@ -33,6 +33,7 @@ class EditAdapter(private val title: String, viewModel: EditViewModel):
     override fun onBindViewHolder(holder: EditViewHolder, position: Int) {
         if (list.size > position) {
             list.sortBy{it.id}
+            viewModel.editList = list
             holder.edit.setText(list[position].item)
         }
 
@@ -54,8 +55,10 @@ class EditAdapter(private val title: String, viewModel: EditViewModel):
 
     //LiveDataの内容をEditAdapterのインスタンスのlistに反映させる関数
     internal fun setInfoList(lists: MutableList<InfoList>){
-        for (i in lists){
-            if(i.title == title) list.add(EditList(list.size, i.item))
+        if(list.size == 0){
+            for (i in lists){
+                if(i.title == title) list.add(EditList(i.number, i.item))
+            }
         }
         notifyDataSetChanged()
     }
