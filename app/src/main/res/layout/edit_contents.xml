@@ -18,6 +18,7 @@
         android:inputType="textAutoComplete"
         android:layout_margin="16dp"
         android:textSize="18sp"
-        android:autofillHints="" />
+        android:autofillHints=""
+        android:saveEnabled="false"/>
 
 </LinearLayout>

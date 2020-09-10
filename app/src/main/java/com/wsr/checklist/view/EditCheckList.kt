@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.wsr.checklist.R
 import com.wsr.checklist.adapter.EditAdapter
 import com.wsr.checklist.info_list_database.InfoList
+import com.wsr.checklist.type_file.EditList
 import com.wsr.checklist.view_model.AppViewModel
 import com.wsr.checklist.view_model.EditViewModel
 import kotlinx.android.synthetic.main.activity_edit_check_list.*
@@ -42,8 +43,8 @@ class EditCheckList : AppCompatActivity() {
         //saveButtonが押された際に実行される関数
         save_button.setOnClickListener{
             appViewModel.deleteWithTitle(title)
-            viewModel.editList.sortBy{it.id}
-            for (i in viewModel.editList){
+            editAdapter.list.sortBy{it.id}
+            for (i in editAdapter.list){
                 if (i.item != "") appViewModel.insert(InfoList(UUID.randomUUID().toString(), i.id, title, false, i.item))
             }
             finish()

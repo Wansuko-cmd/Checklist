@@ -31,6 +31,7 @@ class ListAdapter(private val context: Context, private val title: String,  priv
 
     //ViewHolderのインスタンスの保持する値を変更
     override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
+        list.sortedBy { it.number }
         holder.check.isChecked = list[position].check
         holder.item.text = list[position].item
         holder.check.setOnClickListener{
@@ -55,6 +56,7 @@ class ListAdapter(private val context: Context, private val title: String,  priv
             }
         }
         list = tempList
+        list.sortedBy{it.id}
         notifyDataSetChanged()
     }
 

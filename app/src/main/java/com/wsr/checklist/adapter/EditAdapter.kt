@@ -11,11 +11,12 @@ import com.wsr.checklist.type_file.EditList
 import com.wsr.checklist.view_holder.EditViewHolder
 import com.wsr.checklist.view_model.EditViewModel
 
-class EditAdapter(private val title: String, private var viewModel: EditViewModel):
+class EditAdapter(private val title: String, viewModel: EditViewModel):
     RecyclerView.Adapter<EditViewHolder>() {
 
     //編集するチェックリストの中身をidと共に保存するためのリスト
-    private val list = viewModel.editList
+    var list = viewModel.editList
+    private var numList = mutableListOf<Int>()
 
     //ViewHolderのインスタンス化
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EditViewHolder {
@@ -31,35 +32,45 @@ class EditAdapter(private val title: String, private var viewModel: EditViewMode
 
     //インスタンス化したViewHolderの中の値の変更
     override fun onBindViewHolder(holder: EditViewHolder, position: Int) {
-        if (list.size > position) {
-            list.sortBy{it.id}
-            viewModel.editList = list
-            holder.edit.setText(list[position].item)
+            if (list.size > position) {
+                list.sortBy{it.id}
+                holder.edit.text = list[position].item
+            }
+        var check = false
+        for ( i in list){
+            if(position == i.id){
+                list[position] = list[position].copy(item = holder.edit.text.toString())
+                check = true
+            }
         }
+        if(!check){
+            list.add(EditList(position, holder.edit.text.toString()))
+        }
+
 
         //編集内容をlistに代入するための関数
         holder.edit.addTextChangedListener(object : CustomTextWatcher {
             override fun afterTextChanged(p0: Editable?) {
-                var removeValue: EditList? = null
-                for (i in list) {
-                    if (position == i.id) {
-                        removeValue = i
-                        break
+                var exist = false
+                for (i in numList) {
+                    if (position == i) {
+                        exist = true
                     }
                 }
-                if (removeValue != null) list.remove(removeValue)
-                list.add(EditList(position, p0.toString()))
+                if (!exist) numList.add(position)
             }
         })
     }
 
     //LiveDataの内容をEditAdapterのインスタンスのlistに反映させる関数
     internal fun setInfoList(lists: MutableList<InfoList>){
-        if(list.size == 0){
             for (i in lists){
-                if(i.title == title) list.add(EditList(i.number, i.item))
+                if(i.title == title){
+                    list.add(EditList(i.number, i.item))
+                    numList.add(i.number)
+                }
             }
-        }
+        list.sortBy { it.id }
         notifyDataSetChanged()
     }
 }
