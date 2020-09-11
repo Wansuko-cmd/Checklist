@@ -32,8 +32,12 @@ class ListAdapter(private val context: Context, private val title: String,  priv
     //ViewHolderのインスタンスの保持する値を変更
     override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
         list.sortedBy { it.number }
-        holder.check.isChecked = list[position].check
-        holder.item.text = list[position].item
+        for (i in list){
+            if (position == i.number){
+                holder.check.isChecked = i.check
+                holder.item.text = i.item
+            }
+        }
         holder.check.setOnClickListener{
             /*if (!holder.check.isChecked) {
                 makeSureCheckOut(holder, position)

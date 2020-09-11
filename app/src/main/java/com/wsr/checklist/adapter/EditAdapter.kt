@@ -16,7 +16,6 @@ class EditAdapter(private val title: String, viewModel: EditViewModel):
 
     //編集するチェックリストの中身をidと共に保存するためのリスト
     var list = viewModel.editList
-    private var numList = mutableListOf<Int>()
 
     //ViewHolderのインスタンス化
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EditViewHolder {
@@ -35,16 +34,13 @@ class EditAdapter(private val title: String, viewModel: EditViewModel):
             if (list.size > position) {
                 list.sortBy{it.id}
                 holder.edit.text = list[position].item
+            }else{
+                holder.edit.text = null
             }
-        var check = false
         for ( i in list){
             if(position == i.id){
-                list[position] = list[position].copy(item = holder.edit.text.toString())
-                check = true
+                list[position] = i.copy(item = holder.edit.text.toString())
             }
-        }
-        if(!check){
-            list.add(EditList(position, holder.edit.text.toString()))
         }
 
 
@@ -52,12 +48,12 @@ class EditAdapter(private val title: String, viewModel: EditViewModel):
         holder.edit.addTextChangedListener(object : CustomTextWatcher {
             override fun afterTextChanged(p0: Editable?) {
                 var exist = false
-                for (i in numList) {
-                    if (position == i) {
+                for (i in list) {
+                    if (position == i.id) {
                         exist = true
                     }
                 }
-                if (!exist) numList.add(position)
+                if (!exist) list.add(EditList(position, holder.edit.text.toString()))
             }
         })
     }
@@ -67,7 +63,6 @@ class EditAdapter(private val title: String, viewModel: EditViewModel):
             for (i in lists){
                 if(i.title == title){
                     list.add(EditList(i.number, i.item))
-                    numList.add(i.number)
                 }
             }
         list.sortBy { it.id }
