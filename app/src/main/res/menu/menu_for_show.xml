@@ -10,4 +10,8 @@
         android:id="@+id/rename"
         android:title="@string/rename_title"/>
 
+    <item
+        android:id="@+id/delete"
+        android:title="@string/delete"/>
+
 </menu>

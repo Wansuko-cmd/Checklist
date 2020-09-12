@@ -6,7 +6,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.wsr.checklist.R
 import com.wsr.checklist.info_list_database.InfoList
-import com.wsr.checklist.type_file.CheckList
 import com.wsr.checklist.type_file.CustomTextWatcher
 import com.wsr.checklist.type_file.EditList
 import com.wsr.checklist.view_holder.EditViewHolder
@@ -17,7 +16,6 @@ class EditAdapter(private val title: String, viewModel: EditViewModel):
 
     //編集するチェックリストの中身をidと共に保存するためのリスト
     var list = viewModel.editList
-    var checkList = viewModel.checkList
 
     //ViewHolderのインスタンス化
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EditViewHolder {
@@ -34,34 +32,24 @@ class EditAdapter(private val title: String, viewModel: EditViewModel):
     //インスタンス化したViewHolderの中の値の変更
     override fun onBindViewHolder(holder: EditViewHolder, position: Int) {
             if (list.size > position) {
-                if(!checkList[position].check){
-                    list.sortBy{it.id}
-                    holder.edit.setText(list[position].item)
-                    checkList[position] = checkList[position].copy(check = true)
-                }
+                list.sortBy { it.id }
+                holder.edit.setText(list[position].item)
             }else{
                 holder.edit.text = null
             }
-        for ( i in list){
-            if(position == i.id){
-                list[position] = i.copy(item = holder.edit.text.toString())
-                break
-                //list.remove(i)
-                //list.add(EditList(i.id, holder.edit.text.toString()))
-            }
-        }
 
         //編集内容をlistに代入するための関数
         holder.edit.addTextChangedListener(object : CustomTextWatcher {
             override fun afterTextChanged(p0: Editable?) {
                 var exist = false
                 for (i in list) {
-                    if (position == i.id) {
+                    if (holder.adapterPosition == i.id) {
+                        list[holder.adapterPosition] = i.copy(item = holder.edit.text.toString())
                         exist = true
                         break
                     }
                 }
-                if (!exist) list.add(EditList(position, holder.edit.text.toString()))
+                if (!exist) list.add(EditList(holder.adapterPosition, holder.edit.text.toString()))
             }
         })
     }
@@ -71,7 +59,6 @@ class EditAdapter(private val title: String, viewModel: EditViewModel):
             for (i in lists){
                 if(i.title == title){
                     list.add(EditList(i.number, i.item))
-                    checkList.add(CheckList(i.number, false))
                 }
             }
         list.sortBy { it.id }

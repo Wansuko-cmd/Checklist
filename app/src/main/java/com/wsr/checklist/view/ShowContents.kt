@@ -76,6 +76,20 @@ class ShowContents : AppCompatActivity() {
                     .setCancelable(false)
                     .show()
             }
+
+            else if(menuItem.itemId == R.id.delete){
+                AlertDialog.Builder(this)
+                    .setTitle("Waring")
+                    .setMessage("Do you really want to delete it?")
+                    .setPositiveButton("Yes"){ dialog, which ->
+                        viewModel.deleteWithTitle(title)
+                        finish()
+                    }
+                    .setNegativeButton("No"){dialog, which ->
+
+                    }
+                    .show()
+            }
             true
         }
 
