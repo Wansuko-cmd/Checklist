@@ -36,6 +36,10 @@ class EditCheckList : AppCompatActivity() {
         content_recyclerView.setHasFixedSize(true)
 
         //LiveDataの監視、値が変更した際に実行する関数の設定
+        viewModel.editList.observe(this, Observer{list ->
+            list?.let{editAdapter.maintainList(list)}
+        })
+
         appViewModel.infoList.observe(this, Observer{list ->
             list?.let{editAdapter.setInfoList(list)}
         })

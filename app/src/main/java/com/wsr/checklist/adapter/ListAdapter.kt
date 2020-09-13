@@ -31,18 +31,19 @@ class ListAdapter(private val context: Context, private val title: String,  priv
 
     //ViewHolderのインスタンスの保持する値を変更
     override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
-        list.sortedBy { it.number }
+        list.sortedBy{it.number}
         for (i in list){
-            if (position == i.number){
+            if (holder.adapterPosition == i.number){
                 holder.check.isChecked = i.check
                 holder.item.text = i.item
             }
         }
         holder.check.setOnClickListener{
-            /*if (!holder.check.isChecked) {
-                makeSureCheckOut(holder, position)
-            }*/
-            viewModel.changeCheck(list[position].id, holder.check.isChecked)
+            for (i in list){
+                if (holder.adapterPosition == i.number){
+                    viewModel.changeCheck(i.id, holder.check.isChecked)
+                }
+            }
         }
     }
 
@@ -60,7 +61,6 @@ class ListAdapter(private val context: Context, private val title: String,  priv
             }
         }
         list = tempList
-        list.sortedBy{it.id}
         notifyDataSetChanged()
     }
 

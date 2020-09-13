@@ -32,10 +32,9 @@ abstract class InfoListDatabase : RoomDatabase(){
             Completable.fromAction{
                 infoListDao.deleteAll()
                 for (i in 0..100){
-                    infoListDao.insert(InfoList(UUID.randomUUID().toString(), i, "Test", false, i.toString()))
+                    val id = UUID.randomUUID().toString()
+                    infoListDao.insert(InfoList(id, i, "Test", false, i.toString()))
                 }
-                /*infoListDao.insert(InfoList(UUID.randomUUID().toString(), 101, "Test", false, "Homework"))
-                infoListDao.insert(InfoList(UUID.randomUUID().toString(), 102, "Test",false, "Homework"))*/
                 infoListDao.insert(InfoList(UUID.randomUUID().toString(), 0,"code", false, "Alpha"))
                 infoListDao.insert(InfoList(UUID.randomUUID().toString(), 1, "code",false, "Bravo"))
                 infoListDao.insert(InfoList(UUID.randomUUID().toString(), 2, "code",false, "Charlie"))

@@ -11,11 +11,11 @@ import com.wsr.checklist.type_file.EditList
 import com.wsr.checklist.view_holder.EditViewHolder
 import com.wsr.checklist.view_model.EditViewModel
 
-class EditAdapter(private val title: String, viewModel: EditViewModel):
+class EditAdapter(private val title: String, private val viewModel: EditViewModel):
     RecyclerView.Adapter<EditViewHolder>() {
 
     //編集するチェックリストの中身をidと共に保存するためのリスト
-    var list = viewModel.editList
+    var list = mutableListOf<EditList>()
 
     //ViewHolderのインスタンス化
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EditViewHolder {
@@ -44,23 +44,31 @@ class EditAdapter(private val title: String, viewModel: EditViewModel):
                 var exist = false
                 for (i in list) {
                     if (holder.adapterPosition == i.id) {
-                        list[holder.adapterPosition] = i.copy(item = holder.edit.text.toString())
+                        viewModel.changeItem(holder.adapterPosition, holder.edit.text.toString())
                         exist = true
                         break
                     }
                 }
-                if (!exist) list.add(EditList(holder.adapterPosition, holder.edit.text.toString()))
+                if (!exist) viewModel.insert(EditList(holder.adapterPosition, holder.edit.text.toString()))
             }
         })
     }
 
     //LiveDataの内容をEditAdapterのインスタンスのlistに反映させる関数
+    internal fun maintainList(lists: MutableList<EditList>){
+        this.list = lists
+        list.sortBy { it.id }
+        notifyDataSetChanged()
+    }
+
     internal fun setInfoList(lists: MutableList<InfoList>){
-            for (i in lists){
-                if(i.title == title){
-                    list.add(EditList(i.number, i.item))
+        if(list.size == 0){
+            for (i in lists) {
+                if (i.title == title) {
+                    viewModel.insert(EditList(i.number, i.item))
                 }
             }
+        }
         list.sortBy { it.id }
         notifyDataSetChanged()
     }
