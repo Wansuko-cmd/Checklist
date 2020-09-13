@@ -6,8 +6,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.wsr.checklist.view_holder.MainViewHolder
 import com.wsr.checklist.R
 import com.wsr.checklist.info_list_database.InfoList
+import com.wsr.checklist.view_model.AppViewModel
 
-class MainAdapter:
+class MainAdapter(private val viewModel: AppViewModel):
     RecyclerView.Adapter<MainViewHolder>(){
 
     //LiveDataのから抽出したタイトルのみのリスト代入
@@ -33,6 +34,9 @@ class MainAdapter:
         holder.title.text = titleList[position]
         holder.title.setOnClickListener{
             clickTitleOnListener(holder.title.text.toString())
+        }
+        holder.delete.setOnClickListener {
+            viewModel.deleteWithTitle(titleList[holder.adapterPosition])
         }
     }
 
