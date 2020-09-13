@@ -19,7 +19,16 @@ class EditViewModel(application: Application) : AndroidViewModel(application) {
 
     fun changeItem(position: Int, Item: String){
         if(editList.value != null){
-            editList.value!![position] = editList.value!![position].copy(item = Item)
+            val range = editList.value!!.size - 1
+            if (Item == "" && position != range){
+                editList.value!!.sortBy{it.id}
+                editList.value!!.removeAt(position)
+                for (i in 0..range){
+                    editList.value!![position] = editList.value!![position].copy(id = i)
+                }
+            }else{
+                editList.value!![position] = editList.value!![position].copy(item = Item)
+            }
         }
     }
 }

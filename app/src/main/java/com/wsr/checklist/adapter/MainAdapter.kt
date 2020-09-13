@@ -38,6 +38,7 @@ class MainAdapter:
 
     //LiveDataの内容をMainAdapterのインスタンスに反映させる関数
     internal fun setInfoList(lists: MutableList<InfoList>){
+        titleList = mutableListOf()
         for (numOfTitle in lists){
             if (!titleList.contains(numOfTitle.title)){
                 titleList.add(numOfTitle.title)
