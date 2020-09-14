@@ -35,6 +35,49 @@ class ShowContents : AppCompatActivity() {
         recyclerView.layoutManager = layoutManager
         recyclerView.setHasFixedSize(true)
 
+        edit_button.setOnClickListener {
+            val intent = Intent(this, EditCheckList::class.java)
+            intent.putExtra("TITLE", title)
+            startActivity(intent)
+        }
+
+        rename_button.setOnClickListener {
+            val editText = EditText(this)
+
+            //Renameのためのアラートダイアログの表示
+            AlertDialog.Builder(this)
+                .setTitle("Title")
+                .setMessage("Input the title")
+                .setView(editText)
+                .setPositiveButton("OK") { dialog, which ->
+
+                    //新しいチェックリストのタイトルの入った変数
+                    val title = MainActivity().checkTitle(editText.text.toString(), adapter.titleList)
+                    for (i in adapter.list){
+                        viewModel.changeTitle(i.id, title)
+                    }
+                }
+                .setNegativeButton("Cancel"){dialog, which ->}
+                .setCancelable(false)
+                .show()
+        }
+
+        check_out_button.setOnClickListener {
+            AlertDialog.Builder(this)
+                .setTitle("Waring")
+                .setMessage("Do you want to check out all elements?")
+                .setPositiveButton("Yes") { dialog, which ->
+
+                    //新しいチェックリストのタイトルの入った変数
+                    for (i in adapter.list){
+                        viewModel.changeCheck(i.id , false)
+                    }
+                }
+                .setNegativeButton("Cancel"){dialog, which ->}
+                .setCancelable(false)
+                .show()
+        }
+
         //ToolBarの設定
         show_toolbar.title = title
         show_toolbar.setNavigationIcon(R.drawable.ic_back_arrow)

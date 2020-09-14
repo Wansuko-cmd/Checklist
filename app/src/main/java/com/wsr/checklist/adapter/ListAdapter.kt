@@ -2,6 +2,7 @@ package com.wsr.checklist.adapter
 
 import android.app.AlertDialog
 import android.content.Context
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -31,16 +32,23 @@ class ListAdapter(private val context: Context, private val title: String,  priv
 
     //ViewHolderのインスタンスの保持する値を変更
     override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
-        list.sortedBy{it.number}
-        for (i in list){
-            if (holder.adapterPosition == i.number){
+        list.sortedBy { it.number }
+        for (i in list) {
+            if (holder.adapterPosition == i.number) {
                 holder.check.isChecked = i.check
                 holder.item.text = i.item
             }
         }
-        holder.check.setOnClickListener{
-            for (i in list){
-                if (holder.adapterPosition == i.number){
+
+        if (holder.check.isChecked) {
+            holder.view.setBackgroundColor(Color.parseColor("#FFFFFF"))
+        } else {
+            holder.view.setBackgroundColor(Color.parseColor("#FFD5EC"))
+        }
+
+        holder.check.setOnClickListener {
+            for (i in list) {
+                if (holder.adapterPosition == i.number) {
                     viewModel.changeCheck(i.id, holder.check.isChecked)
                 }
             }

@@ -1,5 +1,7 @@
 package com.wsr.checklist.adapter
 
+import android.app.AlertDialog
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -8,7 +10,7 @@ import com.wsr.checklist.R
 import com.wsr.checklist.info_list_database.InfoList
 import com.wsr.checklist.view_model.AppViewModel
 
-class MainAdapter(private val viewModel: AppViewModel):
+class MainAdapter(private val context: Context, private val viewModel: AppViewModel):
     RecyclerView.Adapter<MainViewHolder>(){
 
     //LiveDataのから抽出したタイトルのみのリスト代入
@@ -36,7 +38,15 @@ class MainAdapter(private val viewModel: AppViewModel):
             clickTitleOnListener(holder.title.text.toString())
         }
         holder.delete.setOnClickListener {
-            viewModel.deleteWithTitle(titleList[holder.adapterPosition])
+            AlertDialog.Builder(context)
+                .setTitle("Waring")
+                .setMessage("Do you really want to delete it?")
+                .setPositiveButton("Yes") {dialog, which ->
+                    viewModel.deleteWithTitle(titleList[holder.adapterPosition])
+                }
+                .setNegativeButton("No") { dialog, which ->}
+                .setCancelable(true)
+                .show()
         }
     }
 
