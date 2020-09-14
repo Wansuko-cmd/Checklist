@@ -31,14 +31,16 @@ class EditAdapter(private val title: String, private val viewModel: EditViewMode
 
     //インスタンス化したViewHolderの中の値の変更
     override fun onBindViewHolder(holder: EditViewHolder, position: Int) {
-            if (list.size > position) {
-                list.sortBy { it.id }
-                holder.edit.setText(list[position].item)
-            }else{
-                holder.edit.text = null
-            }
 
-        //編集内容をlistに代入するための関数
+        //データベースの情報を格納するためのプロセス
+        if (list.size > position) {
+            list.sortBy { it.id }
+            holder.edit.setText(list[position].item)
+        } else {
+            holder.edit.text = null
+        }
+
+        //編集内容をこのクラスのインスタンスに代入するための関数
         holder.edit.addTextChangedListener(object : CustomTextWatcher {
             override fun afterTextChanged(p0: Editable?) {
                 var exist = false
@@ -49,18 +51,24 @@ class EditAdapter(private val title: String, private val viewModel: EditViewMode
                         break
                     }
                 }
-                if (!exist) viewModel.insert(EditList(holder.adapterPosition, holder.edit.text.toString()))
+                if (!exist) viewModel.insert(
+                    EditList(
+                        holder.adapterPosition,
+                        holder.edit.text.toString()
+                    )
+                )
             }
         })
     }
 
-    //LiveDataの内容をEditAdapterのインスタンスのlistに反映させる関数
+    //EditViewModelのLiveDataの内容をEditAdapterのインスタンスのlistに反映させる関数
     internal fun maintainList(lists: MutableList<EditList>){
         this.list = lists
         list.sortBy { it.id }
         notifyDataSetChanged()
     }
 
+    //最初にデータベースの内容をEditViewModelに格納するための関数
     internal fun setInfoList(lists: MutableList<InfoList>){
         if(list.size == 0){
             for (i in lists) {

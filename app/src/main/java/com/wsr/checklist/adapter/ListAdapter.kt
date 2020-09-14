@@ -11,12 +11,14 @@ import com.wsr.checklist.view_holder.ListViewHolder
 import com.wsr.checklist.R
 import com.wsr.checklist.info_list_database.InfoList
 
-class ListAdapter(private val context: Context, private val title: String,  private val viewModel: AppViewModel):
+class ListAdapter(private val context: Context, var title: String,  private val viewModel: AppViewModel):
     RecyclerView.Adapter<ListViewHolder>(){
 
-    //LiveDataから得られた値を収納する変数
-    var list = emptyList<InfoList>()
+    //チェックリストのタイトルを全て格納する変数
     var titleList = mutableListOf<String>()
+
+    //選択されたタイトルのチェックリストの全ての情報を格納する変数
+    var list = emptyList<InfoList>()
 
     //ViewHolderのインスタンスを形成
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {
@@ -33,6 +35,8 @@ class ListAdapter(private val context: Context, private val title: String,  priv
     //ViewHolderのインスタンスの保持する値を変更
     override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
         list.sortedBy { it.number }
+
+        //データベースの情報を格納するためのプロセス
         for (i in list) {
             if (holder.adapterPosition == i.number) {
                 holder.check.isChecked = i.check
@@ -40,12 +44,14 @@ class ListAdapter(private val context: Context, private val title: String,  priv
             }
         }
 
+        //チェックのついてないところを色付けするためのプロセス
         if (holder.check.isChecked) {
             holder.view.setBackgroundColor(Color.parseColor("#FFFFFF"))
         } else {
             holder.view.setBackgroundColor(Color.parseColor("#FFD5EC"))
         }
 
+        //チェックの状態が変更したときにデータベースに保存するためのプロセス
         holder.check.setOnClickListener {
             for (i in list) {
                 if (holder.adapterPosition == i.number) {
@@ -72,8 +78,8 @@ class ListAdapter(private val context: Context, private val title: String,  priv
         notifyDataSetChanged()
     }
 
-    //チェックを外す際に確認をとる関数
-    private fun makeSureCheckOut(holder: ListViewHolder, position: Int){
+    //チェックを外す際に確認をとる関数（コメントアウト中）
+    /*private fun makeSureCheckOut(holder: ListViewHolder, position: Int){
         AlertDialog.Builder(context)
             .setTitle(list[position].item)
             .setMessage("Do you really want to check out it?")
@@ -85,5 +91,5 @@ class ListAdapter(private val context: Context, private val title: String,  priv
             }
             .setCancelable(false)
             .show()
-    }
+    }*/
 }

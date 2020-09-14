@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.wsr.checklist.R
 import com.wsr.checklist.adapter.EditAdapter
 import com.wsr.checklist.info_list_database.InfoList
-import com.wsr.checklist.type_file.EditList
 import com.wsr.checklist.view_model.AppViewModel
 import com.wsr.checklist.view_model.EditViewModel
 import kotlinx.android.synthetic.main.activity_edit_check_list.*

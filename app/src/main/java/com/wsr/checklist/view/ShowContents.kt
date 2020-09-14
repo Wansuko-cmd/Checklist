@@ -22,7 +22,7 @@ class ShowContents : AppCompatActivity() {
         setContentView(R.layout.activity_show_contents)
 
         //MainActivityからの引数を代入
-        val title = intent.getStringExtra("TITLE")
+        var title = intent.getStringExtra("TITLE")
 
         //インスタンス形成
         val viewModel: AppViewModel = ViewModelProviders.of(this).get(AppViewModel::class.java)
@@ -35,33 +35,42 @@ class ShowContents : AppCompatActivity() {
         recyclerView.layoutManager = layoutManager
         recyclerView.setHasFixedSize(true)
 
+        /*
+        下の３つのボタンを押した際のそれぞれの処理を記述
+         */
+        //editボタンを押したとき
         edit_button.setOnClickListener {
             val intent = Intent(this, EditCheckList::class.java)
             intent.putExtra("TITLE", title)
             startActivity(intent)
         }
 
+        //renameボタンを押したとき
         rename_button.setOnClickListener {
             val editText = EditText(this)
+            editText.setText(title)
 
             //Renameのためのアラートダイアログの表示
             AlertDialog.Builder(this)
-                .setTitle("Title")
+                .setTitle("Rename title")
                 .setMessage("Input the title")
                 .setView(editText)
                 .setPositiveButton("OK") { dialog, which ->
 
                     //新しいチェックリストのタイトルの入った変数
-                    val title = MainActivity().checkTitle(editText.text.toString(), adapter.titleList)
+                    title = MainActivity().checkTitle(editText.text.toString(), adapter.titleList)
                     for (i in adapter.list){
-                        viewModel.changeTitle(i.id, title)
+                        viewModel.changeTitle(i.id, title!!)
                     }
+                    adapter.title = title!!
+                    show_toolbar.title = title
                 }
                 .setNegativeButton("Cancel"){dialog, which ->}
                 .setCancelable(false)
                 .show()
         }
 
+        //check outボタンを押したとき
         check_out_button.setOnClickListener {
             AlertDialog.Builder(this)
                 .setTitle("Waring")
@@ -86,55 +95,60 @@ class ShowContents : AppCompatActivity() {
         show_toolbar.setNavigationOnClickListener{
             finish()
         }
-        show_toolbar.inflateMenu(R.menu.menu_for_show)
+
+        //toolbarのメニュー画面の設定（コメントアウト中）
+
+        /*show_toolbar.inflateMenu(R.menu.menu_for_show)
 
         //Menuバーを押した際の処理
         show_toolbar.setOnMenuItemClickListener{menuItem ->
 
             //editを押したとき
-            if(menuItem.itemId == R.id.edit){
-                val intent = Intent(this, EditCheckList::class.java)
-                intent.putExtra("TITLE", title)
-                startActivity(intent)
-            }
+            when (menuItem.itemId) {
+                R.id.edit -> {
+                    val intent = Intent(this, EditCheckList::class.java)
+                    intent.putExtra("TITLE", title)
+                    startActivity(intent)
+                }
 
-            //Rename titleを押したとき
-            else if(menuItem.itemId == R.id.rename){
-                val editText = EditText(this)
+                //Rename titleを押したとき
+                R.id.rename -> {
+                    val editText = EditText(this)
+                    editText.setText(title)
 
-                //Renameのためのアラートダイアログの表示
-                AlertDialog.Builder(this)
-                    .setTitle("Title")
-                    .setMessage("Input the title")
-                    .setView(editText)
-                    .setPositiveButton("OK") { dialog, which ->
+                    //Renameのためのアラートダイアログの表示
+                    AlertDialog.Builder(this)
+                        .setTitle("Rename Title")
+                        .setMessage("Input the title")
+                        .setView(editText)
+                        .setPositiveButton("OK") { dialog, which ->
 
-                        //新しいチェックリストのタイトルの入った変数
-                        val title = MainActivity().checkTitle(editText.text.toString(), adapter.titleList)
-                        for (i in adapter.list){
-                            viewModel.changeTitle(i.id, title)
+                            //新しいチェックリストのタイトルの入った変数
+                            val title = MainActivity().checkTitle(editText.text.toString(), adapter.titleList)
+                            for (i in adapter.list){
+                                viewModel.changeTitle(i.id, title)
+                            }
                         }
-                    }
-                    .setNegativeButton("Cancel"){dialog, which ->}
-                    .setCancelable(false)
-                    .show()
-            }
+                        .setNegativeButton("Cancel"){dialog, which ->}
+                        .setCancelable(false)
+                        .show()
+                }
+                R.id.delete -> {
+                    AlertDialog.Builder(this)
+                        .setTitle("Waring")
+                        .setMessage("Do you really want to delete it?")
+                        .setPositiveButton("Yes"){ dialog, which ->
+                            viewModel.deleteWithTitle(title)
+                            finish()
+                        }
+                        .setNegativeButton("No"){dialog, which ->
 
-            else if(menuItem.itemId == R.id.delete){
-                AlertDialog.Builder(this)
-                    .setTitle("Waring")
-                    .setMessage("Do you really want to delete it?")
-                    .setPositiveButton("Yes"){ dialog, which ->
-                        viewModel.deleteWithTitle(title)
-                        finish()
-                    }
-                    .setNegativeButton("No"){dialog, which ->
-
-                    }
-                    .show()
+                        }
+                        .show()
+                }
             }
             true
-        }
+        }*/
 
         //LiveDataの監視、値が変更した際に実行する関数の設定
         viewModel.infoList.observe(this, Observer{list ->
