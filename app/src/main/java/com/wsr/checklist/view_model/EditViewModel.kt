@@ -23,8 +23,8 @@ class EditViewModel(application: Application) : AndroidViewModel(application) {
             if (Item == "" && position != range){
                 editList.value!!.sortBy{it.id}
                 editList.value!!.removeAt(position)
-                for (i in 0..range){
-                    editList.value!![position] = editList.value!![position].copy(id = i)
+                for (i in 0 until range){
+                    editList.value!![i] = editList.value!![i].copy(id = i)
                 }
             }else{
                 editList.value!![position] = editList.value!![position].copy(item = Item)
