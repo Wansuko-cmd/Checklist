@@ -25,16 +25,6 @@
         app:layout_constraintTop_toBottomOf="@id/show_toolbar"
         android:text="@string/check"/>
 
-    <TextView
-        android:id="@+id/ItemLine"
-        android:gravity="center"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/show_toolbar"
-        app:layout_constraintStart_toEndOf="@id/CheckLine"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:text="@string/item"/>
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/ContentRecyclerView"
         android:layout_width="0dp"
