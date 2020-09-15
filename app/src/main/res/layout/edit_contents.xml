@@ -8,16 +8,25 @@
     android:elevation="4dp"
     android:orientation="horizontal">
 
+    <CheckBox
+        android:id="@+id/CheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <Space
+        android:layout_width="20dp"
+        android:layout_height="wrap_content"/>
+
     <EditText
         android:id="@+id/edit_contents"
+        android:background="#00000000"
+        android:textCursorDrawable="@drawable/cursor"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minHeight="48dp"
         android:fontFamily="sans-serif-light"
         android:hint="@string/item"
         android:inputType="textAutoComplete"
-        android:layout_margin="16dp"
-        android:textSize="18sp"
+        android:textSize="23sp"
         android:autofillHints=""
         android:saveEnabled="false"/>
 

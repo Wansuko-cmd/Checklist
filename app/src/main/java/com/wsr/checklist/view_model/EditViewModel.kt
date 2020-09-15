@@ -20,15 +20,23 @@ class EditViewModel(application: Application) : AndroidViewModel(application) {
     fun changeItem(position: Int, Item: String){
         if(editList.value != null){
             val range = editList.value!!.size - 1
-            if (Item == "" && position != range){
+            editList.value!![position] = editList.value!![position].copy(item = Item)
+            /*if (Item == "" && position != range){
                 editList.value!!.sortBy{it.id}
                 editList.value!!.removeAt(position)
                 for (i in 0 until range){
                     editList.value!![i] = editList.value!![i].copy(id = i)
                 }
-            }else{
-                editList.value!![position] = editList.value!![position].copy(item = Item)
+            }else if(position < range){
+                for (i in position..range){
+                    editList.value!![i] = editList.value!![i].copy(id = i + 1)
+                }
+                editList.value!!.add(EditList(position, Item))
+                editList.value!!.sortBy{it.id}
             }
+            else{
+                editList.value!![position] = editList.value!![position].copy(item = Item)
+            }*/
         }
     }
 }

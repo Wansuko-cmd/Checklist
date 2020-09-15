@@ -31,7 +31,6 @@ class EditAdapter(private val title: String, private val viewModel: EditViewMode
 
     //インスタンス化したViewHolderの中の値の変更
     override fun onBindViewHolder(holder: EditViewHolder, position: Int) {
-
         //データベースの情報を格納するためのプロセス
         if (list.size > position) {
             list.sortBy { it.id }
