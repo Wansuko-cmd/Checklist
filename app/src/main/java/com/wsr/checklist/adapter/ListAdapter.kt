@@ -20,6 +20,8 @@ class ListAdapter(private val context: Context, var title: String,  private val 
     //選択されたタイトルのチェックリストの全ての情報を格納する変数
     var list = emptyList<InfoList>()
 
+    var onlyFalseList = emptyList<InfoList>()
+    var onlyTrueList = emptyList<InfoList>()
     //ViewHolderのインスタンスを形成
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -34,7 +36,7 @@ class ListAdapter(private val context: Context, var title: String,  private val 
 
     //ViewHolderのインスタンスの保持する値を変更
     override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
-        list.sortedBy { it.number }
+        list.sortedBy { it.check }
 
         //データベースの情報を格納するためのプロセス
         for (i in list) {
@@ -69,12 +71,20 @@ class ListAdapter(private val context: Context, var title: String,  private val 
             }
         }
         val tempList = mutableListOf<InfoList>()
+        val tempFalseList = mutableListOf<InfoList>()
+        var count = 0
         for (numOfTitle in lists){
             if (numOfTitle.title == title){
-                tempList.add(numOfTitle)
+                //tempList.add(numOfTitle)
+                if(numOfTitle.check == false){
+                    tempList.add(InfoList(numOfTitle.id, count, numOfTitle.title,  numOfTitle.check, numOfTitle.item))
+                    tempFalseList.add(numOfTitle)
+                    count++
+                }
             }
         }
         list = tempList
+        onlyFalseList = tempFalseList
         notifyDataSetChanged()
     }
 
