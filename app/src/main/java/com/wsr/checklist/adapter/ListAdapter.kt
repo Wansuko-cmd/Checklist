@@ -20,8 +20,8 @@ class ListAdapter(private val context: Context, var title: String,  private val 
     //選択されたタイトルのチェックリストの全ての情報を格納する変数
     var list = emptyList<InfoList>()
 
-    var onlyFalseList = emptyList<InfoList>()
-    var onlyTrueList = emptyList<InfoList>()
+    var listForCheck = sortTrueFalse(list)
+
     //ViewHolderのインスタンスを形成
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -39,12 +39,13 @@ class ListAdapter(private val context: Context, var title: String,  private val 
         list.sortedBy { it.check }
 
         //データベースの情報を格納するためのプロセス
-        for (i in list) {
+        for (i in listForCheck) {
             if (holder.adapterPosition == i.number) {
                 holder.check.isChecked = i.check
-                holder.item.text = i.item
+                holder.item.text =i.item
             }
         }
+
 
         //チェックのついてないところを色付けするためのプロセス
         if (holder.check.isChecked) {
@@ -71,21 +72,25 @@ class ListAdapter(private val context: Context, var title: String,  private val 
             }
         }
         val tempList = mutableListOf<InfoList>()
-        val tempFalseList = mutableListOf<InfoList>()
-        var count = 0
         for (numOfTitle in lists){
             if (numOfTitle.title == title){
-                //tempList.add(numOfTitle)
-                if(numOfTitle.check == false){
-                    tempList.add(InfoList(numOfTitle.id, count, numOfTitle.title,  numOfTitle.check, numOfTitle.item))
-                    tempFalseList.add(numOfTitle)
-                    count++
-                }
+                tempList.add(numOfTitle)
             }
         }
         list = tempList
-        onlyFalseList = tempFalseList
+        listForCheck = sortTrueFalse(list)
         notifyDataSetChanged()
+    }
+
+    private fun sortTrueFalse(list: List<InfoList>): List<InfoList>{
+        list.sortedBy { it.number }
+        val onlyFalseList: List<InfoList> = list.filter{ !it.check}
+        val onlyTrueList: List<InfoList> = list.filter{ it.check }
+        val result = onlyFalseList + onlyTrueList
+        for ((num, i) in result.withIndex()){
+            i.number = num
+        }
+        return result
     }
 
     //チェックを外す際に確認をとる関数（コメントアウト中）
