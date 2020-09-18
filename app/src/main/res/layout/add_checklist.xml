@@ -17,8 +17,9 @@
         android:layout_width="20dp"
         android:layout_height="wrap_content"/>
 
-    <TextView
+    <EditText
         android:id="@+id/Item"
+        android:background="#00000000"
         android:textSize="23sp"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"

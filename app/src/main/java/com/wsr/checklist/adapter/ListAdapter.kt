@@ -42,7 +42,7 @@ class ListAdapter(private val context: Context, var title: String,  private val 
         for (i in listForCheck) {
             if (holder.adapterPosition == i.number) {
                 holder.check.isChecked = i.check
-                holder.item.text =i.item
+                holder.item.setText(i.item)
             }
         }
 
