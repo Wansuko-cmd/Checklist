@@ -61,10 +61,8 @@ class EditAdapter(private val title: String, private val viewModel: EditViewMode
 
         holder.delete.setOnClickListener {
             list.removeAt(holder.adapterPosition)
-            var count = 0
-            for (i in list){
+            for ((count, i) in list.withIndex()){
                 i.id = count
-                count++
             }
             viewModel.update(list)
         }
