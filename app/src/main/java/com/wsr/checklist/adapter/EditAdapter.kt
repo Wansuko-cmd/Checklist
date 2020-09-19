@@ -58,6 +58,16 @@ class EditAdapter(private val title: String, private val viewModel: EditViewMode
                 )
             }
         })
+
+        holder.delete.setOnClickListener {
+            list.removeAt(holder.adapterPosition)
+            var count = 0
+            for (i in list){
+                i.id = count
+                count++
+            }
+            viewModel.update(list)
+        }
     }
 
     //EditViewModelのLiveDataの内容をEditAdapterのインスタンスのlistに反映させる関数

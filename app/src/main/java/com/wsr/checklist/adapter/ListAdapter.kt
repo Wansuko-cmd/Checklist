@@ -51,7 +51,7 @@ class ListAdapter(private val context: Context, var title: String,  private val 
         if (holder.check.isChecked) {
             holder.view.setBackgroundColor(Color.parseColor("#FFFFFF"))
         } else {
-            holder.view.setBackgroundColor(Color.parseColor("#FFD5EC"))
+            holder.view.setBackgroundColor(Color.parseColor("#AFEEEE"))
         }
 
         //チェックの状態が変更したときにデータベースに保存するためのプロセス
