@@ -47,9 +47,10 @@ class EditCheckList : AppCompatActivity() {
         save_button.setOnClickListener{
             appViewModel.deleteWithTitle(title)
             editAdapter.list.sortBy{it.id}
-            for (i in editAdapter.list){
-                //if (i.item != "")
-                appViewModel.insert(InfoList(UUID.randomUUID().toString(), i.id, title, false, i.item))
+            val list = editAdapter.list.filter { it.item != "" }
+            list.sortedBy { it.id }
+            for ((count, i) in list.withIndex()){
+                appViewModel.insert(InfoList(UUID.randomUUID().toString(), count, title, false, i.item))
             }
             finish()
         }

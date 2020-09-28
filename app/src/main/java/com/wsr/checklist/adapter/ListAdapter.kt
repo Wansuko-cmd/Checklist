@@ -1,6 +1,5 @@
 package com.wsr.checklist.adapter
 
-import android.app.AlertDialog
 import android.content.Context
 import android.graphics.Color
 import android.view.LayoutInflater
@@ -42,7 +41,7 @@ class ListAdapter(private val context: Context, var title: String,  private val 
         for (i in listForCheck) {
             if (holder.adapterPosition == i.number) {
                 holder.check.isChecked = i.check
-                holder.item.setText(i.item)
+                holder.item.text = i.item
             }
         }
 
@@ -77,6 +76,7 @@ class ListAdapter(private val context: Context, var title: String,  private val 
                 tempList.add(numOfTitle)
             }
         }
+        tempList.sortBy { it.number }
         list = tempList
         listForCheck = sortTrueFalse(list)
         notifyDataSetChanged()
