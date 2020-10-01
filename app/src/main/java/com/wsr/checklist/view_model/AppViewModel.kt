@@ -18,7 +18,12 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
         val infoListDao: InfoListDao = InfoListDatabase.getDatabase(application,viewModelScope).infoListDao()
         repository = AppRepository(infoListDao)
         infoList = repository.infoList
+
+        //val testList : MutableList<InfoList>? = infoList.value
+        //changeItem(testList[2].id, "TEST")
     }
+
+
 
     //データベースに値を代入するための関数
     fun insert(infoList: InfoList) = viewModelScope.launch(Dispatchers.IO){

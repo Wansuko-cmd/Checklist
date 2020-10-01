@@ -16,6 +16,6 @@ class InfoList(
     @PrimaryKey val id: String,
     @ColumnInfo(name = "number") var number: Int,
     @ColumnInfo(name = "title") val title: String,
-    @ColumnInfo(name = "check") val check: Boolean,
-    @ColumnInfo(name = "item") val item: String
+    @ColumnInfo(name = "check") var check: Boolean,
+    @ColumnInfo(name = "item") var item: String
 )

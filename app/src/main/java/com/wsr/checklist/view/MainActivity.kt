@@ -54,9 +54,9 @@ class MainActivity : AppCompatActivity() {
                         val title = checkTitle(editText.text.toString(), adapter.titleList)
 
                         //新しく作成するチェックリストの中身を記入するためのインテント
-                        val intent = Intent(this, EditCheckList::class.java)
+                        /*val intent = Intent(this, EditCheckList::class.java)
                         intent.putExtra("TITLE", title)
-                        startActivity(intent)
+                        startActivity(intent)*/
                     }
                     .setNegativeButton("Cancel"){dialog, which ->}
                     .setCancelable(false)

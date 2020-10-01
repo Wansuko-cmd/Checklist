@@ -13,20 +13,28 @@ import androidx.recyclerview.widget.RecyclerView
 import com.wsr.checklist.view_model.AppViewModel
 import com.wsr.checklist.adapter.ListAdapter
 import com.wsr.checklist.R
+import com.wsr.checklist.info_list_database.InfoList
+import com.wsr.checklist.view_model.EditViewModel
 import kotlinx.android.synthetic.main.activity_show_contents.*
+import java.util.*
 
 class ShowContents : AppCompatActivity() {
+
+    private lateinit var viewModel: AppViewModel
+    private lateinit var editViewModel: EditViewModel
+    private lateinit var title: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_show_contents)
 
         //MainActivityからの引数を代入
-        var title = intent.getStringExtra("TITLE")
+        title = intent.getStringExtra("TITLE")!!
 
         //インスタンス形成
-        val viewModel: AppViewModel = ViewModelProviders.of(this).get(AppViewModel::class.java)
-        val adapter = ListAdapter(this, title!!, viewModel)
+        viewModel = ViewModelProviders.of(this).get(AppViewModel::class.java)
+        editViewModel = ViewModelProviders.of(this).get(EditViewModel::class.java)
+        val adapter = ListAdapter(this, title!!, viewModel, editViewModel)
         val layoutManager = LinearLayoutManager(this)
 
         //RecyclerViewの設定
@@ -40,9 +48,9 @@ class ShowContents : AppCompatActivity() {
          */
         //editボタンを押したとき
         edit_button.setOnClickListener {
-            val intent = Intent(this, EditCheckList::class.java)
+            /*val intent = Intent(this, EditCheckList::class.java)
             intent.putExtra("TITLE", title)
-            startActivity(intent)
+            startActivity(intent)*/
         }
 
         //renameボタンを押したとき
@@ -96,64 +104,23 @@ class ShowContents : AppCompatActivity() {
             finish()
         }
 
-        //toolbarのメニュー画面の設定（コメントアウト中）
-
-        /*show_toolbar.inflateMenu(R.menu.menu_for_show)
-
-        //Menuバーを押した際の処理
-        show_toolbar.setOnMenuItemClickListener{menuItem ->
-
-            //editを押したとき
-            when (menuItem.itemId) {
-                R.id.edit -> {
-                    val intent = Intent(this, EditCheckList::class.java)
-                    intent.putExtra("TITLE", title)
-                    startActivity(intent)
-                }
-
-                //Rename titleを押したとき
-                R.id.rename -> {
-                    val editText = EditText(this)
-                    editText.setText(title)
-
-                    //Renameのためのアラートダイアログの表示
-                    AlertDialog.Builder(this)
-                        .setTitle("Rename Title")
-                        .setMessage("Input the title")
-                        .setView(editText)
-                        .setPositiveButton("OK") { dialog, which ->
-
-                            //新しいチェックリストのタイトルの入った変数
-                            val title = MainActivity().checkTitle(editText.text.toString(), adapter.titleList)
-                            for (i in adapter.list){
-                                viewModel.changeTitle(i.id, title)
-                            }
-                        }
-                        .setNegativeButton("Cancel"){dialog, which ->}
-                        .setCancelable(false)
-                        .show()
-                }
-                R.id.delete -> {
-                    AlertDialog.Builder(this)
-                        .setTitle("Waring")
-                        .setMessage("Do you really want to delete it?")
-                        .setPositiveButton("Yes"){ dialog, which ->
-                            viewModel.deleteWithTitle(title)
-                            finish()
-                        }
-                        .setNegativeButton("No"){dialog, which ->
-
-                        }
-                        .show()
-                }
-            }
-            true
-        }*/
-
         //LiveDataの監視、値が変更した際に実行する関数の設定
         viewModel.infoList.observe(this, Observer{list ->
             list?.let{adapter.setInfoList(it)}
         })
+
+        editViewModel.editList.observe(this, Observer{list ->
+            list?.let{adapter.setEditList(it)}
+        })
+    }
+
+    override fun onStop() {
+        super.onStop()
+        viewModel.deleteWithTitle(title)
+        val list = editViewModel.editList.value!!.filter{ it.item != ""}
+        for ((count, i) in list.withIndex()){
+            viewModel.insert(InfoList(UUID.randomUUID().toString(), count, title, i.check, i.item))
+        }
     }
 
 }
