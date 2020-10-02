@@ -58,6 +58,7 @@ class MainAdapter(private val context: Context, private val viewModel: AppViewMo
                 titleList.add(numOfTitle.title)
             }
         }
+        titleList.sort()
         notifyDataSetChanged()
     }
 }

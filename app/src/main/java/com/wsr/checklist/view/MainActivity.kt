@@ -11,7 +11,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.wsr.checklist.view_model.AppViewModel
 import com.wsr.checklist.adapter.MainAdapter
 import com.wsr.checklist.R
+import com.wsr.checklist.info_list_database.InfoList
 import kotlinx.android.synthetic.main.activity_main.*
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -54,9 +56,10 @@ class MainActivity : AppCompatActivity() {
                         val title = checkTitle(editText.text.toString(), adapter.titleList)
 
                         //新しく作成するチェックリストの中身を記入するためのインテント
-                        /*val intent = Intent(this, EditCheckList::class.java)
+                        viewModel.insert(InfoList(UUID.randomUUID().toString(), 0, title, false, ""))
+                        val intent = Intent(this, ShowContents::class.java)
                         intent.putExtra("TITLE", title)
-                        startActivity(intent)*/
+                        startActivity(intent)
                     }
                     .setNegativeButton("Cancel"){dialog, which ->}
                     .setCancelable(false)
@@ -65,8 +68,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     //同じ名前のタイトルがないかを確認する関数
-    fun checkTitle(title: String, titleList: List<String>): String{
-        var title = title
+    fun checkTitle(Title: String, titleList: List<String>): String{
+        var title = Title
         if (title == "") title = "Non-Title"
         for (i in titleList) {
             if (title == i) title = addNumber(title, titleList)

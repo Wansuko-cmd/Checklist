@@ -23,6 +23,7 @@ class ShowContents : AppCompatActivity() {
     private lateinit var viewModel: AppViewModel
     private lateinit var editViewModel: EditViewModel
     private lateinit var title: String
+    private lateinit var adapter: ListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,7 +35,7 @@ class ShowContents : AppCompatActivity() {
         //インスタンス形成
         viewModel = ViewModelProviders.of(this).get(AppViewModel::class.java)
         editViewModel = ViewModelProviders.of(this).get(EditViewModel::class.java)
-        val adapter = ListAdapter(this, title!!, viewModel, editViewModel)
+        adapter = ListAdapter(this, title, viewModel, editViewModel)
         val layoutManager = LinearLayoutManager(this)
 
         //RecyclerViewの設定
@@ -48,9 +49,10 @@ class ShowContents : AppCompatActivity() {
          */
         //editボタンを押したとき
         edit_button.setOnClickListener {
-            /*val intent = Intent(this, EditCheckList::class.java)
-            intent.putExtra("TITLE", title)
-            startActivity(intent)*/
+            val id = UUID.randomUUID().toString()
+            viewModel.insert(InfoList(id , adapter.listForCheck.size, title, false, ""))
+            editViewModel.insert(InfoList(id , adapter.listForCheck.size, title, false, ""))
+            adapter.notifyDataSetChanged()
         }
 
         //renameボタンを押したとき
@@ -68,9 +70,9 @@ class ShowContents : AppCompatActivity() {
                     //新しいチェックリストのタイトルの入った変数
                     title = MainActivity().checkTitle(editText.text.toString(), adapter.titleList)
                     for (i in adapter.list){
-                        viewModel.changeTitle(i.id, title!!)
+                        viewModel.changeTitle(i.id, title)
                     }
-                    adapter.title = title!!
+                    adapter.title = title
                     show_toolbar.title = title
                 }
                 .setNegativeButton("Cancel"){dialog, which ->}
@@ -108,19 +110,14 @@ class ShowContents : AppCompatActivity() {
         viewModel.infoList.observe(this, Observer{list ->
             list?.let{adapter.setInfoList(it)}
         })
-
-        editViewModel.editList.observe(this, Observer{list ->
-            list?.let{adapter.setEditList(it)}
-        })
     }
 
     override fun onStop() {
         super.onStop()
-        viewModel.deleteWithTitle(title)
-        val list = editViewModel.editList.value!!.filter{ it.item != ""}
-        for ((count, i) in list.withIndex()){
-            viewModel.insert(InfoList(UUID.randomUUID().toString(), count, title, i.check, i.item))
+        val list = editViewModel.editList
+        for(i in list){
+            viewModel.changeItem(i.id, i.item)
+            viewModel.changeCheck(i.id, i.check)
         }
     }
-
 }

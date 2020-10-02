@@ -25,7 +25,7 @@ class ListAdapter(
     var titleList = mutableListOf<String>()
 
     //選択されたタイトルのチェックリストの全ての情報を格納する変数
-    var list = emptyList<InfoList>()
+    var list = mutableListOf<InfoList>()
 
     var listForCheck = emptyList<InfoList>()
 
@@ -43,7 +43,6 @@ class ListAdapter(
 
     //ViewHolderのインスタンスの保持する値を変更
     override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
-
         //データベースの情報を格納するためのプロセス
         for (i in listForCheck) {
             if (holder.adapterPosition == i.number) {
@@ -52,14 +51,6 @@ class ListAdapter(
             }
         }
 
-
-
-        holder.item.addTextChangedListener(object : CustomTextWatcher {
-            override fun afterTextChanged(p0: Editable?) {
-                editViewModel.changeItem(holder.adapterPosition, p0.toString())
-            }
-        })
-
         //チェックのついてないところを色付けするためのプロセス
         if (holder.check.isChecked) {
             holder.view.setBackgroundColor(Color.parseColor("#FFFFFF"))
@@ -67,11 +58,27 @@ class ListAdapter(
             holder.view.setBackgroundColor(Color.parseColor("#AFEEEE"))
         }
 
+        holder.item.addTextChangedListener(object : CustomTextWatcher {
+            override fun afterTextChanged(p0: Editable?) {
+                for (i in list){
+                    if(holder.adapterPosition == i.number){
+                        //list[holder.adapterPosition] = list[holder.adapterPosition].copy(item = p0.toString())
+                        editViewModel.changeItem(i.number, p0.toString())
+                        break
+                    }
+                }
+            }
+        })
+
         //チェックの状態が変更したときにデータベースに保存するためのプロセス
         holder.check.setOnClickListener {
             for (i in list) {
                 if (holder.adapterPosition == i.number) {
-                    editViewModel.changeCheck(holder.adapterPosition, holder.check.isChecked)
+                    //list[holder.adapterPosition] = list[holder.adapterPosition].copy(check = holder.check.isChecked)
+                    //editViewModel.changeCheck(i.number, holder.check.isChecked)
+                    viewModel.changeCheck(i.id, holder.check.isChecked)
+                    notifyDataSetChanged()
+                    break
                 }
             }
         }
@@ -79,7 +86,6 @@ class ListAdapter(
 
     //LiveDataの値が変更した際に実行される関数
     internal fun setInfoList(lists: MutableList<InfoList>){
-        lists.sortBy { it.number }
         for (numOfTitle in lists){
             if (!titleList.contains(numOfTitle.title)){
                 titleList.add(numOfTitle.title)
@@ -93,15 +99,14 @@ class ListAdapter(
             }
         }
         tempList.sortBy { it.number }
-        //editViewModel.editList.value = tempList
-        listForCheck = sortTrueFalse(tempList)
+        list = tempList
+        listForCheck = sortTrueFalse(list)
         notifyDataSetChanged()
     }
 
-    internal fun setEditList(lists: MutableList<InfoList>){
+    internal fun maintainList(lists: MutableList<InfoList>){
         this.list = lists
-        list.sortedBy { it.number }
-        listForCheck = sortTrueFalse(lists)
+        list.sortBy { it.number }
         notifyDataSetChanged()
     }
 
