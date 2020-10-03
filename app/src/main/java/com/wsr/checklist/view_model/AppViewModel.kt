@@ -18,9 +18,6 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
         val infoListDao: InfoListDao = InfoListDatabase.getDatabase(application,viewModelScope).infoListDao()
         repository = AppRepository(infoListDao)
         infoList = repository.infoList
-
-        //val testList : MutableList<InfoList>? = infoList.value
-        //changeItem(testList[2].id, "TEST")
     }
 
 

@@ -3,6 +3,7 @@ package com.wsr.checklist.view
 
 import android.app.AlertDialog
 import android.content.Intent
+import android.icu.text.IDNA
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.EditText
@@ -35,7 +36,7 @@ class ShowContents : AppCompatActivity() {
         //インスタンス形成
         viewModel = ViewModelProviders.of(this).get(AppViewModel::class.java)
         editViewModel = ViewModelProviders.of(this).get(EditViewModel::class.java)
-        adapter = ListAdapter(this, title, viewModel, editViewModel)
+        adapter = ListAdapter(title, viewModel, editViewModel)
         val layoutManager = LinearLayoutManager(this)
 
         //RecyclerViewの設定
@@ -50,8 +51,10 @@ class ShowContents : AppCompatActivity() {
         //editボタンを押したとき
         edit_button.setOnClickListener {
             val id = UUID.randomUUID().toString()
-            viewModel.insert(InfoList(id , adapter.list.size, title, false, ""))
-            editViewModel.insert(InfoList(id , adapter.list.size, title, false, ""))
+            viewModel.insert(InfoList(id , adapter.listForCheck.size, title, false, ""))
+            editViewModel.insert(InfoList(id , adapter.listForCheck.size, title, false, ""))
+            //recyclerView.scrollToPosition(adapter.list.size-1)
+            adapter.focus = adapter.listForCheck.size
             adapter.notifyDataSetChanged()
         }
 
@@ -69,7 +72,7 @@ class ShowContents : AppCompatActivity() {
 
                     //新しいチェックリストのタイトルの入った変数
                     if (title != editText.text.toString()) MainActivity().checkTitle(editText.text.toString(), adapter.titleList)
-                    for (i in adapter.list){
+                    for (i in adapter.listForCheck){
                         viewModel.changeTitle(i.id, title)
                     }
                     adapter.title = title
@@ -88,7 +91,7 @@ class ShowContents : AppCompatActivity() {
                 .setPositiveButton("Yes") { dialog, which ->
 
                     //新しいチェックリストのタイトルの入った変数
-                    for (i in adapter.list){
+                    for (i in adapter.listForCheck){
                         viewModel.changeCheck(i.id , false)
                     }
                 }
@@ -114,9 +117,17 @@ class ShowContents : AppCompatActivity() {
 
     override fun onStop() {
         super.onStop()
-        val list = editViewModel.editList
+        val list = editViewModel.getList()
         for(i in list){
             viewModel.changeItem(i.id, i.item)
         }
+        /*viewModel.deleteWithTitle(title)
+        val list = if (editViewModel.editList != emptyList<InfoList>()) editViewModel.editList.filter { it.item != "" } else listOf(
+            InfoList(UUID.randomUUID().toString(), 0, title, false, "")
+        )
+        list.sortedBy { it.id }
+        for (i in list){
+            viewModel.insert(i)
+        }*/
     }
 }
