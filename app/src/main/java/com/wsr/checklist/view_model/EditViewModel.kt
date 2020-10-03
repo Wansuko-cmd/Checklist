@@ -16,12 +16,19 @@ class EditViewModel(application: Application) : AndroidViewModel(application) {
 
     var editList: MutableList<InfoList> = mutableListOf()
 
+    val setPosition: (String) -> Int = fun(id: String): Int{
+        for ((count, i) in editList.withIndex()){
+            if(id == i.id) return count
+        }
+        return -1
+    }
+
     fun insert(List: InfoList){
         editList.add(List)
     }
 
-    fun changeItem(position: Int, Item: String){
-        editList[position] = editList[position].copy(item = Item)
+    fun changeItem(id: String, Item: String){
+        editList[setPosition(id)] = editList[setPosition(id)].copy(item = Item)
     }
 
     /*fun changeCheck(position: Int, Check: Boolean){

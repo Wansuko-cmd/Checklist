@@ -31,7 +31,7 @@ abstract class InfoListDatabase : RoomDatabase(){
         fun populateDatabase(infoListDao: InfoListDao){
             Completable.fromAction{
                 infoListDao.deleteAll()
-                for (i in 0..10){
+                for (i in 0..100){
                     val id = UUID.randomUUID().toString()
                     infoListDao.insert(InfoList(id, i, "Test", false, i.toString()))
                     //infoListDao.changeItem(id, "ok")

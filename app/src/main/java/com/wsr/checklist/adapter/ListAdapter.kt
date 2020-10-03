@@ -62,8 +62,7 @@ class ListAdapter(
             override fun afterTextChanged(p0: Editable?) {
                 for (i in list){
                     if(holder.adapterPosition == i.number){
-                        //list[holder.adapterPosition] = list[holder.adapterPosition].copy(item = p0.toString())
-                        editViewModel.changeItem(i.number, p0.toString())
+                        if (p0.toString() != i.item) editViewModel.changeItem(i.id, p0.toString())
                         break
                     }
                 }
@@ -74,10 +73,7 @@ class ListAdapter(
         holder.check.setOnClickListener {
             for (i in list) {
                 if (holder.adapterPosition == i.number) {
-                    //list[holder.adapterPosition] = list[holder.adapterPosition].copy(check = holder.check.isChecked)
-                    //editViewModel.changeCheck(i.number, holder.check.isChecked)
                     viewModel.changeCheck(i.id, holder.check.isChecked)
-                    notifyDataSetChanged()
                     break
                 }
             }
@@ -95,18 +91,12 @@ class ListAdapter(
         for (numOfTitle in lists){
             if (numOfTitle.title == title){
                 tempList.add(numOfTitle)
-                editViewModel.insert(numOfTitle)
             }
         }
         tempList.sortBy { it.number }
+        if(editViewModel.editList == emptyList<InfoList>()) editViewModel.update(tempList)
         list = tempList
         listForCheck = sortTrueFalse(list)
-        notifyDataSetChanged()
-    }
-
-    internal fun maintainList(lists: MutableList<InfoList>){
-        this.list = lists
-        list.sortBy { it.number }
         notifyDataSetChanged()
     }
 

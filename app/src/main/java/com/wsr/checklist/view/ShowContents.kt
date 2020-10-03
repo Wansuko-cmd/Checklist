@@ -50,8 +50,8 @@ class ShowContents : AppCompatActivity() {
         //editボタンを押したとき
         edit_button.setOnClickListener {
             val id = UUID.randomUUID().toString()
-            viewModel.insert(InfoList(id , adapter.listForCheck.size, title, false, ""))
-            editViewModel.insert(InfoList(id , adapter.listForCheck.size, title, false, ""))
+            viewModel.insert(InfoList(id , adapter.list.size, title, false, ""))
+            editViewModel.insert(InfoList(id , adapter.list.size, title, false, ""))
             adapter.notifyDataSetChanged()
         }
 
@@ -68,7 +68,7 @@ class ShowContents : AppCompatActivity() {
                 .setPositiveButton("OK") { dialog, which ->
 
                     //新しいチェックリストのタイトルの入った変数
-                    title = MainActivity().checkTitle(editText.text.toString(), adapter.titleList)
+                    if (title != editText.text.toString()) MainActivity().checkTitle(editText.text.toString(), adapter.titleList)
                     for (i in adapter.list){
                         viewModel.changeTitle(i.id, title)
                     }
@@ -117,7 +117,6 @@ class ShowContents : AppCompatActivity() {
         val list = editViewModel.editList
         for(i in list){
             viewModel.changeItem(i.id, i.item)
-            viewModel.changeCheck(i.id, i.check)
         }
     }
 }
