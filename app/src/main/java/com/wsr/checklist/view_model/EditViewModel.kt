@@ -25,6 +25,11 @@ class EditViewModel(application: Application) : AndroidViewModel(application) {
         sortTrueFalse(editList)
     }
 
+    fun changeCheck(id: String, Check: Boolean){
+        editList[setPosition(id)] = editList[setPosition(id)].copy(check = Check)
+        sortTrueFalse(editList)
+    }
+
     fun update(list: MutableList<InfoList>){
         editList = list
         sortTrueFalse(editList)
@@ -33,6 +38,8 @@ class EditViewModel(application: Application) : AndroidViewModel(application) {
     fun getList(): MutableList<InfoList>{
         return editList
     }
+
+
 
     private fun sortTrueFalse(list: List<InfoList>): List<InfoList>{
         list.sortedBy { it.number }

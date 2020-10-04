@@ -23,8 +23,6 @@ class ListAdapter(
 
     //選択されたタイトルのチェックリストの全ての情報を格納する変数
 
-    var listForCheck = emptyList<InfoList>()
-
     var focus: Int = -1
 
     //ViewHolderのインスタンスを形成
@@ -32,18 +30,18 @@ class ListAdapter(
         val layoutInflater = LayoutInflater.from(parent.context)
         val view = layoutInflater.inflate(R.layout.add_checklist, parent, false)
         return ListViewHolder(view)
-    }
+            }
 
-    //LiveDataの入っている変数の長さを返す関数
-    override fun getItemCount(): Int {
-        return  listForCheck.size
-    }
+            //LiveDataの入っている変数の長さを返す関数
+            override fun getItemCount(): Int {
+                return  editViewModel.getList().size
+            }
 
-    //ViewHolderのインスタンスの保持する値を変更
-    override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
-        //データベースの情報を格納するためのプロセス
-        for (i in listForCheck) {
-            if (holder.adapterPosition == i.number) {
+            //ViewHolderのインスタンスの保持する値を変更
+            override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
+                //データベースの情報を格納するためのプロセス
+                for (i in editViewModel.getList()) {
+                    if (holder.adapterPosition == i.number) {
                 holder.check.isChecked = i.check
                 holder.item.setText(i.item)
             }
@@ -63,10 +61,9 @@ class ListAdapter(
 
         holder.item.addTextChangedListener(object : CustomTextWatcher {
             override fun afterTextChanged(p0: Editable?) {
-                for (i in listForCheck){
+                for (i in editViewModel.getList()){
                     if(holder.adapterPosition == i.number){
                         if (p0.toString() != i.item) editViewModel.changeItem(i.id, p0.toString())
-                        i.item = p0.toString()
                         break
                     }
                 }
@@ -75,7 +72,7 @@ class ListAdapter(
 
         //チェックの状態が変更したときにデータベースに保存するためのプロセス
         holder.check.setOnClickListener {
-            for (i in listForCheck) {
+            for (i in editViewModel.getList()) {
                 if (holder.adapterPosition == i.number) {
                     viewModel.changeCheck(i.id, holder.check.isChecked)
                     break
@@ -91,26 +88,20 @@ class ListAdapter(
                 titleList.add(numOfTitle.title)
             }
         }
-        val tempList = mutableListOf<InfoList>()
-        for (numOfTitle in lists){
-            if (numOfTitle.title == title){
-                tempList.add(numOfTitle)
+        if(editViewModel.getList() == emptyList<InfoList>()){
+            for (numOfTitle in lists){
+                if (numOfTitle.title == title){
+                    editViewModel.insert(numOfTitle)
+                }
+            }
+        }else{
+            for (numOfTitle in lists){
+                if (numOfTitle.title == title){
+                    editViewModel.changeCheck(numOfTitle.id, numOfTitle.check)
+                }
             }
         }
-        tempList.sortBy { it.number }
-        if(editViewModel.getList() == emptyList<InfoList>()) editViewModel.update(tempList)
-        listForCheck = sortTrueFalse(tempList)
-        notifyDataSetChanged()
-    }
 
-    private fun sortTrueFalse(list: List<InfoList>): List<InfoList>{
-        list.sortedBy { it.number }
-        val onlyFalseList: List<InfoList> = list.filter{ !it.check}
-        val onlyTrueList: List<InfoList> = list.filter{ it.check }
-        val result = onlyFalseList + onlyTrueList
-        for ((num, i) in result.withIndex()){
-            i.number = num
-        }
-        return result
+        notifyDataSetChanged()
     }
 }

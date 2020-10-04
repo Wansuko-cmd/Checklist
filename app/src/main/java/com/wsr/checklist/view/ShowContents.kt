@@ -51,10 +51,10 @@ class ShowContents : AppCompatActivity() {
         //editボタンを押したとき
         edit_button.setOnClickListener {
             val id = UUID.randomUUID().toString()
-            viewModel.insert(InfoList(id , adapter.listForCheck.size, title, false, ""))
-            editViewModel.insert(InfoList(id , adapter.listForCheck.size, title, false, ""))
+            viewModel.insert(InfoList(id , editViewModel.getList().size, title, false, ""))
+            editViewModel.insert(InfoList(id , editViewModel.getList().size, title, false, ""))
             //recyclerView.scrollToPosition(adapter.list.size-1)
-            adapter.focus = adapter.listForCheck.size
+            adapter.focus = editViewModel.getList().size
             adapter.notifyDataSetChanged()
         }
 
@@ -72,7 +72,7 @@ class ShowContents : AppCompatActivity() {
 
                     //新しいチェックリストのタイトルの入った変数
                     if (title != editText.text.toString()) MainActivity().checkTitle(editText.text.toString(), adapter.titleList)
-                    for (i in adapter.listForCheck){
+                    for (i in editViewModel.getList()){
                         viewModel.changeTitle(i.id, title)
                     }
                     adapter.title = title
@@ -91,7 +91,7 @@ class ShowContents : AppCompatActivity() {
                 .setPositiveButton("Yes") { dialog, which ->
 
                     //新しいチェックリストのタイトルの入った変数
-                    for (i in adapter.listForCheck){
+                    for (i in editViewModel.getList()){
                         viewModel.changeCheck(i.id , false)
                     }
                 }
