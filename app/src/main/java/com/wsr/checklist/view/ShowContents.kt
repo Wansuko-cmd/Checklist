@@ -17,6 +17,9 @@ import com.wsr.checklist.R
 import com.wsr.checklist.info_list_database.InfoList
 import com.wsr.checklist.view_model.EditViewModel
 import kotlinx.android.synthetic.main.activity_show_contents.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import java.util.*
 
 class ShowContents : AppCompatActivity() {
@@ -119,13 +122,20 @@ class ShowContents : AppCompatActivity() {
         super.onStop()
         val list = editViewModel.getList()
         for(i in list){
-            viewModel.changeItem(i.id, i.item)
+            runBlocking {
+                val job = GlobalScope.launch {
+                    viewModel.changeItem(i.id, i.item)
+                }
+                job.join()
+            }
         }
-        /*viewModel.deleteWithTitle(title)
-        val list = if (editViewModel.editList != emptyList<InfoList>()) editViewModel.editList.filter { it.item != "" } else listOf(
+        /*
+        viewModel.deleteWithTitle(title)
+        /*val list = if (editViewModel.getList() != emptyList<InfoList>()) editViewModel.getList().filter { it.item != "" } else listOf(
             InfoList(UUID.randomUUID().toString(), 0, title, false, "")
-        )
-        list.sortedBy { it.id }
+        )*/
+        val list = editViewModel.getList()
+        list.sortedBy { it.number }
         for (i in list){
             viewModel.insert(i)
         }*/
