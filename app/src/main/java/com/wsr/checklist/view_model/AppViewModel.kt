@@ -20,8 +20,6 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
         infoList = repository.infoList
     }
 
-
-
     //データベースに値を代入するための関数
     fun insert(infoList: InfoList) = viewModelScope.launch(Dispatchers.IO){
         repository.insert(infoList)
@@ -37,6 +35,7 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
         repository.changeTitle(id, title)
     }
 
+    //アイテムを変更するための関数
     fun changeItem(id: String, item: String)=  viewModelScope.launch(Dispatchers.IO){
         repository.changeItem(id, item)
     }

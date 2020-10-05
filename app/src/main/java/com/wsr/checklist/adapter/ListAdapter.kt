@@ -21,8 +21,7 @@ class ListAdapter(
     //チェックリストのタイトルを全て格納する変数
     var titleList = mutableListOf<String>()
 
-    //選択されたタイトルのチェックリストの全ての情報を格納する変数
-
+    //新しくアイテム欄を作成した際に使用される変数
     var focus: Int = -1
 
     //ViewHolderのインスタンスを形成
@@ -54,11 +53,13 @@ class ListAdapter(
             holder.view.setBackgroundColor(Color.parseColor("#AFEEEE"))
         }
 
+        //新しく作成したアイテム欄にカーソルを合わせる処理
         if(focus == holder.adapterPosition){
             holder.item.requestFocus()
             focus = -1
         }
 
+        //アイテムが変更されたときにeditViewModelの保持する値を変更するためのプロセス
         holder.item.addTextChangedListener(object : CustomTextWatcher {
             override fun afterTextChanged(p0: Editable?) {
                 for (i in editViewModel.getList()){
@@ -88,6 +89,7 @@ class ListAdapter(
                 titleList.add(numOfTitle.title)
             }
         }
+        //最初は代入、それ以降はチェックの値の更新をする
         if(editViewModel.getList() == emptyList<InfoList>()){
             for (numOfTitle in lists){
                 if (numOfTitle.title == title){
@@ -101,7 +103,6 @@ class ListAdapter(
                 }
             }
         }
-
         notifyDataSetChanged()
     }
 }

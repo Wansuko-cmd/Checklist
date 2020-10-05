@@ -24,6 +24,7 @@ import java.util.*
 
 class ShowContents : AppCompatActivity() {
 
+    //それぞれの変数を定義
     private lateinit var viewModel: AppViewModel
     private lateinit var editViewModel: EditViewModel
     private lateinit var title: String
@@ -36,7 +37,7 @@ class ShowContents : AppCompatActivity() {
         //MainActivityからの引数を代入
         title = intent.getStringExtra("TITLE")!!
 
-        //インスタンス形成
+        //インスタンスを代入
         viewModel = ViewModelProviders.of(this).get(AppViewModel::class.java)
         editViewModel = ViewModelProviders.of(this).get(EditViewModel::class.java)
         adapter = ListAdapter(title, viewModel, editViewModel)
@@ -118,10 +119,12 @@ class ShowContents : AppCompatActivity() {
         })
     }
 
+    //ShowContentsが止められた時に実行される処理
     override fun onStop() {
         super.onStop()
         val list = editViewModel.getList()
         for(i in list){
+            //データベースにデータが入るのを待つ
             runBlocking {
                 val job = GlobalScope.launch {
                     viewModel.changeItem(i.id, i.item)
@@ -129,15 +132,5 @@ class ShowContents : AppCompatActivity() {
                 job.join()
             }
         }
-        /*
-        viewModel.deleteWithTitle(title)
-        /*val list = if (editViewModel.getList() != emptyList<InfoList>()) editViewModel.getList().filter { it.item != "" } else listOf(
-            InfoList(UUID.randomUUID().toString(), 0, title, false, "")
-        )*/
-        val list = editViewModel.getList()
-        list.sortedBy { it.number }
-        for (i in list){
-            viewModel.insert(i)
-        }*/
     }
 }

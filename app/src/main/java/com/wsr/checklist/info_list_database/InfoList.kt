@@ -7,6 +7,7 @@ import androidx.room.PrimaryKey
 
 /*
 id:UUIDを用いて一対一のidを記録
+number:リストで何番目に並ぶのかを記録
 title:チェックリストの題名を記録
 check:チェックの有り無しを記録
 item:チェックする項目を記録
