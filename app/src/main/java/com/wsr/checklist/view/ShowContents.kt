@@ -38,8 +38,13 @@ class ShowContents : AppCompatActivity() {
         //インスタンスを代入
         viewModel = ViewModelProviders.of(this).get(AppViewModel::class.java)
         editViewModel = ViewModelProviders.of(this).get(EditViewModel::class.java)
-        adapter = ListAdapter(title, viewModel, editViewModel)
+        adapter = ListAdapter(this, title, viewModel, editViewModel)
         val layoutManager = LinearLayoutManager(this)
+
+        //LiveDataの監視、値が変更した際に実行する関数の設定
+        viewModel.infoList.observe(this, Observer { list ->
+            list?.let { adapter.setInfoList(it) }
+        })
 
         //RecyclerViewの設定
         val recyclerView = findViewById<RecyclerView>(R.id.ContentRecyclerView)
@@ -47,22 +52,12 @@ class ShowContents : AppCompatActivity() {
         recyclerView.layoutManager = layoutManager
         recyclerView.setHasFixedSize(true)
 
-        //LiveDataの監視、値が変更した際に実行する関数の設定
-        viewModel.infoList.observe(this, Observer { list ->
-            list?.let { adapter.setInfoList(it) }
-        })
-
         /*
-        下の３つのボタンを押した際のそれぞれの処理を記述
-         */
+            下の３つのボタンを押した際のそれぞれの処理を記述
+             */
         //editボタンを押したとき
         edit_button.setOnClickListener {
-            val id = UUID.randomUUID().toString()
-            viewModel.insert(InfoList(id, editViewModel.getList().size, title, false, ""))
-            editViewModel.insert(InfoList(id, editViewModel.getList().size, title, false, ""))
-            //recyclerView.scrollToPosition(adapter.list.size-1)
-            adapter.focus = editViewModel.getList().size
-            adapter.notifyDataSetChanged()
+            adapter.addElements()
         }
 
         //renameボタンを押したとき
@@ -82,7 +77,7 @@ class ShowContents : AppCompatActivity() {
                         viewModel.changeCheck(i.id, false)
                     }
                 }
-                .setNegativeButton("Cancel" ,null)
+                .setNegativeButton("Cancel", null)
                 .setCancelable(false)
                 .show()
         }
@@ -108,7 +103,7 @@ class ShowContents : AppCompatActivity() {
     //ShowContentsが止められた時に実行される処理
     override fun onStop() {
         super.onStop()
-        val list = if (editViewModel.getList() != emptyList<InfoList>()) editViewModel.getList().filter { it.item != "" } else listOf(
+        /*val list = if (editViewModel.getList() != emptyList<InfoList>()) editViewModel.getList().filter { it.item != "" } else listOf(
             InfoList(UUID.randomUUID().toString(), 0, title, false, "")
         )
         for(i in list){
@@ -119,20 +114,26 @@ class ShowContents : AppCompatActivity() {
                 }
                 job.join()
             }
+        }*/
+        runBlocking {
+            val job = GlobalScope.launch {
+                viewModel.deleteWithTitle(title)
+            }
+            job.join()
         }
-        /*viewModel.deleteWithTitle(title)
-        val list = if (editViewModel.getList() != mutableListOf<InfoList>()) editViewModel.getList()
+        val numList = editViewModel.getNumList()
+
+            /*if (editViewModel.getList() != mutableListOf<InfoList>()) editViewModel.getList()
             .filter { it.item != "" } else listOf(
             InfoList(UUID.randomUUID().toString(), 0, title, false, "")
-        )
-        list.sortedBy { it.id }
-        for (i in list) {
+        )*/
+        for (i in numList) {
             runBlocking {
                 val job = GlobalScope.launch {
-                    viewModel.insert(i)
+                    viewModel.insert(InfoList(i.id, i.number, title, editViewModel.getCheck(i.id), editViewModel.getItem(i.id)))
                 }
                 job.join()
             }
-        }*/
+        }
     }
 }
