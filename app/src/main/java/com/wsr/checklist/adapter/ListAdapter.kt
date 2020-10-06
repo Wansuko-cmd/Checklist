@@ -44,7 +44,7 @@ class ListAdapter(
     //ViewHolderのインスタンスの保持する値を変更
     override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
         //データベースの情報を格納するためのプロセス
-        for (i in editViewModel.getNumList()) {
+        for (i in editViewModel.getList()) {
             if (holder.adapterPosition == i.number) {
                 holder.check.isChecked = editViewModel.getCheck(i.id)
                 holder.item.setText(editViewModel.getItem(i.id))

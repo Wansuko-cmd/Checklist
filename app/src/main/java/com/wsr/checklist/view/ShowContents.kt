@@ -103,30 +103,26 @@ class ShowContents : AppCompatActivity() {
     //ShowContentsが止められた時に実行される処理
     override fun onStop() {
         super.onStop()
-        /*val list = if (editViewModel.getList() != emptyList<InfoList>()) editViewModel.getList().filter { it.item != "" } else listOf(
-            InfoList(UUID.randomUUID().toString(), 0, title, false, "")
-        )
-        for(i in list){
-            //データベースにデータが入るのを待つ
-            runBlocking {
-                val job = GlobalScope.launch {
-                    viewModel.changeItem(i.id, i.item)
-                }
-                job.join()
-            }
-        }*/
         runBlocking {
             val job = GlobalScope.launch {
                 viewModel.deleteWithTitle(title)
             }
             job.join()
         }
+        //val list = editViewModel.getList()
+
+        /*for (i in list){
+            if(i.item == ""){
+                runBlocking {
+                    val job = GlobalScope.launch {
+                        editViewModel.delete(i.id)
+                    }
+                    job.join()
+                }
+            }
+        }*/
         val numList = editViewModel.getNumList()
 
-            /*if (editViewModel.getList() != mutableListOf<InfoList>()) editViewModel.getList()
-            .filter { it.item != "" } else listOf(
-            InfoList(UUID.randomUUID().toString(), 0, title, false, "")
-        )*/
         for (i in numList) {
             runBlocking {
                 val job = GlobalScope.launch {
