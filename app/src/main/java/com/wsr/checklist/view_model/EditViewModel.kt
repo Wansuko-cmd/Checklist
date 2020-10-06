@@ -66,6 +66,7 @@ class EditViewModel(application: Application) : AndroidViewModel(application) {
         for(i in numList){
             editList[setPosition(i.id)] = editList[setPosition(i.id)].copy(number = i.number)
         }
+        sortTrueFalse(editList)
     }
 
     fun checkEmpty(id: String): Boolean {

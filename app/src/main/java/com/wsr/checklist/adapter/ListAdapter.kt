@@ -92,7 +92,7 @@ class ListAdapter(
         }
 
         holder.delete.setOnClickListener {
-            for (i in editViewModel.getNumList()) {
+            for (i in editViewModel.getList()) {
                 if (holder.adapterPosition == i.number) {
                     editViewModel.delete(i.id)
                     notifyDataSetChanged()
