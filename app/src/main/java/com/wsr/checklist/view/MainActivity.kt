@@ -1,19 +1,16 @@
 package com.wsr.checklist.view
 
-import android.app.AlertDialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.EditText
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.wsr.checklist.view_model.AppViewModel
 import com.wsr.checklist.adapter.MainAdapter
 import com.wsr.checklist.R
-import com.wsr.checklist.info_list_database.InfoList
+import com.wsr.checklist.type_file.renameAlert
 import kotlinx.android.synthetic.main.activity_main.*
-import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -45,51 +42,13 @@ class MainActivity : AppCompatActivity() {
 
         //新しくチェックリストを作成するためのfabの形成
         fab.setOnClickListener{
-            //タイトルを入力するアラートダイアログを出力
-            val editText = EditText(this)
-                AlertDialog.Builder(this)
-                    .setTitle("Title")
-                    .setMessage("Input the title")
-                    .setView(editText)
-                    .setPositiveButton("OK") { dialog, which ->
-                        //新しく作成するチェックリストのタイトルの入った変数
-                        val title = checkTitle(editText.text.toString(), adapter.titleList)
-
-                        //新しく作成するチェックリストの中身を記入するためのインテント
-                        viewModel.insert(InfoList(UUID.randomUUID().toString(), 0, title, false, ""))
-                        val intent = Intent(this, ShowContents::class.java)
-                        intent.putExtra("TITLE", title)
-                        startActivity(intent)
-                    }
-                    .setNegativeButton("Cancel"){dialog, which ->}
-                    .setCancelable(false)
-                    .show()
+            renameAlert(this, makeShowContents, adapter.titleList, "")
         }
     }
 
-    //同じ名前のタイトルがないかを確認する関数
-    fun checkTitle(Title: String, titleList: List<String>): String{
-        var title = Title
-        if (title == "") title = "Non-Title"
-        for (i in titleList) {
-            if (title == i) title = addNumber(title, titleList)
-        }
-        return title
-    }
-
-    //タイトルの後ろに、同じ名前にならないように数字をつける関数
-    private fun addNumber(title: String, titleList: List<String>) : String{
-        var tempTitle: String
-        var num = 1
-        while(true) {
-            var result = true
-            tempTitle = "$title($num)"
-            for (i in titleList) {
-                if (tempTitle == i) result = false
-            }
-            if (result) break
-            num++
-        }
-        return tempTitle
+    private val makeShowContents: (String) -> Unit = { title ->
+        val intent = Intent(this, ShowContents::class.java)
+        intent.putExtra("TITLE", title)
+        startActivity(intent)
     }
 }

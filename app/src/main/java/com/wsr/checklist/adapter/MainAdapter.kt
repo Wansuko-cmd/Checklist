@@ -10,7 +10,9 @@ import com.wsr.checklist.R
 import com.wsr.checklist.info_list_database.InfoList
 import com.wsr.checklist.view_model.AppViewModel
 
-class MainAdapter(private val context: Context, private val viewModel: AppViewModel):
+class MainAdapter(
+    private val context: Context,
+    private val viewModel: AppViewModel):
     RecyclerView.Adapter<MainViewHolder>(){
 
     //LiveDataのから抽出したタイトルのみのリスト代入
@@ -41,10 +43,10 @@ class MainAdapter(private val context: Context, private val viewModel: AppViewMo
             AlertDialog.Builder(context)
                 .setTitle("Waring")
                 .setMessage("Do you really want to delete it?")
-                .setPositiveButton("Yes") {dialog, which ->
+                .setPositiveButton("Yes") { _, _ ->
                     viewModel.deleteWithTitle(titleList[holder.adapterPosition])
                 }
-                .setNegativeButton("No") { dialog, which ->}
+                .setNegativeButton("No", null)
                 .setCancelable(true)
                 .show()
         }

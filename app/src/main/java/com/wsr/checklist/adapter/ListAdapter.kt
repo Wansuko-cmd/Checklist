@@ -16,7 +16,7 @@ class ListAdapter(
     var title: String,
     private val viewModel: AppViewModel,
     private val editViewModel: EditViewModel):
-    RecyclerView.Adapter<ListViewHolder>(){
+    RecyclerView.Adapter<ListViewHolder>() {
 
     //チェックリストのタイトルを全て格納する変数
     var titleList = mutableListOf<String>()
@@ -29,18 +29,18 @@ class ListAdapter(
         val layoutInflater = LayoutInflater.from(parent.context)
         val view = layoutInflater.inflate(R.layout.add_checklist, parent, false)
         return ListViewHolder(view)
-            }
+    }
 
-            //LiveDataの入っている変数の長さを返す関数
-            override fun getItemCount(): Int {
-                return  editViewModel.getList().size
-            }
+    //LiveDataの入っている変数の長さを返す関数
+    override fun getItemCount(): Int {
+        return editViewModel.getList().size
+    }
 
-            //ViewHolderのインスタンスの保持する値を変更
-            override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
-                //データベースの情報を格納するためのプロセス
-                for (i in editViewModel.getList()) {
-                    if (holder.adapterPosition == i.number) {
+    //ViewHolderのインスタンスの保持する値を変更
+    override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
+        //データベースの情報を格納するためのプロセス
+        for (i in editViewModel.getList()) {
+            if (holder.adapterPosition == i.number) {
                 holder.check.isChecked = i.check
                 holder.item.setText(i.item)
             }
@@ -54,7 +54,7 @@ class ListAdapter(
         }
 
         //新しく作成したアイテム欄にカーソルを合わせる処理
-        if(focus == holder.adapterPosition){
+        if (focus == holder.adapterPosition) {
             holder.item.requestFocus()
             focus = -1
         }
@@ -62,8 +62,8 @@ class ListAdapter(
         //アイテムが変更されたときにeditViewModelの保持する値を変更するためのプロセス
         holder.item.addTextChangedListener(object : CustomTextWatcher {
             override fun afterTextChanged(p0: Editable?) {
-                for (i in editViewModel.getList()){
-                    if(holder.adapterPosition == i.number){
+                for (i in editViewModel.getList()) {
+                    if (holder.adapterPosition == i.number) {
                         if (p0.toString() != i.item) editViewModel.changeItem(i.id, p0.toString())
                         break
                     }
@@ -83,22 +83,22 @@ class ListAdapter(
     }
 
     //LiveDataの値が変更した際に実行される関数
-    internal fun setInfoList(lists: MutableList<InfoList>){
-        for (numOfTitle in lists){
-            if (!titleList.contains(numOfTitle.title)){
+    internal fun setInfoList(lists: MutableList<InfoList>) {
+        for (numOfTitle in lists) {
+            if (!titleList.contains(numOfTitle.title)) {
                 titleList.add(numOfTitle.title)
             }
         }
         //最初は代入、それ以降はチェックの値の更新をする
-        if(editViewModel.getList() == emptyList<InfoList>()){
-            for (numOfTitle in lists){
-                if (numOfTitle.title == title){
+        if (editViewModel.getList() == emptyList<InfoList>()) {
+            for (numOfTitle in lists) {
+                if (numOfTitle.title == title) {
                     editViewModel.insert(numOfTitle)
                 }
             }
-        }else{
-            for (numOfTitle in lists){
-                if (numOfTitle.title == title){
+        } else {
+            for (numOfTitle in lists) {
+                if (numOfTitle.title == title) {
                     editViewModel.changeCheck(numOfTitle.id, numOfTitle.check)
                 }
             }

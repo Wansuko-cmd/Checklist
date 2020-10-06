@@ -2,11 +2,8 @@
 package com.wsr.checklist.view
 
 import android.app.AlertDialog
-import android.content.Intent
-import android.icu.text.IDNA
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.EditText
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,6 +12,7 @@ import com.wsr.checklist.view_model.AppViewModel
 import com.wsr.checklist.adapter.ListAdapter
 import com.wsr.checklist.R
 import com.wsr.checklist.info_list_database.InfoList
+import com.wsr.checklist.type_file.renameAlert
 import com.wsr.checklist.view_model.EditViewModel
 import kotlinx.android.synthetic.main.activity_show_contents.*
 import kotlinx.coroutines.GlobalScope
@@ -49,14 +47,19 @@ class ShowContents : AppCompatActivity() {
         recyclerView.layoutManager = layoutManager
         recyclerView.setHasFixedSize(true)
 
+        //LiveDataの監視、値が変更した際に実行する関数の設定
+        viewModel.infoList.observe(this, Observer { list ->
+            list?.let { adapter.setInfoList(it) }
+        })
+
         /*
         下の３つのボタンを押した際のそれぞれの処理を記述
          */
         //editボタンを押したとき
         edit_button.setOnClickListener {
             val id = UUID.randomUUID().toString()
-            viewModel.insert(InfoList(id , editViewModel.getList().size, title, false, ""))
-            editViewModel.insert(InfoList(id , editViewModel.getList().size, title, false, ""))
+            viewModel.insert(InfoList(id, editViewModel.getList().size, title, false, ""))
+            editViewModel.insert(InfoList(id, editViewModel.getList().size, title, false, ""))
             //recyclerView.scrollToPosition(adapter.list.size-1)
             adapter.focus = editViewModel.getList().size
             adapter.notifyDataSetChanged()
@@ -64,27 +67,7 @@ class ShowContents : AppCompatActivity() {
 
         //renameボタンを押したとき
         rename_button.setOnClickListener {
-            val editText = EditText(this)
-            editText.setText(title)
-
-            //Renameのためのアラートダイアログの表示
-            AlertDialog.Builder(this)
-                .setTitle("Rename title")
-                .setMessage("Input the title")
-                .setView(editText)
-                .setPositiveButton("OK") { dialog, which ->
-
-                    //新しいチェックリストのタイトルの入った変数
-                    if (title != editText.text.toString()) MainActivity().checkTitle(editText.text.toString(), adapter.titleList)
-                    for (i in editViewModel.getList()){
-                        viewModel.changeTitle(i.id, title)
-                    }
-                    adapter.title = title
-                    show_toolbar.title = title
-                }
-                .setNegativeButton("Cancel"){dialog, which ->}
-                .setCancelable(false)
-                .show()
+            renameAlert(this, changeTitle, adapter.titleList, title)
         }
 
         //check outボタンを押したとき
@@ -95,11 +78,11 @@ class ShowContents : AppCompatActivity() {
                 .setPositiveButton("Yes") { dialog, which ->
 
                     //新しいチェックリストのタイトルの入った変数
-                    for (i in editViewModel.getList()){
-                        viewModel.changeCheck(i.id , false)
+                    for (i in editViewModel.getList()) {
+                        viewModel.changeCheck(i.id, false)
                     }
                 }
-                .setNegativeButton("Cancel"){dialog, which ->}
+                .setNegativeButton("Cancel" ,null)
                 .setCancelable(false)
                 .show()
         }
@@ -109,20 +92,25 @@ class ShowContents : AppCompatActivity() {
         show_toolbar.setNavigationIcon(R.drawable.ic_back_arrow)
 
         //Backボタンを押した際の処理
-        show_toolbar.setNavigationOnClickListener{
+        show_toolbar.setNavigationOnClickListener {
             finish()
         }
+    }
 
-        //LiveDataの監視、値が変更した際に実行する関数の設定
-        viewModel.infoList.observe(this, Observer{list ->
-            list?.let{adapter.setInfoList(it)}
-        })
+    private val changeTitle: (String) -> Unit = { title ->
+        for (i in editViewModel.getList()) {
+            viewModel.changeTitle(i.id, title)
+        }
+        adapter.title = title
+        show_toolbar.title = title
     }
 
     //ShowContentsが止められた時に実行される処理
     override fun onStop() {
         super.onStop()
-        val list = editViewModel.getList()
+        val list = if (editViewModel.getList() != emptyList<InfoList>()) editViewModel.getList().filter { it.item != "" } else listOf(
+            InfoList(UUID.randomUUID().toString(), 0, title, false, "")
+        )
         for(i in list){
             //データベースにデータが入るのを待つ
             runBlocking {
@@ -132,5 +120,19 @@ class ShowContents : AppCompatActivity() {
                 job.join()
             }
         }
+        /*viewModel.deleteWithTitle(title)
+        val list = if (editViewModel.getList() != mutableListOf<InfoList>()) editViewModel.getList()
+            .filter { it.item != "" } else listOf(
+            InfoList(UUID.randomUUID().toString(), 0, title, false, "")
+        )
+        list.sortedBy { it.id }
+        for (i in list) {
+            runBlocking {
+                val job = GlobalScope.launch {
+                    viewModel.insert(i)
+                }
+                job.join()
+            }
+        }*/
     }
 }
