@@ -44,6 +44,20 @@ class MainActivity : AppCompatActivity() {
         fab.setOnClickListener{
             renameAlert(this, makeShowContents, adapter.titleList, "")
         }
+
+        main_toolbar.inflateMenu(R.menu.menu_for_show)
+
+        main_toolbar.setOnMenuItemClickListener { menuItem ->
+            when(menuItem.itemId){
+                R.id.settings -> showSettings()
+            }
+            true
+        }
+    }
+
+    private fun showSettings(){
+        val intent = Intent(this, ShowPreference::class.java)
+        startActivity(intent)
     }
 
     private val makeShowContents: (String) -> Unit = { title ->

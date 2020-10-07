@@ -1,6 +1,29 @@
 <resources>
     <string name="app_name">CheckList</string>
+
+    <string name="title">TITLE</string>
     <string name="check">Check</string>
     <string name="memo">MEMO</string>
-    <string name="title">TITLE</string>
+
+    <!--タイトル名で削除の警告-->
+    <string name="delete_with_title_title">Waring</string>
+    <string name="delete_with_title_message">Do you really want to delete it?</string>
+    <string name="delete_with_title_positive">Yes</string>
+    <string name="delete_with_title_negative">Cancel</string>
+
+    <!--タイトル変更画面-->
+    <string name="edit_title_title">Title</string>
+    <string name="edit_title_message">Input the title</string>
+    <string name="edit_title_positive">OK</string>
+    <string name="edit_title_negative">Cancel</string>
+
+    <!--チェックアウトの警告-->
+    <string name="check_out_title">Waring</string>
+    <string name="check_out_message">Do you want to check out all elements?</string>
+    <string name="check_out_positive">Yes</string>
+    <string name="check_out_negative">Cancel</string>
+
+    <!--メニュー画面-->
+    <string name="help">help</string>
+    <string name="settings">settings</string>
 </resources>

@@ -39,23 +39,26 @@ class EditViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     //ここに保存されているリストを返り値に持つ関数
-
     fun getList(): MutableList<InfoList> {
         return editList
     }
 
+    //ここに保存されている、本来の数字の並びを保存するリストを返り値に持つ関数
     fun getNumList(): MutableList<RecordNumber> {
         return numList
     }
 
+    //idと結びついている要素のアイテムを返す関数
     fun getItem(id: String): String{
         return editList[setPosition(id)].item
     }
 
+    //idと結びついている要素のチェックの状態を返す関数
     fun getCheck(id: String): Boolean{
         return editList[setPosition(id)].check
     }
 
+    //idで指定された要素を消す関数
     fun delete(id: String){
         numList.removeAll{it.id == id}
         numList.sortBy { it.number }
@@ -69,6 +72,7 @@ class EditViewModel(application: Application) : AndroidViewModel(application) {
         sortTrueFalse(editList)
     }
 
+    //指定された要素の次の要素が何もないか確認するための関数
     fun checkEmpty(id: String): Boolean {
         when {
             setPosition(id) == editList.size - 1 -> return true

@@ -68,16 +68,16 @@ class ShowContents : AppCompatActivity() {
         //check outボタンを押したとき
         check_out_button.setOnClickListener {
             AlertDialog.Builder(this)
-                .setTitle("Waring")
-                .setMessage("Do you want to check out all elements?")
-                .setPositiveButton("Yes") { dialog, which ->
+                .setTitle(R.string.check_out_title)
+                .setMessage(R.string.check_out_message)
+                .setPositiveButton(R.string.check_out_positive) { dialog, which ->
 
                     //新しいチェックリストのタイトルの入った変数
                     for (i in editViewModel.getList()) {
                         viewModel.changeCheck(i.id, false)
                     }
                 }
-                .setNegativeButton("Cancel", null)
+                .setNegativeButton(R.string.check_out_negative, null)
                 .setCancelable(false)
                 .show()
         }

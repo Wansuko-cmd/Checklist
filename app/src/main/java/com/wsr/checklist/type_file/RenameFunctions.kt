@@ -3,15 +3,17 @@ package com.wsr.checklist.type_file
 import android.app.AlertDialog
 import android.content.Context
 import android.widget.EditText
+import com.wsr.checklist.R
+import java.util.*
 
 fun renameAlert(context: Context, Function: (String) -> Unit, titleList: List<String>, setTitle: String){
     val editText = EditText(context)
     editText.setText(setTitle)
     AlertDialog.Builder(context)
-        .setTitle("Title")
-        .setMessage("Input the title")
+        .setTitle(R.string.edit_title_title)
+        .setMessage(R.string.edit_title_message)
         .setView(editText)
-        .setPositiveButton("OK") { _, _ ->
+        .setPositiveButton(R.string.edit_title_positive) { _, _ ->
             //新しく作成するチェックリストのタイトルの入った変数
             val title = if(
                 (editText.text.toString() == setTitle
@@ -21,7 +23,7 @@ fun renameAlert(context: Context, Function: (String) -> Unit, titleList: List<St
             //渡された関数を実行
             Function(title)
         }
-        .setNegativeButton("Cancel", null)
+        .setNegativeButton(R.string.edit_title_negative, null)
         .setCancelable(false)
         .show()
 }

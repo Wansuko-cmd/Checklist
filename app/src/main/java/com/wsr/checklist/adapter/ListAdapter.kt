@@ -133,6 +133,6 @@ class ListAdapter(
         editViewModel.insert(InfoList(id, editViewModel.getList().size, title, false, ""))
         //recyclerView.scrollToPosition(adapter.list.size-1)
         focus = editViewModel.getList().size
-        notifyDataSetChanged()
+        //notifyDataSetChanged()
     }
 }

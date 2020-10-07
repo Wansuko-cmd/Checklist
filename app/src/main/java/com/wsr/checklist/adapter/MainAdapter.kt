@@ -41,12 +41,12 @@ class MainAdapter(
         }
         holder.delete.setOnClickListener {
             AlertDialog.Builder(context)
-                .setTitle("Waring")
-                .setMessage("Do you really want to delete it?")
-                .setPositiveButton("Yes") { _, _ ->
+                .setTitle(R.string.delete_with_title_title)
+                .setMessage(R.string.delete_with_title_message)
+                .setPositiveButton(R.string.delete_with_title_positive) { _, _ ->
                     viewModel.deleteWithTitle(titleList[holder.adapterPosition])
                 }
-                .setNegativeButton("No", null)
+                .setNegativeButton(R.string.delete_with_title_negative, null)
                 .setCancelable(true)
                 .show()
         }
