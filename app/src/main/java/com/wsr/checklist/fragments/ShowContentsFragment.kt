@@ -8,6 +8,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.wsr.checklist.R
@@ -16,6 +18,7 @@ import com.wsr.checklist.info_list_database.InfoList
 import com.wsr.checklist.type_file.renameAlert
 import com.wsr.checklist.view_model.AppViewModel
 import com.wsr.checklist.view_model.EditViewModel
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_show_contents.*
 import kotlinx.android.synthetic.main.fragment_show_contents.edit_button
 import kotlinx.coroutines.GlobalScope
@@ -26,6 +29,8 @@ import java.util.*
 class ShowContentsFragment() : Fragment(){
     //recyclerViewの定義
     private var recyclerView: RecyclerView? = null
+
+    private val args: ShowContentsFragmentArgs by navArgs()
 
     //使う変数の定義
     private var titleList = mutableListOf<String>()
@@ -47,7 +52,7 @@ class ShowContentsFragment() : Fragment(){
         super.onViewCreated(view, savedInstanceState)
 
         //変数の初期化
-        title = arguments?.getString("TITLE")!!
+        title = args.content
         viewModel = ViewModelProviders.of(this).get(AppViewModel::class.java)
         editViewModel = ViewModelProviders.of(this).get(EditViewModel::class.java)
         showContentsAdapter = ListAdapter(editViewModel)
@@ -94,12 +99,13 @@ class ShowContentsFragment() : Fragment(){
                 .show()
         }
 
-        /*main_toolbar.title = title
-        main_toolbar.setNavigationIcon(R.drawable.ic_back_arrow)
+        requireActivity().main_toolbar.title = title
+        requireActivity().main_toolbar.setNavigationIcon(R.drawable.ic_back_arrow)
 
         //Backボタンを押した際の処理
-        main_toolbar.setNavigationOnClickListener {
-        }*/
+        requireActivity().main_toolbar.setNavigationOnClickListener {
+            findNavController().navigate(R.id.back_to_title_fragment)
+        }
 
         //テキストが変更された際の処理
         showContentsAdapter.changeText = { p0, position ->
@@ -137,8 +143,6 @@ class ShowContentsFragment() : Fragment(){
                     break
                 }
             }
-            //showContentsAdapter.notifyDataSetChanged()
-            //showContentsAdapter.notifyItemRemoved(position)
         }
     }
 
@@ -147,6 +151,8 @@ class ShowContentsFragment() : Fragment(){
         for (i in editViewModel.getList()) {
             viewModel.changeTitle(i.id, title)
         }
+        this.title =  title
+        requireActivity().main_toolbar.title = title
     }
 
     //アプリ停止時にデータをデータベースに保存する処理

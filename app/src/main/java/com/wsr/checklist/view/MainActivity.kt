@@ -14,10 +14,10 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         //タイトル名を表示するフラグメントを設定
-        supportFragmentManager
+        /*supportFragmentManager
             .beginTransaction()
             .replace(R.id.main_fragment_container, ShowTitleFragment())
-            .commit()
+            .commit()*/
 
         //toolbarの設定
         main_toolbar.inflateMenu(R.menu.menu_for_show)

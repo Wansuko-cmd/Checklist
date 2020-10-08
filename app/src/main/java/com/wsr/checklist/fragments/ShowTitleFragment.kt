@@ -9,12 +9,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.wsr.checklist.R
 import com.wsr.checklist.adapter.MainAdapter
 import com.wsr.checklist.type_file.renameAlert
 import com.wsr.checklist.view_model.AppViewModel
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_show_title.*
 
 class ShowTitleFragment() : Fragment(){
@@ -77,6 +79,9 @@ class ShowTitleFragment() : Fragment(){
                 .setCancelable(true)
                 .show()
         }
+
+        requireActivity().main_toolbar.title = R.string.app_name.toString()
+        requireActivity().main_toolbar.navigationIcon = null
     }
 
     override fun onDestroyView() {
@@ -88,7 +93,9 @@ class ShowTitleFragment() : Fragment(){
 
     //タイトル名から、チェックリストを表示するための処理
     private val makeShowContents: (String) -> Unit = { title ->
-        val bundle = Bundle()
+        val action = ShowTitleFragmentDirections.actionTitleFragmentToContentsFragment(title)
+        findNavController().navigate(action)
+        /*val bundle = Bundle()
         bundle.putString("TITLE", title)
 
         val activity = requireView().context as AppCompatActivity
@@ -99,6 +106,6 @@ class ShowTitleFragment() : Fragment(){
             .beginTransaction()
             .replace(R.id.main_fragment_container, showContents)
             .addToBackStack(null)
-            .commit()
+            .commit()*/
     }
 }

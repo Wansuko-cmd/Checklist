@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation"
+    app:startDestination="@id/title_fragment">
+
+    <fragment
+        android:id="@+id/title_fragment"
+        android:name="com.wsr.checklist.fragments.ShowTitleFragment"
+        android:label="title_fragment"
+        tools:layout="@layout/fragment_show_title">
+        <action
+            android:id="@+id/action_title_fragment_to_contents_fragment"
+            app:destination="@id/contents_fragment" />
+        <action
+            android:id="@+id/title_fragment_to_setting"
+            app:destination="@id/settings_fragment"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/contents_fragment"
+        android:name="com.wsr.checklist.fragments.ShowContentsFragment"
+        android:label="contents_fragment"
+        tools:layout="@layout/fragment_show_contents">
+        <action
+            android:id="@+id/back_to_title_fragment"
+            app:popUpTo="@id/title_fragment"/>
+        <action
+            android:id="@+id/contents_fragment_to_setting"
+            app:destination="@id/settings_fragment"/>
+        <argument
+            android:name="content"
+            app:argType="string"/>
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/settings_fragment"
+        android:name="com.wsr.checklist.preference.PreferenceFragment"
+        android:label="setting_fragment"
+        tools:layout="@layout/show_preference">
+    </fragment>
+
+</navigation>
