@@ -10,6 +10,7 @@ import com.wsr.checklist.info_list_database.InfoList
 class MainAdapter():
     RecyclerView.Adapter<MainViewHolder>(){
 
+    //全てのタイトル名を保存するリスト
     var titleList = mutableListOf<String>()
 
     //Titleをクリックされたときに実行される関数名
@@ -32,15 +33,18 @@ class MainAdapter():
     override fun onBindViewHolder(holder: MainViewHolder, position: Int) {
         holder.title.text = titleList[position]
 
+        //タイトル名をクリックした際の処理
         holder.title.setOnClickListener {
             clickTitleOnListener(holder.title.text.toString())
         }
 
+        //deleteボタンを押した際の処理
         holder.delete.setOnClickListener {
             clickDeleteOnListener(titleList[holder.adapterPosition], holder.adapterPosition)
         }
     }
 
+    //LiveDataの内容をMainAdapterのインスタンスに反映させる関数
     internal fun setInfoList(lists: MutableList<InfoList>){
         titleList = mutableListOf()
         for (numOfTitle in lists){

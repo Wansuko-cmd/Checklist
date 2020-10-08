@@ -24,8 +24,10 @@ import kotlinx.coroutines.runBlocking
 import java.util.*
 
 class ShowContentsFragment() : Fragment(){
+    //recyclerViewの定義
     private var recyclerView: RecyclerView? = null
 
+    //使う変数の定義
     private var titleList = mutableListOf<String>()
     private lateinit var title: String
     private lateinit var viewModel: AppViewModel
@@ -44,33 +46,38 @@ class ShowContentsFragment() : Fragment(){
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        //変数の初期化
         title = arguments?.getString("TITLE")!!
         viewModel = ViewModelProviders.of(this).get(AppViewModel::class.java)
         editViewModel = ViewModelProviders.of(this).get(EditViewModel::class.java)
         showContentsAdapter = ListAdapter(editViewModel)
 
+        //recyclerViewの初期化
         this.recyclerView = show_contents_recycler_view
-
         this.recyclerView?.apply {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(context)
             adapter = showContentsAdapter
         }
 
+        //viewModelが更新された際の処理
         viewModel.infoList.observe(viewLifecycleOwner, Observer { list ->
             list?.let {
                 setInfoList(it)
             }
         })
 
+        //editボタンが押された際の処理
         edit_button.setOnClickListener {
             addElements()
         }
 
+        //renameボタンが押された際の処理
         rename_button.setOnClickListener {
             renameAlert(requireContext(), changeTitle, titleList, title)
         }
 
+        //checkoutボタンが押された際の処理
         check_out_button.setOnClickListener {
             AlertDialog.Builder(context)
                 .setTitle(R.string.check_out_title)
@@ -94,6 +101,7 @@ class ShowContentsFragment() : Fragment(){
         main_toolbar.setNavigationOnClickListener {
         }*/
 
+        //テキストが変更された際の処理
         showContentsAdapter.changeText = { p0, position ->
             for (i in editViewModel.getList()) {
                 if (position == i.number) {
@@ -106,6 +114,7 @@ class ShowContentsFragment() : Fragment(){
             }
         }
 
+        //チェックの状態が変更されたときの処理
         showContentsAdapter.changeCheck = { check, position ->
             //var id = ""
             for (i in editViewModel.getList()) {
@@ -119,6 +128,7 @@ class ShowContentsFragment() : Fragment(){
             showContentsAdapter.notifyDataSetChanged()
         }
 
+        //deleteボタンが押された際の処理
         showContentsAdapter.deleteElement = { position ->
             for (i in editViewModel.getList()) {
                 if (position == i.number) {
@@ -132,12 +142,14 @@ class ShowContentsFragment() : Fragment(){
         }
     }
 
+    //タイトルが変更された際の処理
     private val changeTitle: (String) -> Unit = { title ->
         for (i in editViewModel.getList()) {
             viewModel.changeTitle(i.id, title)
         }
     }
 
+    //アプリ停止時にデータをデータベースに保存する処理
     override fun onStop() {
         super.onStop()
         runBlocking {
@@ -176,6 +188,7 @@ class ShowContentsFragment() : Fragment(){
         this.recyclerView = null
     }
 
+    //LiveDataの内容を反映させる関数
     private fun setInfoList(lists: MutableList<InfoList>) {
         lists.sortBy { it.number }
         for (numOfTitle in lists) {
@@ -199,6 +212,7 @@ class ShowContentsFragment() : Fragment(){
         showContentsAdapter.notifyDataSetChanged()
     }
 
+    //空欄を追加するための処理
     private fun addElements() {
         val id = UUID.randomUUID().toString()
         viewModel.insert(InfoList(id, editViewModel.getList().size, title, false, ""))

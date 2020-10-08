@@ -18,7 +18,10 @@ import com.wsr.checklist.view_model.AppViewModel
 import kotlinx.android.synthetic.main.fragment_show_title.*
 
 class ShowTitleFragment() : Fragment(){
+    //recyclerViewの定義
     private var recyclerView: RecyclerView? = null
+
+    //使う変数の定義
     private lateinit var viewModel: AppViewModel
     private lateinit var mainAdapter: MainAdapter
 
@@ -34,29 +37,34 @@ class ShowTitleFragment() : Fragment(){
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        //変数の初期化
         viewModel = ViewModelProviders.of(this).get(AppViewModel::class.java)
         mainAdapter = MainAdapter()
 
+        //recyclerViewの初期化
         this.recyclerView = show_title_recycler_view
-
         this.recyclerView?.apply{
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(context)
             adapter = mainAdapter
         }
 
+        //viewModelが更新された際の処理
         viewModel.infoList.observe(viewLifecycleOwner, Observer{list ->
             list?.let{mainAdapter.setInfoList(it)}
         })
 
+        //fabボタンが押された際の処理
         fab.setOnClickListener {
             renameAlert(requireContext(), makeShowContents, mainAdapter.titleList, "")
         }
 
+        //タイトルが押されたときの処理
         mainAdapter.clickTitleOnListener = {title ->
             makeShowContents(title)
         }
 
+        //deleteボタンが押された際の処理
         mainAdapter.clickDeleteOnListener = {title, position ->
             AlertDialog.Builder(context)
                 .setTitle(R.string.delete_with_title_title)
@@ -78,7 +86,7 @@ class ShowTitleFragment() : Fragment(){
     }
 
 
-
+    //タイトル名から、チェックリストを表示するための処理
     private val makeShowContents: (String) -> Unit = { title ->
         val bundle = Bundle()
         bundle.putString("TITLE", title)

@@ -14,6 +14,7 @@ class ListAdapter(
     private val editViewModel: EditViewModel):
     RecyclerView.Adapter<ListViewHolder>() {
 
+    //使用する関数の定義
     var changeText: (p0: String, position: Int) -> Unit = {_,_  ->}
     var changeCheck: (check: Boolean, position: Int) -> Unit = {_, _ ->}
     var deleteElement: (position: Int) -> Unit = {}
@@ -60,6 +61,11 @@ class ListAdapter(
             changeCheck(holder.check.isChecked, holder.adapterPosition)
         }
 
+        holder.item.setOnClickListener{
+
+        }
+
+        //deleteボタンが押されたときの処理
         holder.delete.setOnClickListener {
             deleteElement(holder.adapterPosition)
         }

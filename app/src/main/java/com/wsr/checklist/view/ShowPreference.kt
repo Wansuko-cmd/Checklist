@@ -10,6 +10,7 @@ class ShowPreference :AppCompatActivity(){
         super.onCreate(savedInstanceState)
         setContentView(R.layout.show_preference)
 
+        //設定画面のフラグメントの設定
         supportFragmentManager
             .beginTransaction()
             .replace(R.id.settings_container, PreferenceFragment())
