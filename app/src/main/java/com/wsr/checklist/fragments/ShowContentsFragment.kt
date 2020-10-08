@@ -1,0 +1,208 @@
+package com.wsr.checklist.fragments
+
+import android.app.AlertDialog
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.wsr.checklist.R
+import com.wsr.checklist.adapter.ListAdapter
+import com.wsr.checklist.info_list_database.InfoList
+import com.wsr.checklist.type_file.renameAlert
+import com.wsr.checklist.view_model.AppViewModel
+import com.wsr.checklist.view_model.EditViewModel
+import kotlinx.android.synthetic.main.fragment_show_contents.*
+import kotlinx.android.synthetic.main.fragment_show_contents.edit_button
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import java.util.*
+
+class ShowContentsFragment() : Fragment(){
+    private var recyclerView: RecyclerView? = null
+
+    private var titleList = mutableListOf<String>()
+    private lateinit var title: String
+    private lateinit var viewModel: AppViewModel
+    private lateinit var editViewModel: EditViewModel
+    private lateinit var showContentsAdapter: ListAdapter
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        super.onCreateView(inflater, container, savedInstanceState)
+        return inflater.inflate(R.layout.fragment_show_contents, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        title = arguments?.getString("TITLE")!!
+        viewModel = ViewModelProviders.of(this).get(AppViewModel::class.java)
+        editViewModel = ViewModelProviders.of(this).get(EditViewModel::class.java)
+        showContentsAdapter = ListAdapter(editViewModel)
+
+        this.recyclerView = show_contents_recycler_view
+
+        this.recyclerView?.apply {
+            setHasFixedSize(true)
+            layoutManager = LinearLayoutManager(context)
+            adapter = showContentsAdapter
+        }
+
+        viewModel.infoList.observe(viewLifecycleOwner, Observer { list ->
+            list?.let {
+                setInfoList(it)
+            }
+        })
+
+        edit_button.setOnClickListener {
+            addElements()
+        }
+
+        rename_button.setOnClickListener {
+            renameAlert(requireContext(), changeTitle, titleList, title)
+        }
+
+        check_out_button.setOnClickListener {
+            AlertDialog.Builder(context)
+                .setTitle(R.string.check_out_title)
+                .setMessage(R.string.check_out_message)
+                .setPositiveButton(R.string.check_out_positive) { _, _ ->
+
+                    //新しいチェックリストのタイトルの入った変数
+                    for (i in editViewModel.getList()) {
+                        viewModel.changeCheck(i.id, false)
+                    }
+                }
+                .setNegativeButton(R.string.check_out_negative, null)
+                .setCancelable(false)
+                .show()
+        }
+
+        /*main_toolbar.title = title
+        main_toolbar.setNavigationIcon(R.drawable.ic_back_arrow)
+
+        //Backボタンを押した際の処理
+        main_toolbar.setNavigationOnClickListener {
+        }*/
+
+        showContentsAdapter.changeText = { p0, position ->
+            for (i in editViewModel.getList()) {
+                if (position == i.number) {
+                    //一番下の要素の中でエンターキーを押した際に新しく空欄を作る機能
+                    if (p0.endsWith("\n") && (editViewModel.checkEmpty(i.id))) {
+                        addElements()
+                    } else if (p0 != i.item) editViewModel.changeItem(i.id, p0)
+                    break
+                }
+            }
+        }
+
+        showContentsAdapter.changeCheck = { check, position ->
+            //var id = ""
+            for (i in editViewModel.getList()) {
+                if (position == i.number) {
+                    //id = i.id
+                    viewModel.changeCheck(i.id, check)
+                    break
+                }
+            }
+            //showContentsAdapter.notifyItemMoved(position, editViewModel.setPosition(id))
+            showContentsAdapter.notifyDataSetChanged()
+        }
+
+        showContentsAdapter.deleteElement = { position ->
+            for (i in editViewModel.getList()) {
+                if (position == i.number) {
+                    showContentsAdapter.notifyItemRemoved(position)
+                    editViewModel.delete(i.id)
+                    break
+                }
+            }
+            //showContentsAdapter.notifyDataSetChanged()
+            //showContentsAdapter.notifyItemRemoved(position)
+        }
+    }
+
+    private val changeTitle: (String) -> Unit = { title ->
+        for (i in editViewModel.getList()) {
+            viewModel.changeTitle(i.id, title)
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        runBlocking {
+            val job = GlobalScope.launch {
+                viewModel.deleteWithTitle(title)
+            }
+            job.join()
+        }
+        //val list = editViewModel.getList()
+
+        /*for (i in list){
+            if(i.item == ""){
+                runBlocking {
+                    val job = GlobalScope.launch {
+                        editViewModel.delete(i.id)
+                    }
+                    job.join()
+                }
+            }
+        }*/
+        val numList = editViewModel.getNumList()
+
+        for (i in numList) {
+            runBlocking {
+                val job = GlobalScope.launch {
+                    viewModel.insert(InfoList(i.id, i.number, title, editViewModel.getCheck(i.id), editViewModel.getItem(i.id)))
+                }
+                job.join()
+            }
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        this.recyclerView?.adapter = null
+        this.recyclerView = null
+    }
+
+    private fun setInfoList(lists: MutableList<InfoList>) {
+        lists.sortBy { it.number }
+        for (numOfTitle in lists) {
+            if (!titleList.contains(numOfTitle.title)) {
+                titleList.add(numOfTitle.title)
+            }
+        }
+        if (editViewModel.getList() == emptyList<InfoList>()) {
+            for (numOfTitle in lists) {
+                if (numOfTitle.title == title) {
+                    editViewModel.insert(numOfTitle)
+                }
+            }
+        } else {
+            for (numOfTitle in lists) {
+                if (numOfTitle.title == title) {
+                    editViewModel.changeCheck(numOfTitle.id, numOfTitle.check)
+                }
+            }
+        }
+        showContentsAdapter.notifyDataSetChanged()
+    }
+
+    private fun addElements() {
+        val id = UUID.randomUUID().toString()
+        viewModel.insert(InfoList(id, editViewModel.getList().size, title, false, ""))
+        editViewModel.insert(InfoList(id, editViewModel.getList().size, title, false, ""))
+        showContentsAdapter.notifyDataSetChanged()
+    }
+}

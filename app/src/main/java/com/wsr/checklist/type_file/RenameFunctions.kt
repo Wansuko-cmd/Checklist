@@ -4,7 +4,7 @@ import android.app.AlertDialog
 import android.content.Context
 import android.widget.EditText
 import com.wsr.checklist.R
-import java.util.*
+import com.wsr.checklist.fragments.ShowContentsFragment
 
 fun renameAlert(context: Context, Function: (String) -> Unit, titleList: List<String>, setTitle: String){
     val editText = EditText(context)
