@@ -19,6 +19,14 @@ class EditViewModel(application: Application) : AndroidViewModel(application) {
         return -1
     }
 
+    //idを入れることでNumberを返り値に持つ関数
+    val setNumber: (String) -> Int = fun(id: String): Int{
+        for (i in editList){
+            if (id == i.id) return i.number
+        }
+        return -1
+    }
+
     //新しいデータを代入するための関数
     fun insert(List: InfoList) {
         numList.add(RecordNumber(List.id, List.number))

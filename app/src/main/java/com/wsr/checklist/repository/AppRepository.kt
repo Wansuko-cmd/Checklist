@@ -28,6 +28,11 @@ class AppRepository(private val infoListDao: InfoListDao) {
         infoListDao.changeItem(id, item)
     }
 
+    //指定したId名のものを削除する関数
+    fun deleteWithId(id: String){
+        infoListDao.deleteWithId(id)
+    }
+
     //指定したタイトル名のものを削除する関数
     fun deleteWithTitle(title:String){
         infoListDao.deleteWithTitle(title)

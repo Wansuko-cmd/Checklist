@@ -40,6 +40,11 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
         repository.changeItem(id, item)
     }
 
+    //指定したId名のものを削除する関数
+    fun deleteWithId(id: String) = viewModelScope.launch(Dispatchers.IO){
+        repository.deleteWithId(id)
+    }
+
     //タイトル名が一致するものをすべて消すための関数
     fun deleteWithTitle(title: String) = viewModelScope.launch(Dispatchers.IO){
         repository.deleteWithTitle(title)

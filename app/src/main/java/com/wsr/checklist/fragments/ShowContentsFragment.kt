@@ -119,7 +119,6 @@ class ShowContentsFragment() : Fragment(){
 
                     } else if (p0 != i.item){
                         editViewModel.changeItem(i.id, p0)
-                        showContentsAdapter.notifyItemChanged(position)
                     }
                     break
                 }
@@ -145,6 +144,7 @@ class ShowContentsFragment() : Fragment(){
                 if (position == i.number) {
                     showContentsAdapter.notifyItemRemoved(position)
                     editViewModel.delete(i.id)
+                    viewModel.deleteWithId(i.id)
                     break
                 }
             }
@@ -238,10 +238,13 @@ class ShowContentsFragment() : Fragment(){
     //空欄を追加するための処理
     private fun addElements() {
         val id = UUID.randomUUID().toString()
-        val number = editViewModel.getList().size
+        val number = showContentsAdapter.itemCount
         viewModel.insert(InfoList(id, number, title, false, ""))
         editViewModel.insert(InfoList(id, number, title, false, ""))
-        //showContentsAdapter.notifyDataSetChanged()
+        showContentsAdapter.notifyDataSetChanged()
+        recyclerView!!.scrollToPosition(editViewModel.setNumber(id))
+        showContentsAdapter.focus = number
+        showContentsAdapter.checkFocus = true
         showContentsAdapter.notifyItemInserted(number)
     }
 }

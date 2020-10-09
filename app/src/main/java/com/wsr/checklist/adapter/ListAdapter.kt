@@ -19,6 +19,9 @@ class ListAdapter(
     var changeCheck: (check: Boolean, position: Int) -> Unit = {_, _ ->}
     var deleteElement: (position: Int) -> Unit = {}
 
+    var checkFocus: Boolean = false
+    var focus = -1
+
     //ViewHolderのインスタンスを形成
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -40,6 +43,11 @@ class ListAdapter(
                 holder.item.setText(editViewModel.getItem(i.id))
                 break
             }
+        }
+
+        if(checkFocus && holder.adapterPosition == focus){
+            holder.item.requestFocus()
+            checkFocus = false
         }
 
         //チェックのついてないところを色付けするためのプロセス

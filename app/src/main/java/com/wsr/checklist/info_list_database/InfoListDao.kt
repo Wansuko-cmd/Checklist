@@ -27,8 +27,8 @@ interface InfoListDao {
     fun changeItem(UUID: String, Item: String)
 
     //特定のエンティティを消すための関数
-    @Delete
-    fun delete(infoList: InfoList)
+    @Query("Delete FROM info_list_table WHERE id = :id")
+    fun deleteWithId(id: String)
 
     //タイトル名が一致するものをすべて消すための関数
     @Query("Delete From info_list_table WHERE title = :Title")
