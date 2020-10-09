@@ -26,6 +26,6 @@
     <!--メニュー画面-->
     <string name="help">ヘルプ</string>
     <string name="settings">設定</string>
-
+    <string name="rename_title" >タイトル編集</string>
 
 </resources>

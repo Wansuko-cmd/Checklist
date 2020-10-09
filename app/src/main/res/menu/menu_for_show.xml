@@ -2,11 +2,23 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item
-        android:id="@+id/help"
-        android:title="@string/help"
-        android:icon="@drawable/ic_help"
-        app:showAsAction="ifRoom"/>
+    <group
+        android:id="@+id/rename_group">
+        <item
+            android:id="@+id/rename_title"
+            android:title="@string/rename_title"
+            android:icon="@drawable/ic_edit"
+            app:showAsAction="ifRoom"/>
+    </group>
+
+    <group
+        android:id="@+id/help_group">
+        <item
+            android:id="@+id/help"
+            android:title="@string/help"
+            android:icon="@drawable/ic_help"
+            app:showAsAction="ifRoom"/>
+    </group>
 
     <item
         android:id="@+id/settings"

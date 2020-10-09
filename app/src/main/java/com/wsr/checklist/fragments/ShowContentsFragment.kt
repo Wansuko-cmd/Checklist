@@ -1,6 +1,7 @@
 package com.wsr.checklist.fragments
 
 import android.app.AlertDialog
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -18,6 +19,8 @@ import com.wsr.checklist.adapter.ListAdapter
 import com.wsr.checklist.info_list_database.InfoList
 import com.wsr.checklist.type_file.SwipeToDeleteCallback
 import com.wsr.checklist.type_file.renameAlert
+import com.wsr.checklist.view.MainActivity
+import com.wsr.checklist.view.ShowPreference
 import com.wsr.checklist.view_model.AppViewModel
 import com.wsr.checklist.view_model.EditViewModel
 import kotlinx.android.synthetic.main.activity_main.*
@@ -58,6 +61,9 @@ class ShowContentsFragment() : Fragment(){
         viewModel = ViewModelProviders.of(this).get(AppViewModel::class.java)
         editViewModel = ViewModelProviders.of(this).get(EditViewModel::class.java)
         showContentsAdapter = ListAdapter(editViewModel)
+
+        //toolbarの設定
+        setToolbar()
 
         //recyclerViewの初期化
         this.recyclerView = show_contents_recycler_view
@@ -202,6 +208,21 @@ class ShowContentsFragment() : Fragment(){
         this.recyclerView = null
     }
 
+    private fun setToolbar(){
+        val toolbar = requireActivity().main_toolbar
+        toolbar.title = title
+        toolbar.navigationIcon = null
+        toolbar.menu.setGroupVisible(R.id.rename_group, true)
+        toolbar.menu.setGroupVisible(R.id.help_group, false)
+        toolbar.setOnMenuItemClickListener { menuItem ->
+            when(menuItem.itemId){
+                R.id.settings -> showSettings()
+                R.id.rename_title -> renameAlert(requireContext(), changeTitle, titleList, title)
+            }
+            true
+        }
+    }
+
     //LiveDataの内容を反映させる関数
     private fun setInfoList(lists: MutableList<InfoList>) {
         lists.sortBy { it.number }
@@ -246,5 +267,10 @@ class ShowContentsFragment() : Fragment(){
         showContentsAdapter.focus = number
         showContentsAdapter.checkFocus = true
         showContentsAdapter.notifyItemInserted(number)
+    }
+
+    private fun showSettings(){
+        val intent = Intent(requireActivity(), ShowPreference::class.java)
+        startActivity(intent)
     }
 }

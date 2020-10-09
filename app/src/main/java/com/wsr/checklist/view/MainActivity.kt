@@ -15,6 +15,7 @@ class MainActivity : AppCompatActivity() {
 
         //toolbarの設定
         main_toolbar.inflateMenu(R.menu.menu_for_show)
+        main_toolbar.menu.setGroupVisible(R.id.rename_group, false)
         main_toolbar.setOnMenuItemClickListener { menuItem ->
             when(menuItem.itemId){
                 R.id.settings -> showSettings()
@@ -24,7 +25,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     //設定画面に画面遷移するための処理
-    private fun showSettings(){
+    fun showSettings(){
         val intent = Intent(this, ShowPreference::class.java)
         startActivity(intent)
     }

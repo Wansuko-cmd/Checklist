@@ -1,6 +1,7 @@
 package com.wsr.checklist.fragments
 
 import android.app.AlertDialog
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.wsr.checklist.R
 import com.wsr.checklist.adapter.MainAdapter
 import com.wsr.checklist.type_file.renameAlert
+import com.wsr.checklist.view.ShowPreference
 import com.wsr.checklist.view_model.AppViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_show_title.*
@@ -41,6 +43,9 @@ class ShowTitleFragment() : Fragment(){
         //変数の初期化
         viewModel = ViewModelProviders.of(this).get(AppViewModel::class.java)
         mainAdapter = MainAdapter()
+
+        //toolbarの設定
+        setToolbar()
 
         //recyclerViewの初期化
         this.recyclerView = show_title_recycler_view
@@ -78,9 +83,6 @@ class ShowTitleFragment() : Fragment(){
                 .setCancelable(true)
                 .show()
         }
-
-        requireActivity().main_toolbar.title = "CheckList"
-        requireActivity().main_toolbar.navigationIcon = null
     }
 
     override fun onDestroyView() {
@@ -106,5 +108,25 @@ class ShowTitleFragment() : Fragment(){
             .replace(R.id.main_fragment_container, showContents)
             .addToBackStack(null)
             .commit()*/
+    }
+
+    //toolbarの設定
+    private fun setToolbar(){
+        val toolbar = requireActivity().main_toolbar
+        toolbar.title = "CheckList"
+        toolbar.navigationIcon = null
+        toolbar.menu.setGroupVisible(R.id.rename_group, false)
+        toolbar.menu.setGroupVisible(R.id.help_group, true)
+        toolbar.setOnMenuItemClickListener { menuItem ->
+            when(menuItem.itemId){
+                R.id.settings -> showSettings()
+            }
+            true
+        }
+    }
+
+    private fun showSettings(){
+        val intent = Intent(requireActivity(), ShowPreference::class.java)
+        startActivity(intent)
     }
 }

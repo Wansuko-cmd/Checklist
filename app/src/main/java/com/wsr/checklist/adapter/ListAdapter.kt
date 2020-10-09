@@ -47,7 +47,7 @@ class ListAdapter(
 
         if(checkFocus && holder.adapterPosition == focus){
             holder.item.requestFocus()
-            checkFocus = false
+            //checkFocus = false
         }
 
         //チェックのついてないところを色付けするためのプロセス
