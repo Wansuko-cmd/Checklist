@@ -64,10 +64,5 @@ class ListAdapter(
         holder.item.setOnClickListener{
 
         }
-
-        //deleteボタンが押されたときの処理
-        holder.delete.setOnClickListener {
-            deleteElement(holder.adapterPosition)
-        }
     }
 }

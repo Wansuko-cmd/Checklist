@@ -10,11 +10,13 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.wsr.checklist.R
 import com.wsr.checklist.adapter.ListAdapter
 import com.wsr.checklist.info_list_database.InfoList
+import com.wsr.checklist.type_file.SwipeToDeleteCallback
 import com.wsr.checklist.type_file.renameAlert
 import com.wsr.checklist.view_model.AppViewModel
 import com.wsr.checklist.view_model.EditViewModel
@@ -114,7 +116,11 @@ class ShowContentsFragment() : Fragment(){
                     //一番下の要素の中でエンターキーを押した際に新しく空欄を作る機能
                     if (p0.endsWith("\n") && (editViewModel.checkEmpty(i.id))) {
                         addElements()
-                    } else if (p0 != i.item) editViewModel.changeItem(i.id, p0)
+
+                    } else if (p0 != i.item){
+                        editViewModel.changeItem(i.id, p0)
+                        showContentsAdapter.notifyItemChanged(position)
+                    }
                     break
                 }
             }
@@ -122,10 +128,9 @@ class ShowContentsFragment() : Fragment(){
 
         //チェックの状態が変更されたときの処理
         showContentsAdapter.changeCheck = { check, position ->
-            //var id = ""
             for (i in editViewModel.getList()) {
                 if (position == i.number) {
-                    //id = i.id
+                    showContentsAdapter.notifyItemMoved(1, 3)
                     viewModel.changeCheck(i.id, check)
                     break
                 }
@@ -144,15 +149,18 @@ class ShowContentsFragment() : Fragment(){
                 }
             }
         }
-    }
 
-    //タイトルが変更された際の処理
-    private val changeTitle: (String) -> Unit = { title ->
-        for (i in editViewModel.getList()) {
-            viewModel.changeTitle(i.id, title)
+        val swipeHandler = object : SwipeToDeleteCallback(requireContext()){
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                viewHolder.let{
+                    showContentsAdapter.deleteElement(it.adapterPosition)
+                }
+            }
         }
-        this.title =  title
-        requireActivity().main_toolbar.title = title
+
+        val itemTouchHelper = ItemTouchHelper(swipeHandler)
+        itemTouchHelper.attachToRecyclerView(recyclerView)
+
     }
 
     //アプリ停止時にデータをデータベースに保存する処理
@@ -218,11 +226,22 @@ class ShowContentsFragment() : Fragment(){
         showContentsAdapter.notifyDataSetChanged()
     }
 
+    //タイトルが変更された際の処理
+    private val changeTitle: (String) -> Unit = { title ->
+        for (i in editViewModel.getList()) {
+            viewModel.changeTitle(i.id, title)
+        }
+        this.title =  title
+        requireActivity().main_toolbar.title = title
+    }
+
     //空欄を追加するための処理
     private fun addElements() {
         val id = UUID.randomUUID().toString()
-        viewModel.insert(InfoList(id, editViewModel.getList().size, title, false, ""))
-        editViewModel.insert(InfoList(id, editViewModel.getList().size, title, false, ""))
-        showContentsAdapter.notifyDataSetChanged()
+        val number = editViewModel.getList().size
+        viewModel.insert(InfoList(id, number, title, false, ""))
+        editViewModel.insert(InfoList(id, number, title, false, ""))
+        //showContentsAdapter.notifyDataSetChanged()
+        showContentsAdapter.notifyItemInserted(number)
     }
 }

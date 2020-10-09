@@ -10,6 +10,5 @@ import kotlinx.android.synthetic.main.add_checklist.view.*
 class ListViewHolder(val view: View): RecyclerView.ViewHolder(view){
     val check: CheckBox = view.CheckBox
     val item: EditText = view.Item
-    val delete: ImageButton = view.delete_contents_button
 }
 

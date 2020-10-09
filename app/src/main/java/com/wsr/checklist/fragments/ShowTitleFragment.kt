@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -80,7 +79,7 @@ class ShowTitleFragment() : Fragment(){
                 .show()
         }
 
-        requireActivity().main_toolbar.title = R.string.app_name.toString()
+        requireActivity().main_toolbar.title = "CheckList"
         requireActivity().main_toolbar.navigationIcon = null
     }
 
