@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,7 +19,7 @@ import com.wsr.checklist.view_model.AppViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_show_title.*
 
-class ShowTitleFragment() : Fragment(){
+class ShowTitleFragment : Fragment(){
     //recyclerViewの定義
     private var recyclerView: RecyclerView? = null
 
@@ -56,7 +55,7 @@ class ShowTitleFragment() : Fragment(){
         }
 
         //viewModelが更新された際の処理
-        viewModel.infoList.observe(viewLifecycleOwner, Observer{list ->
+        viewModel.infoList.observe(viewLifecycleOwner, { list ->
             list?.let{mainAdapter.setInfoList(it)}
         })
 

@@ -4,7 +4,6 @@ import android.app.AlertDialog
 import android.content.Context
 import android.widget.EditText
 import com.wsr.checklist.R
-import com.wsr.checklist.fragments.ShowContentsFragment
 
 //タイトル名を変更する際に呼び出される関数
 fun renameAlert(context: Context, Function: (String) -> Unit, titleList: List<String>, setTitle: String){

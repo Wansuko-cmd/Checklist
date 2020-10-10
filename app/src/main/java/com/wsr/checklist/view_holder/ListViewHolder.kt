@@ -3,7 +3,6 @@ package com.wsr.checklist.view_holder
 import android.view.View
 import android.widget.CheckBox
 import android.widget.EditText
-import android.widget.ImageButton
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.add_checklist.view.*
 

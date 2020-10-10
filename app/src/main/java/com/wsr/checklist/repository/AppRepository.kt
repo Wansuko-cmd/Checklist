@@ -23,11 +23,6 @@ class AppRepository(private val infoListDao: InfoListDao) {
         infoListDao.changeTitle(id, title)
     }
 
-    //アイテムを変更するための関数
-    fun changeItem(id: String, item: String){
-        infoListDao.changeItem(id, item)
-    }
-
     //指定したId名のものを削除する関数
     fun deleteWithId(id: String){
         infoListDao.deleteWithId(id)

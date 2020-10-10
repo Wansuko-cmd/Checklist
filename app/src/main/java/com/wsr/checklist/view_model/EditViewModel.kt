@@ -70,7 +70,7 @@ class EditViewModel(application: Application) : AndroidViewModel(application) {
     fun delete(id: String){
         numList.removeAll{it.id == id}
         numList.sortBy { it.number }
-        for ((count, i) in numList.withIndex()){
+        for ((count, _) in numList.withIndex()){
             numList[count] = numList[count].copy(number = count)
         }
         editList.removeAll{it.id == id}

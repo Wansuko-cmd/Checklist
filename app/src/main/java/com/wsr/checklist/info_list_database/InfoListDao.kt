@@ -22,10 +22,6 @@ interface InfoListDao {
     @Query("UPDATE info_list_table SET 'title' = :Title WHERE id = :UUID")
     fun changeTitle(UUID: String, Title: String)
 
-    //アイテムを変更するための関数
-    @Query("UPDATE info_list_table SET 'item' = :Item WHERE id = :UUID")
-    fun changeItem(UUID: String, Item: String)
-
     //特定のエンティティを消すための関数
     @Query("Delete FROM info_list_table WHERE id = :id")
     fun deleteWithId(id: String)

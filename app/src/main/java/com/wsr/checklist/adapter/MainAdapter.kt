@@ -7,7 +7,7 @@ import com.wsr.checklist.view_holder.MainViewHolder
 import com.wsr.checklist.R
 import com.wsr.checklist.info_list_database.InfoList
 
-class MainAdapter():
+class MainAdapter:
     RecyclerView.Adapter<MainViewHolder>(){
 
     //全てのタイトル名を保存するリスト

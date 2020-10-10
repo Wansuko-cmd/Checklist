@@ -34,7 +34,6 @@ abstract class InfoListDatabase : RoomDatabase(){
                 for (i in 0..10){
                     val id = UUID.randomUUID().toString()
                     infoListDao.insert(InfoList(id, i, "Test", false, i.toString()))
-                    //infoListDao.changeItem(id, "ok")
                 }
                 infoListDao.insert(InfoList(UUID.randomUUID().toString(), 0,"code", false, "Alpha"))
                 infoListDao.insert(InfoList(UUID.randomUUID().toString(), 1, "code",false, "Bravo"))

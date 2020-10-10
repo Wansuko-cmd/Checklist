@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -19,7 +18,6 @@ import com.wsr.checklist.adapter.ListAdapter
 import com.wsr.checklist.info_list_database.InfoList
 import com.wsr.checklist.type_file.SwipeToDeleteCallback
 import com.wsr.checklist.type_file.renameAlert
-import com.wsr.checklist.view.MainActivity
 import com.wsr.checklist.view.ShowPreference
 import com.wsr.checklist.view_model.AppViewModel
 import com.wsr.checklist.view_model.EditViewModel
@@ -31,7 +29,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import java.util.*
 
-class ShowContentsFragment() : Fragment(){
+class ShowContentsFragment : Fragment(){
     //recyclerViewの定義
     private var recyclerView: RecyclerView? = null
 
@@ -74,7 +72,7 @@ class ShowContentsFragment() : Fragment(){
         }
 
         //viewModelが更新された際の処理
-        viewModel.infoList.observe(viewLifecycleOwner, Observer { list ->
+        viewModel.infoList.observe(viewLifecycleOwner, { list ->
             list?.let {
                 setInfoList(it)
             }
@@ -156,7 +154,7 @@ class ShowContentsFragment() : Fragment(){
             }
         }
 
-        val swipeHandler = object : SwipeToDeleteCallback(requireContext()){
+        val swipeHandler = object : SwipeToDeleteCallback(){
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 viewHolder.let{
                     showContentsAdapter.deleteElement(it.adapterPosition)

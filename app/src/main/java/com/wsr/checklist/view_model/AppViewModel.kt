@@ -35,11 +35,6 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
         repository.changeCheck(id, check)
     }
 
-    //アイテムを変更するための関数
-    fun changeItem(id: String, item: String)=  viewModelScope.launch(Dispatchers.IO){
-        repository.changeItem(id, item)
-    }
-
     //指定したId名のものを削除する関数
     fun deleteWithId(id: String) = viewModelScope.launch(Dispatchers.IO){
         repository.deleteWithId(id)
