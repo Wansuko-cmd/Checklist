@@ -1,39 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.preference.PreferenceScreen
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:key="settings">
 
-    <ListPreference
-        android:key="language"
-        android:title="Language"
-        android:entries="@array/language_labels"
-        android:entryValues="@array/language_values"
-        android:dialogTitle="Language"
-        android:defaultValue="English" />
-
-    <PreferenceCategory android:title="スイッチによる設定">
-        <SwitchPreferenceCompat
-            android:key="switch1"
-            android:title="スイッチ1"
-            android:summary="1つ目のスイッチだよ"
-            android:defaultValue="true" />
-        <SwitchPreferenceCompat
-            android:key="switch2"
-            android:title="スイッチ2"
-            android:summary="2つ目のスイッチだよ"
-            android:defaultValue="false" />
-    </PreferenceCategory>
-
-    <PreferenceCategory android:title="チェックボックスによる設定">
-        <CheckBoxPreference
-            android:key="checkbox1"
-            android:title="チェックボックス1"
-            android:summary="1つ目のチェックボックスだよ"
-            android:defaultValue="true" />
-        <CheckBoxPreference
-            android:key="checkbox2"
-            android:title="チェックボックス2"
-            android:summary="2つ目のチェックボックスだよ"
-            android:defaultValue="false" />
+    <PreferenceCategory android:title="@string/default_title">
+        <EditTextPreference
+            android:key="default_title"
+            android:title="@string/default_title_explanation"
+            android:dialogTitle="Title"
+            android:defaultValue="@string/non_title"
+            app:useSimpleSummaryProvider="true"/>
     </PreferenceCategory>
 
 </androidx.preference.PreferenceScreen>

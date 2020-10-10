@@ -82,15 +82,7 @@ class EditViewModel(application: Application) : AndroidViewModel(application) {
 
     //指定された要素の次の要素が何もないか確認するための関数
     fun checkEmpty(id: String): Boolean {
-        when {
-            setPosition(id) == editList.size - 1 -> return true
-            /*setPosition(id) > editList.size - 1 -> return false
-            setPosition(id) < editList.size - 1 -> {
-                if(editList[setPosition(id) + 1].item != ""){
-                    return true
-                }
-            }*/
-        }
+        if(setPosition(id) == editList.size - 1) return true
         return false
     }
 

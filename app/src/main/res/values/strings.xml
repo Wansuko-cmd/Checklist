@@ -19,7 +19,7 @@
 
     <!--チェックアウトの警告-->
     <string name="check_out_title">Waring</string>
-    <string name="check_out_message">Do you want to check out all elements?</string>
+    <string name="check_out_message">Do you want to delete all checked elements?</string>
     <string name="check_out_positive">Yes</string>
     <string name="check_out_negative">Cancel</string>
 
@@ -27,4 +27,9 @@
     <string name="help">help</string>
     <string name="settings">settings</string>
     <string name="rename_title" >rename title</string>
+
+    <!--設定画面-->
+    <string name="default_title">Default title</string>
+    <string name="default_title_explanation">The title will set when you don\'t enter title name.</string>
+    <string name="non_title">Non-title</string>
 </resources>

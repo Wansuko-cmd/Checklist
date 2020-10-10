@@ -88,16 +88,29 @@ class ShowContentsFragment : Fragment(){
             renameAlert(requireContext(), changeTitle, titleList, title)
         }
 
-        //checkoutボタンが押された際の処理
-        check_out_button.setOnClickListener {
+        //delete_checkボタンが押された際の処理
+        delete_check_button.setOnClickListener {
             AlertDialog.Builder(context)
                 .setTitle(R.string.check_out_title)
                 .setMessage(R.string.check_out_message)
                 .setPositiveButton(R.string.check_out_positive) { _, _ ->
 
                     //新しいチェックリストのタイトルの入った変数
-                    for (i in editViewModel.getList()) {
+                    /*for (i in editViewModel.getList()) {
                         viewModel.changeCheck(i.id, false)
+                    }*/
+                    val idList = mutableListOf<String>()
+                    for(i in editViewModel.getList()){
+                        if(i.check) idList.add(i.id)
+                    }
+                    for(i in idList){
+                        runBlocking {
+                            val job = GlobalScope.launch {
+                                editViewModel.delete(i)
+                                viewModel.deleteWithId(i)
+                            }
+                            job.join()
+                        }
                     }
                 }
                 .setNegativeButton(R.string.check_out_negative, null)
@@ -177,6 +190,13 @@ class ShowContentsFragment : Fragment(){
             job.join()
         }
         val numList = editViewModel.getNumList()
+        for(i in editViewModel.getList()){
+            if(i.item == "") numList.removeAll {it.id == i.id}
+        }
+        numList.sortBy { it.number }
+        for ((count, _) in numList.withIndex()){
+            numList[count] = numList[count].copy(number = count)
+        }
 
         for (i in numList) {
             runBlocking {
