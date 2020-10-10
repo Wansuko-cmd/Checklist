@@ -85,7 +85,8 @@ class ShowContentsFragment : Fragment(){
 
         //renameボタンが押された際の処理
         rename_button.setOnClickListener {
-            renameAlert(requireContext(), changeTitle, titleList, title)
+            //renameAlert(requireContext(), changeTitle, titleList, title)
+            showContentsAdapter.notifyDataSetChanged()
         }
 
         //delete_checkボタンが押された際の処理
@@ -94,24 +95,14 @@ class ShowContentsFragment : Fragment(){
                 .setTitle(R.string.check_out_title)
                 .setMessage(R.string.check_out_message)
                 .setPositiveButton(R.string.check_out_positive) { _, _ ->
-
-                    //新しいチェックリストのタイトルの入った変数
-                    /*for (i in editViewModel.getList()) {
-                        viewModel.changeCheck(i.id, false)
-                    }*/
                     val idList = mutableListOf<String>()
                     for(i in editViewModel.getList()){
                         if(i.check) idList.add(i.id)
                     }
                     for(i in idList){
-                        runBlocking {
-                            val job = GlobalScope.launch {
-                                editViewModel.delete(i)
-                                viewModel.deleteWithId(i)
-                            }
-                            job.join()
-                        }
+                        editViewModel.delete(i)
                     }
+                    showContentsAdapter.notifyDataSetChanged()
                 }
                 .setNegativeButton(R.string.check_out_negative, null)
                 .setCancelable(false)
@@ -132,8 +123,8 @@ class ShowContentsFragment : Fragment(){
                 if (position == i.number) {
                     //一番下の要素の中でエンターキーを押した際に新しく空欄を作る機能
                     if (p0.endsWith("\n") && (editViewModel.checkEmpty(i.id))) {
+                        showContentsAdapter.notifyDataSetChanged()
                         addElements()
-
                     } else if (p0 != i.item){
                         editViewModel.changeItem(i.id, p0)
                     }
@@ -146,8 +137,9 @@ class ShowContentsFragment : Fragment(){
         showContentsAdapter.changeCheck = { check, position ->
             for (i in editViewModel.getList()) {
                 if (position == i.number) {
-                    showContentsAdapter.notifyItemMoved(1, 3)
-                    viewModel.changeCheck(i.id, check)
+                    editViewModel.changeCheck(i.id, check)
+                    //showContentsAdapter.notifyDataSetChanged()
+                    showContentsAdapter.notifyItemMoved(0, 4)
                     break
                 }
             }
@@ -155,13 +147,12 @@ class ShowContentsFragment : Fragment(){
             showContentsAdapter.notifyDataSetChanged()
         }
 
-        //deleteボタンが押された際の処理
+        //特定の要素を削除する処理
         showContentsAdapter.deleteElement = { position ->
             for (i in editViewModel.getList()) {
                 if (position == i.number) {
                     showContentsAdapter.notifyItemRemoved(position)
                     editViewModel.delete(i.id)
-                    viewModel.deleteWithId(i.id)
                     break
                 }
             }
@@ -183,12 +174,6 @@ class ShowContentsFragment : Fragment(){
     //アプリ停止時にデータをデータベースに保存する処理
     override fun onStop() {
         super.onStop()
-        runBlocking {
-            val job = GlobalScope.launch {
-                viewModel.deleteWithTitle(title)
-            }
-            job.join()
-        }
         val numList = editViewModel.getNumList()
         for(i in editViewModel.getList()){
             if(i.item == "") numList.removeAll {it.id == i.id}
@@ -197,15 +182,7 @@ class ShowContentsFragment : Fragment(){
         for ((count, _) in numList.withIndex()){
             numList[count] = numList[count].copy(number = count)
         }
-
-        for (i in numList) {
-            runBlocking {
-                val job = GlobalScope.launch {
-                    viewModel.insert(InfoList(i.id, i.number, title, editViewModel.getCheck(i.id), editViewModel.getItem(i.id)))
-                }
-                job.join()
-            }
-        }
+        updateDatabase(title, title)
     }
 
     override fun onDestroyView() {
@@ -244,36 +221,42 @@ class ShowContentsFragment : Fragment(){
                     editViewModel.insert(numOfTitle)
                 }
             }
-        } else {
-            for (numOfTitle in lists) {
-                if (numOfTitle.title == title) {
-                    editViewModel.changeCheck(numOfTitle.id, numOfTitle.check)
-                }
-            }
         }
         showContentsAdapter.notifyDataSetChanged()
     }
 
     //タイトルが変更された際の処理
-    private val changeTitle: (String) -> Unit = { title ->
-        for (i in editViewModel.getList()) {
-            viewModel.changeTitle(i.id, title)
-        }
-        this.title =  title
-        requireActivity().main_toolbar.title = title
+    private val changeTitle: (String) -> Unit = { newTitle ->
+        updateDatabase(title, newTitle)
+        title =  newTitle
+        requireActivity().main_toolbar.title = newTitle
     }
 
     //空欄を追加するための処理
     private fun addElements() {
         val id = UUID.randomUUID().toString()
         val number = showContentsAdapter.itemCount
-        viewModel.insert(InfoList(id, number, title, false, ""))
         editViewModel.insert(InfoList(id, number, title, false, ""))
-        showContentsAdapter.notifyDataSetChanged()
         recyclerView!!.scrollToPosition(editViewModel.setNumber(id))
         showContentsAdapter.focus = editViewModel.setNumber(id)
-        showContentsAdapter.checkFocus = true
-        showContentsAdapter.notifyItemInserted(number)
+        showContentsAdapter.notifyItemInserted(editViewModel.nonCheckNumber())
+    }
+
+    private fun updateDatabase(oldTitle: String, newTitle: String){
+        runBlocking {
+            val job = GlobalScope.launch {
+                viewModel.deleteWithTitle(oldTitle)
+            }
+            job.join()
+        }
+        for (i in editViewModel.getNumList()) {
+            runBlocking {
+                val job = GlobalScope.launch {
+                    viewModel.insert(InfoList(i.id, i.number, newTitle, editViewModel.getCheck(i.id), editViewModel.getItem(i.id)))
+                }
+                job.join()
+            }
+        }
     }
 
     //設定画面に画面遷移するための処理

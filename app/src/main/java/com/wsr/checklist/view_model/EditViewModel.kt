@@ -27,6 +27,11 @@ class EditViewModel(application: Application) : AndroidViewModel(application) {
         return -1
     }
 
+    fun nonCheckNumber(): Int{
+        val list = editList.filter { !it.check }
+        return list.size - 1
+    }
+
     //新しいデータを代入するための関数
     fun insert(List: InfoList) {
         numList.add(RecordNumber(List.id, List.number))

@@ -18,8 +18,6 @@ class ListAdapter(
     var changeText: (p0: String, position: Int) -> Unit = {_,_  ->}
     var changeCheck: (check: Boolean, position: Int) -> Unit = {_, _ ->}
     var deleteElement: (position: Int) -> Unit = {}
-
-    var checkFocus: Boolean = false
     var focus = -1
 
     //ViewHolderのインスタンスを形成
@@ -46,7 +44,7 @@ class ListAdapter(
         }
 
         //focusを当てる処理
-        if(checkFocus && holder.adapterPosition == focus){
+        if(holder.adapterPosition == focus){
             holder.item.requestFocus()
         }
 
