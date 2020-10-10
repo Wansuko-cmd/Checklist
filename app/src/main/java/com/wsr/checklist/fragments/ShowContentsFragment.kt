@@ -178,18 +178,6 @@ class ShowContentsFragment() : Fragment(){
             }
             job.join()
         }
-        //val list = editViewModel.getList()
-
-        /*for (i in list){
-            if(i.item == ""){
-                runBlocking {
-                    val job = GlobalScope.launch {
-                        editViewModel.delete(i.id)
-                    }
-                    job.join()
-                }
-            }
-        }*/
         val numList = editViewModel.getNumList()
 
         for (i in numList) {
@@ -208,6 +196,7 @@ class ShowContentsFragment() : Fragment(){
         this.recyclerView = null
     }
 
+    //toolbarの設定
     private fun setToolbar(){
         val toolbar = requireActivity().main_toolbar
         toolbar.title = title
@@ -264,11 +253,12 @@ class ShowContentsFragment() : Fragment(){
         editViewModel.insert(InfoList(id, number, title, false, ""))
         showContentsAdapter.notifyDataSetChanged()
         recyclerView!!.scrollToPosition(editViewModel.setNumber(id))
-        showContentsAdapter.focus = number
+        showContentsAdapter.focus = editViewModel.setNumber(id)
         showContentsAdapter.checkFocus = true
         showContentsAdapter.notifyItemInserted(number)
     }
 
+    //設定画面に画面遷移するための処理
     private fun showSettings(){
         val intent = Intent(requireActivity(), ShowPreference::class.java)
         startActivity(intent)

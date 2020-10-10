@@ -1,7 +1,9 @@
 package com.wsr.checklist.adapter
 
+import android.app.usage.UsageEvents.Event.NONE
 import android.graphics.Color
 import android.text.Editable
+import android.text.InputType.TYPE_CLASS_TEXT
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -9,6 +11,7 @@ import com.wsr.checklist.view_holder.ListViewHolder
 import com.wsr.checklist.R
 import com.wsr.checklist.type_file.CustomTextWatcher
 import com.wsr.checklist.view_model.EditViewModel
+import org.w3c.dom.Text
 
 class ListAdapter(
     private val editViewModel: EditViewModel):
@@ -45,9 +48,9 @@ class ListAdapter(
             }
         }
 
+        //focusを当てる処理
         if(checkFocus && holder.adapterPosition == focus){
             holder.item.requestFocus()
-            //checkFocus = false
         }
 
         //チェックのついてないところを色付けするためのプロセス
@@ -69,8 +72,10 @@ class ListAdapter(
             changeCheck(holder.check.isChecked, holder.adapterPosition)
         }
 
-        holder.item.setOnClickListener{
-
-        }
+        /*holder.item.inputType = NONE
+        holder.item.setOnLongClickListener{
+            holder.item.inputType = TYPE_CLASS_TEXT
+            true
+        }*/
     }
 }

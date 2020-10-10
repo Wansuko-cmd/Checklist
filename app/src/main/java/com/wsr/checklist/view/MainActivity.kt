@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     //設定画面に画面遷移するための処理
-    fun showSettings(){
+    private fun showSettings(){
         val intent = Intent(this, ShowPreference::class.java)
         startActivity(intent)
     }

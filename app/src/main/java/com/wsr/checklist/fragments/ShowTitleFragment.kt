@@ -96,18 +96,6 @@ class ShowTitleFragment() : Fragment(){
     private val makeShowContents: (String) -> Unit = { title ->
         val action = ShowTitleFragmentDirections.actionTitleFragmentToContentsFragment(title)
         findNavController().navigate(action)
-        /*val bundle = Bundle()
-        bundle.putString("TITLE", title)
-
-        val activity = requireView().context as AppCompatActivity
-        val showContents = ShowContentsFragment()
-        showContents.arguments = bundle
-
-        activity.supportFragmentManager
-            .beginTransaction()
-            .replace(R.id.main_fragment_container, showContents)
-            .addToBackStack(null)
-            .commit()*/
     }
 
     //toolbarの設定
@@ -125,6 +113,7 @@ class ShowTitleFragment() : Fragment(){
         }
     }
 
+    //設定画面に画面遷移するための処理
     private fun showSettings(){
         val intent = Intent(requireActivity(), ShowPreference::class.java)
         startActivity(intent)
