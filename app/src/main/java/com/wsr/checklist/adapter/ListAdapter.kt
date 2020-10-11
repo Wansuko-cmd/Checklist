@@ -16,7 +16,7 @@ class ListAdapter(
 
     //使用する関数の定義
     var changeText: (p0: String, position: Int) -> Unit = {_,_  ->}
-    var changeCheck: (check: Boolean, position: Int) -> Unit = {_, _ ->}
+    var changeCheck: (check: Boolean, holder: ListViewHolder) -> Unit = {_, _ ->}
     var deleteElement: (position: Int) -> Unit = {}
     var focus = -1
 
@@ -35,6 +35,7 @@ class ListAdapter(
     //ViewHolderのインスタンスの保持する値を変更
     override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
         //データベースの情報を格納するためのプロセス
+
         for (i in editViewModel.getList()) {
             if (holder.adapterPosition == i.number) {
                 holder.check.isChecked = editViewModel.getCheck(i.id)
@@ -64,7 +65,7 @@ class ListAdapter(
 
         //チェックの状態が変更したときにデータベースに保存するためのプロセス
         holder.check.setOnClickListener {
-            changeCheck(holder.check.isChecked, holder.adapterPosition)
+            changeCheck(holder.check.isChecked, holder)
         }
     }
 }

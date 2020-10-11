@@ -2,6 +2,7 @@ package com.wsr.checklist.fragments
 
 import android.app.AlertDialog
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -135,17 +136,21 @@ class ShowContentsFragment : Fragment(){
         }
 
         //チェックの状態が変更されたときの処理
-        showContentsAdapter.changeCheck = { check, position ->
+        showContentsAdapter.changeCheck = { check, holder ->
+            val position = holder.adapterPosition
             for (i in editViewModel.getList()) {
                 if (position == i.number) {
+                    if (check) {
+                        holder.view.setBackgroundColor(Color.parseColor("#FFFFFF"))
+                    } else {
+                        holder.view.setBackgroundColor(Color.parseColor("#AFEEEE"))
+                    }
                     editViewModel.changeCheck(i.id, check)
-                    //showContentsAdapter.notifyDataSetChanged()
                     showContentsAdapter.notifyItemMoved(position, editViewModel.setNumber(i.id))
+                    recyclerView!!.scrollToPosition(position)
                     break
                 }
             }
-            //showContentsAdapter.notifyItemMoved(position, editViewModel.setPosition(id))
-            showContentsAdapter.notifyDataSetChanged()
         }
 
         //特定の要素を削除する処理

@@ -77,6 +77,7 @@ class ShowTitleFragment : Fragment(){
                 .setPositiveButton(R.string.delete_with_title_positive) { _, _ ->
                     mainAdapter.notifyItemRemoved(position)
                     viewModel.deleteWithTitle(title)
+                    //mainAdapter.notifyItemMoved(0,1)
                 }
                 .setNegativeButton(R.string.delete_with_title_negative, null)
                 .setCancelable(true)
