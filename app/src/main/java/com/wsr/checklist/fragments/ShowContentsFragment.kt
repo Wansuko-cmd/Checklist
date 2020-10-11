@@ -86,10 +86,10 @@ class ShowContentsFragment : Fragment(){
         }
 
         //renameボタンが押された際の処理
-        rename_button.setOnClickListener {
+        /*rename_button.setOnClickListener {
             //renameAlert(requireContext(), changeTitle, titleList, title)
             showContentsAdapter.notifyDataSetChanged()
-        }
+        }*/
 
         //delete_checkボタンが押された際の処理
         delete_check_button.setOnClickListener {

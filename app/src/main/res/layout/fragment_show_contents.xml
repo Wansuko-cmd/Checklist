@@ -41,12 +41,14 @@
             android:layout_weight="1"
             android:src="@drawable/ic_add"/>
 
+        <!--
         <ImageButton
             android:id="@+id/rename_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:src="@drawable/ic_rename"/>
+            -->
 
         <ImageButton
             android:id="@+id/delete_check_button"
