@@ -66,11 +66,5 @@ class ListAdapter(
         holder.check.setOnClickListener {
             changeCheck(holder.check.isChecked, holder.adapterPosition)
         }
-
-        /*holder.item.inputType = NONE
-        holder.item.setOnLongClickListener{
-            holder.item.inputType = TYPE_CLASS_TEXT
-            true
-        }*/
     }
 }

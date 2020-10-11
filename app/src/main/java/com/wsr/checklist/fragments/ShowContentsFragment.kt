@@ -65,6 +65,7 @@ class ShowContentsFragment : Fragment(){
 
         //recyclerViewの初期化
         this.recyclerView = show_contents_recycler_view
+        this.recyclerView!!.setOnClickListener{it.requestFocus()}
         this.recyclerView?.apply {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(context)
@@ -139,7 +140,7 @@ class ShowContentsFragment : Fragment(){
                 if (position == i.number) {
                     editViewModel.changeCheck(i.id, check)
                     //showContentsAdapter.notifyDataSetChanged()
-                    showContentsAdapter.notifyItemMoved(0, 4)
+                    showContentsAdapter.notifyItemMoved(position, editViewModel.setNumber(i.id))
                     break
                 }
             }
@@ -205,6 +206,7 @@ class ShowContentsFragment : Fragment(){
             }
             true
         }
+        toolbar.setOnClickListener{it.requestFocus()}
     }
 
     //LiveDataの内容を反映させる関数
@@ -221,8 +223,8 @@ class ShowContentsFragment : Fragment(){
                     editViewModel.insert(numOfTitle)
                 }
             }
+            showContentsAdapter.notifyDataSetChanged()
         }
-        showContentsAdapter.notifyDataSetChanged()
     }
 
     //タイトルが変更された際の処理
@@ -259,9 +261,10 @@ class ShowContentsFragment : Fragment(){
         }
     }
 
-    //設定画面に画面遷移するための処理
+    //設定、ヘルプ画面に画面遷移するための処理
     private fun showSettings(){
         val intent = Intent(requireActivity(), ShowPreference::class.java)
+        intent.putExtra("Purpose", "settings")
         startActivity(intent)
     }
 }

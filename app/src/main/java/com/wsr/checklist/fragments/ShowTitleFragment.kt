@@ -75,8 +75,8 @@ class ShowTitleFragment : Fragment(){
                 .setTitle(R.string.delete_with_title_title)
                 .setMessage(R.string.delete_with_title_message)
                 .setPositiveButton(R.string.delete_with_title_positive) { _, _ ->
-                    viewModel.deleteWithTitle(title)
                     mainAdapter.notifyItemRemoved(position)
+                    viewModel.deleteWithTitle(title)
                 }
                 .setNegativeButton(R.string.delete_with_title_negative, null)
                 .setCancelable(true)
@@ -106,15 +106,17 @@ class ShowTitleFragment : Fragment(){
         toolbar.menu.setGroupVisible(R.id.help_group, true)
         toolbar.setOnMenuItemClickListener { menuItem ->
             when(menuItem.itemId){
-                R.id.settings -> showSettings()
+                R.id.settings -> showSettingsOrHelp("settings")
+                R.id.help -> showSettingsOrHelp("help")
             }
             true
         }
     }
 
-    //設定画面に画面遷移するための処理
-    private fun showSettings(){
+    //設定、ヘルプ画面に画面遷移するための処理
+    private fun showSettingsOrHelp(purpose: String){
         val intent = Intent(requireActivity(), ShowPreference::class.java)
+        intent.putExtra("Purpose", purpose)
         startActivity(intent)
     }
 }

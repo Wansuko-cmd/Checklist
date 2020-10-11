@@ -13,6 +13,7 @@
         android:layout_height="?attr/actionBarSize"
         android:background="@color/dodgerBlue"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        android:focusableInTouchMode="true"
         tools:ignore="MissingConstraints">
 
     </androidx.appcompat.widget.Toolbar>

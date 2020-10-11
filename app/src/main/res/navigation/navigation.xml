@@ -37,7 +37,7 @@
 
     <fragment
         android:id="@+id/settings_fragment"
-        android:name="com.wsr.checklist.preference.PreferenceFragment"
+        android:name="com.wsr.checklist.fragments.PreferenceFragment"
         android:label="setting_fragment"
         tools:layout="@layout/show_preference">
     </fragment>
