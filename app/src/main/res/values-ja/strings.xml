@@ -30,7 +30,11 @@
 
     <!--設定画面-->
     <string name="default_title">デフォルトタイトル名</string>
-    <string name="default_title_explanation">タイトル名を入力しなかったときに設定されるタイトル名です</string>
     <string name="non_title">タイトル名なし</string>
+
+    <string name="text_size">文字の大きさ</string>
+    <string name="small_size">小さめ</string>
+    <string name="medium_size">中くらい</string>
+    <string name="large_size">大きめ</string>
 
 </resources>

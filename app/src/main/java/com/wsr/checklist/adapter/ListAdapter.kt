@@ -1,5 +1,6 @@
 package com.wsr.checklist.adapter
 
+import android.content.Context
 import android.graphics.Color
 import android.text.Editable
 import android.view.LayoutInflater
@@ -7,10 +8,12 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.wsr.checklist.view_holder.ListViewHolder
 import com.wsr.checklist.R
+import com.wsr.checklist.preference.getTextSize
 import com.wsr.checklist.type_file.CustomTextWatcher
 import com.wsr.checklist.view_model.EditViewModel
 
 class ListAdapter(
+    private val context: Context,
     private val editViewModel: EditViewModel):
     RecyclerView.Adapter<ListViewHolder>() {
 
@@ -34,8 +37,8 @@ class ListAdapter(
 
     //ViewHolderのインスタンスの保持する値を変更
     override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
+        holder.item.textSize = getTextSize(context).toFloat()
         //データベースの情報を格納するためのプロセス
-
         for (i in editViewModel.getList()) {
             if (holder.adapterPosition == i.number) {
                 holder.check.isChecked = editViewModel.getCheck(i.id)

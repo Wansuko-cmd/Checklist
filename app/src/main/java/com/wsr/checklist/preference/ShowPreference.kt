@@ -1,10 +1,10 @@
-package com.wsr.checklist.view
+package com.wsr.checklist.preference
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.wsr.checklist.R
 import com.wsr.checklist.fragments.HelpFragment
-import com.wsr.checklist.fragments.PreferenceFragment
+import com.wsr.checklist.preference.PreferenceFragment
 
 class ShowPreference :AppCompatActivity(){
     override fun onCreate(savedInstanceState: Bundle?) {

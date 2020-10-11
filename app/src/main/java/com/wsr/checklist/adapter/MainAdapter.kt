@@ -1,13 +1,15 @@
 package com.wsr.checklist.adapter
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.wsr.checklist.view_holder.MainViewHolder
 import com.wsr.checklist.R
 import com.wsr.checklist.info_list_database.InfoList
+import com.wsr.checklist.preference.getTextSize
 
-class MainAdapter:
+class MainAdapter(private val context: Context):
     RecyclerView.Adapter<MainViewHolder>(){
 
     //全てのタイトル名を保存するリスト
@@ -32,6 +34,7 @@ class MainAdapter:
     //インスタンス化したViewHolderの中の値の変更
     override fun onBindViewHolder(holder: MainViewHolder, position: Int) {
         holder.title.text = titleList[position]
+        holder.title.textSize = getTextSize(context).toFloat()
 
         //タイトル名をクリックした際の処理
         holder.title.setOnClickListener {

@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".view.ShowPreference"
+            android:name=".preference.ShowPreference"
             android:screenOrientation="portrait" />
         <activity
             android:name=".view.MainActivity"

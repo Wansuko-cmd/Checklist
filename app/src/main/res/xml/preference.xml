@@ -4,13 +4,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:key="settings">
 
-    <PreferenceCategory android:title="@string/default_title">
         <EditTextPreference
             android:key="default_title"
-            android:title="@string/default_title_explanation"
+            android:title="@string/default_title"
             android:dialogTitle="Title"
             android:defaultValue="@string/non_title"
             app:useSimpleSummaryProvider="true"/>
-    </PreferenceCategory>
+
+        <ListPreference
+            android:key="text_size"
+            android:title="@string/text_size"
+            android:entries="@array/text_size_labels"
+            android:entryValues="@array/text_size_values"
+            android:dialogTitle="@string/text_size"
+            android:defaultValue="medium"/>
 
 </androidx.preference.PreferenceScreen>

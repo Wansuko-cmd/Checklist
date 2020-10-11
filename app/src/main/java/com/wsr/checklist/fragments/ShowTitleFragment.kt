@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.wsr.checklist.R
 import com.wsr.checklist.adapter.MainAdapter
 import com.wsr.checklist.type_file.renameAlert
-import com.wsr.checklist.view.ShowPreference
+import com.wsr.checklist.preference.ShowPreference
 import com.wsr.checklist.view_model.AppViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_show_title.*
@@ -41,7 +41,7 @@ class ShowTitleFragment : Fragment(){
 
         //変数の初期化
         viewModel = ViewModelProviders.of(this).get(AppViewModel::class.java)
-        mainAdapter = MainAdapter()
+        mainAdapter = MainAdapter(requireContext())
 
         //toolbarの設定
         setToolbar()
@@ -85,6 +85,12 @@ class ShowTitleFragment : Fragment(){
         }
     }
 
+    //設定から戻ったときに結果を反映するための処理
+    override fun onResume() {
+        super.onResume()
+        mainAdapter.notifyDataSetChanged()
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         this.recyclerView?.adapter = null
@@ -119,5 +125,6 @@ class ShowTitleFragment : Fragment(){
         val intent = Intent(requireActivity(), ShowPreference::class.java)
         intent.putExtra("Purpose", purpose)
         startActivity(intent)
+        if(purpose == "settings") mainAdapter.notifyDataSetChanged()
     }
 }

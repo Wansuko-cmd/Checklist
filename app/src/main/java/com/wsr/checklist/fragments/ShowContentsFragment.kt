@@ -19,7 +19,7 @@ import com.wsr.checklist.adapter.ListAdapter
 import com.wsr.checklist.info_list_database.InfoList
 import com.wsr.checklist.type_file.SwipeToDeleteCallback
 import com.wsr.checklist.type_file.renameAlert
-import com.wsr.checklist.view.ShowPreference
+import com.wsr.checklist.preference.ShowPreference
 import com.wsr.checklist.view_model.AppViewModel
 import com.wsr.checklist.view_model.EditViewModel
 import kotlinx.android.synthetic.main.activity_main.*
@@ -59,7 +59,7 @@ class ShowContentsFragment : Fragment(){
         title = args.content
         viewModel = ViewModelProviders.of(this).get(AppViewModel::class.java)
         editViewModel = ViewModelProviders.of(this).get(EditViewModel::class.java)
-        showContentsAdapter = ListAdapter(editViewModel)
+        showContentsAdapter = ListAdapter(requireContext(), editViewModel)
 
         //toolbarの設定
         setToolbar()
@@ -111,14 +111,6 @@ class ShowContentsFragment : Fragment(){
                 .show()
         }
 
-        requireActivity().main_toolbar.title = title
-        requireActivity().main_toolbar.setNavigationIcon(R.drawable.ic_back_arrow)
-
-        //Backボタンを押した際の処理
-        requireActivity().main_toolbar.setNavigationOnClickListener {
-            findNavController().navigate(R.id.back_to_title_fragment)
-        }
-
         //テキストが変更された際の処理
         showContentsAdapter.changeText = { p0, position ->
             for (i in editViewModel.getList()) {
@@ -164,6 +156,7 @@ class ShowContentsFragment : Fragment(){
             }
         }
 
+        //スワイプでアイテムを消す処理
         val swipeHandler = object : SwipeToDeleteCallback(){
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 viewHolder.let{
@@ -171,10 +164,14 @@ class ShowContentsFragment : Fragment(){
                 }
             }
         }
-
         val itemTouchHelper = ItemTouchHelper(swipeHandler)
         itemTouchHelper.attachToRecyclerView(recyclerView)
+    }
 
+    //設定から戻ったときに結果を反映するための処理
+    override fun onResume() {
+        super.onResume()
+        showContentsAdapter.notifyDataSetChanged()
     }
 
     //アプリ停止時にデータをデータベースに保存する処理
@@ -201,7 +198,7 @@ class ShowContentsFragment : Fragment(){
     private fun setToolbar(){
         val toolbar = requireActivity().main_toolbar
         toolbar.title = title
-        toolbar.navigationIcon = null
+        toolbar.setNavigationIcon(R.drawable.ic_back_arrow)
         toolbar.menu.setGroupVisible(R.id.rename_group, true)
         toolbar.menu.setGroupVisible(R.id.help_group, false)
         toolbar.setOnMenuItemClickListener { menuItem ->
@@ -210,6 +207,9 @@ class ShowContentsFragment : Fragment(){
                 R.id.rename_title -> renameAlert(requireContext(), changeTitle, titleList, title)
             }
             true
+        }
+        toolbar.setNavigationOnClickListener {
+            findNavController().navigate(R.id.back_to_title_fragment)
         }
         toolbar.setOnClickListener{it.requestFocus()}
     }
@@ -249,6 +249,7 @@ class ShowContentsFragment : Fragment(){
         showContentsAdapter.notifyItemInserted(editViewModel.nonCheckNumber())
     }
 
+    //editViewModelの内容をデータベースに反映させる関数
     private fun updateDatabase(oldTitle: String, newTitle: String){
         runBlocking {
             val job = GlobalScope.launch {

@@ -1,4 +1,4 @@
-package com.wsr.checklist.fragments
+package com.wsr.checklist.preference
 
 import android.os.Bundle
 import androidx.preference.PreferenceFragmentCompat

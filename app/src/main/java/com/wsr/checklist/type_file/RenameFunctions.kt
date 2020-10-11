@@ -2,11 +2,15 @@ package com.wsr.checklist.type_file
 
 import android.app.AlertDialog
 import android.content.Context
+import android.content.SharedPreferences
 import android.widget.EditText
+import androidx.preference.PreferenceManager
 import com.wsr.checklist.R
+import com.wsr.checklist.preference.getDefaultTitle
 
 //タイトル名を変更する際に呼び出される関数
 fun renameAlert(context: Context, Function: (String) -> Unit, titleList: List<String>, setTitle: String){
+    val defaultTitle = getDefaultTitle(context)
     val editText = EditText(context)
     editText.setText(setTitle)
     AlertDialog.Builder(context)
@@ -15,10 +19,11 @@ fun renameAlert(context: Context, Function: (String) -> Unit, titleList: List<St
         .setView(editText)
         .setPositiveButton(R.string.edit_title_positive) { _, _ ->
             //新しく作成するチェックリストのタイトルの入った変数
-            val title = if(
-                (editText.text.toString() == setTitle
-                        &&editText.text.toString() != "")
-                    ) setTitle else checkTitle(editText.text.toString(), titleList)
+            val title = when(editText.text.toString()){
+                "" -> checkTitle(defaultTitle!!, titleList)
+                setTitle -> setTitle
+                else -> checkTitle(editText.text.toString(), titleList)
+            }
 
             //渡された関数を実行
             Function(title)

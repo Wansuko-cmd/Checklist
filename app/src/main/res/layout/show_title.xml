@@ -12,6 +12,7 @@
         android:id="@+id/title"
         android:layout_weight="1"
         android:gravity="center"
+        android:layout_gravity="center_vertical"
         android:textSize="30sp"
         android:layout_height="wrap_content"
         android:layout_width="0dp"

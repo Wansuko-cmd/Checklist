@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="text_size_labels">
+        <item>@string/small_size</item>
+        <item>@string/medium_size</item>
+        <item>@string/large_size</item>
+    </string-array>
+
+    <string-array name="text_size_values">
+        <item>small</item>
+        <item>medium</item>
+        <item>large</item>
+    </string-array>
+</resources>
