@@ -25,9 +25,13 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
         repository.insert(infoList)
     }
 
+    fun update(id: String, number: Int, check: Boolean, item: String) = viewModelScope.launch(Dispatchers.IO){
+        repository.update(id, number, check, item)
+    }
+
     //タイトルのみを変更するための関数
-    fun changeTitle(id: String, title: String) = viewModelScope.launch(Dispatchers.IO){
-        repository.changeTitle(id, title)
+    fun changeTitle(oldTitle: String, newTitle: String) = viewModelScope.launch(Dispatchers.IO){
+        repository.changeTitle(oldTitle, newTitle)
     }
 
     //チェックの有り無しのみを記録するための関数

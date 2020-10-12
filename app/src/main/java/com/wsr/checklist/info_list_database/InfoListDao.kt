@@ -14,13 +14,16 @@ interface InfoListDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insert(infoList: InfoList)
 
+    @Query("UPDATE info_list_table SET 'number' = :Number, 'check' = :Check, 'item' = :Item WHERE id = :UUID")
+    fun update(UUID: String, Number: Int, Check: Boolean, Item: String)
+
     //チェックの有り無しのデータのみ変更するための関数
     @Query("UPDATE info_list_table SET 'check' = :Check WHERE id = :UUID")
     fun changeCheck(UUID: String, Check: Boolean)
 
     //タイトルのみを変更するための関数
-    @Query("UPDATE info_list_table SET 'title' = :Title WHERE id = :UUID")
-    fun changeTitle(UUID: String, Title: String)
+    @Query("UPDATE info_list_table SET 'title' = :newTitle WHERE title = :oldTitle")
+    fun changeTitle(oldTitle: String, newTitle: String)
 
     //特定のエンティティを消すための関数
     @Query("Delete FROM info_list_table WHERE id = :id")

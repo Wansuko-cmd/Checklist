@@ -20,6 +20,7 @@ import com.wsr.checklist.info_list_database.InfoList
 import com.wsr.checklist.type_file.SwipeToDeleteCallback
 import com.wsr.checklist.type_file.renameAlert
 import com.wsr.checklist.preference.ShowPreference
+import com.wsr.checklist.type_file.setHelp
 import com.wsr.checklist.view_model.AppViewModel
 import com.wsr.checklist.view_model.EditViewModel
 import kotlinx.android.synthetic.main.activity_main.*
@@ -63,6 +64,8 @@ class ShowContentsFragment : Fragment(){
 
         //toolbarの設定
         setToolbar()
+
+        if(title == "") setHelp(requireContext(), viewModel)
 
         //recyclerViewの初期化
         this.recyclerView = show_contents_recycler_view
@@ -177,15 +180,17 @@ class ShowContentsFragment : Fragment(){
     //アプリ停止時にデータをデータベースに保存する処理
     override fun onStop() {
         super.onStop()
-        val numList = editViewModel.getNumList()
-        for(i in editViewModel.getList()){
-            if(i.item == "") numList.removeAll {it.id == i.id}
+        if(title != ""){
+            val numList = editViewModel.getNumList()
+            for(i in editViewModel.getList()){
+                if(i.item == "") numList.removeAll {it.id == i.id}
+            }
+            numList.sortBy { it.number }
+            for ((count, _) in numList.withIndex()){
+                numList[count] = numList[count].copy(number = count)
+            }
+            updateDatabase()
         }
-        numList.sortBy { it.number }
-        for ((count, _) in numList.withIndex()){
-            numList[count] = numList[count].copy(number = count)
-        }
-        updateDatabase(title, title)
     }
 
     override fun onDestroyView() {
@@ -197,14 +202,14 @@ class ShowContentsFragment : Fragment(){
     //toolbarの設定
     private fun setToolbar(){
         val toolbar = requireActivity().main_toolbar
-        toolbar.title = title
+        toolbar.title = if(title != "") title else "Help"
         toolbar.setNavigationIcon(R.drawable.ic_back_arrow)
         toolbar.menu.setGroupVisible(R.id.rename_group, true)
         toolbar.menu.setGroupVisible(R.id.help_group, false)
         toolbar.setOnMenuItemClickListener { menuItem ->
             when(menuItem.itemId){
                 R.id.settings -> showSettings()
-                R.id.rename_title -> renameAlert(requireContext(), changeTitle, titleList, title)
+                R.id.rename_title -> if(title != "") renameAlert(requireContext(), changeTitle, titleList, title)
             }
             true
         }
@@ -234,7 +239,7 @@ class ShowContentsFragment : Fragment(){
 
     //タイトルが変更された際の処理
     private val changeTitle: (String) -> Unit = { newTitle ->
-        updateDatabase(title, newTitle)
+        viewModel.changeTitle(title, newTitle)
         title =  newTitle
         requireActivity().main_toolbar.title = newTitle
     }
@@ -250,17 +255,17 @@ class ShowContentsFragment : Fragment(){
     }
 
     //editViewModelの内容をデータベースに反映させる関数
-    private fun updateDatabase(oldTitle: String, newTitle: String){
+    private fun updateDatabase(){
         runBlocking {
             val job = GlobalScope.launch {
-                viewModel.deleteWithTitle(oldTitle)
+                viewModel.deleteWithTitle(title)
             }
             job.join()
         }
         for (i in editViewModel.getNumList()) {
             runBlocking {
                 val job = GlobalScope.launch {
-                    viewModel.insert(InfoList(i.id, i.number, newTitle, editViewModel.getCheck(i.id), editViewModel.getItem(i.id)))
+                    viewModel.insert(InfoList(i.id, i.number, title, editViewModel.getCheck(i.id), editViewModel.getItem(i.id)))
                 }
                 job.join()
             }

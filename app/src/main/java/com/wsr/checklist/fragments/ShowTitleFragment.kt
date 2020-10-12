@@ -113,18 +113,20 @@ class ShowTitleFragment : Fragment(){
         toolbar.menu.setGroupVisible(R.id.help_group, true)
         toolbar.setOnMenuItemClickListener { menuItem ->
             when(menuItem.itemId){
-                R.id.settings -> showSettingsOrHelp("settings")
-                R.id.help -> showSettingsOrHelp("help")
+                R.id.settings -> showSettings()
+                R.id.help -> {
+                    val action = ShowTitleFragmentDirections.actionTitleFragmentToContentsFragment("")
+                    findNavController().navigate(action)
+                }
             }
             true
         }
     }
 
     //設定、ヘルプ画面に画面遷移するための処理
-    private fun showSettingsOrHelp(purpose: String){
+    private fun showSettings(){
         val intent = Intent(requireActivity(), ShowPreference::class.java)
-        intent.putExtra("Purpose", purpose)
+        intent.putExtra("Purpose", "settings")
         startActivity(intent)
-        if(purpose == "settings") mainAdapter.notifyDataSetChanged()
     }
 }

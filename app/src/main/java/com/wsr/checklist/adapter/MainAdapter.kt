@@ -51,7 +51,7 @@ class MainAdapter(private val context: Context):
     internal fun setInfoList(lists: MutableList<InfoList>){
         titleList = mutableListOf()
         for (numOfTitle in lists){
-            if (!titleList.contains(numOfTitle.title)){
+            if (!titleList.contains(numOfTitle.title) && numOfTitle.title != ""){
                 titleList.add(numOfTitle.title)
             }
         }

@@ -13,14 +13,18 @@ class AppRepository(private val infoListDao: InfoListDao) {
         infoListDao.insert(infoList)
     }
 
+    fun update(id: String, number: Int, check: Boolean, item: String){
+        infoListDao.update(id, number, check, item)
+    }
+
     //チェックの状態を変更するための関数
     fun changeCheck(id: String, check: Boolean){
         infoListDao.changeCheck(id, check)
     }
 
     //タイトルを変更するための関数
-    fun changeTitle(id: String, title: String){
-        infoListDao.changeTitle(id, title)
+    fun changeTitle(oldTitle: String, newTitle: String){
+        infoListDao.changeTitle(oldTitle, newTitle)
     }
 
     //指定したId名のものを削除する関数
