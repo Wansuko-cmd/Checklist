@@ -10,6 +10,9 @@ interface InfoListDao {
     @Query("SELECT * FROM info_list_table")
     fun getAll(): LiveData<MutableList<InfoList>>
 
+    @Query("SELECT * FROM info_list_table WHERE title = ''")
+    fun getHelp(): List<InfoList>
+
     //データを挿入するための関数
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insert(infoList: InfoList)

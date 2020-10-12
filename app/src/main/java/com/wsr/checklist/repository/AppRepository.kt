@@ -13,6 +13,10 @@ class AppRepository(private val infoListDao: InfoListDao) {
         infoListDao.insert(infoList)
     }
 
+    fun getHelp(): List<InfoList>{
+        return infoListDao.getHelp()
+    }
+
     fun update(id: String, number: Int, check: Boolean, item: String){
         infoListDao.update(id, number, check, item)
     }

@@ -9,28 +9,27 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import java.util.*
 
-fun setHelp(context: Context, viewModel: AppViewModel) = runBlocking{
-    val mainJob = GlobalScope.launch{
-        val list: List<String> = listOf(
-            context.getString(R.string.help_1),
-            context.getString(R.string.help_2),
-            context.getString(R.string.help_3),
-            context.getString(R.string.help_4),
-            context.getString(R.string.help_5),
-            context.getString(R.string.help_6),
-            context.getString(R.string.help_7),
-            context.getString(R.string.help_8),
-            context.getString(R.string.help_9)
-        )
+fun setHelp(context: Context, viewModel: AppViewModel) {
+    val list: List<String> = listOf(
+        context.getString(R.string.help_1),
+        context.getString(R.string.help_2),
+        context.getString(R.string.help_3),
+        context.getString(R.string.help_4),
+        context.getString(R.string.help_5),
+        context.getString(R.string.help_6),
+        context.getString(R.string.help_7),
+        context.getString(R.string.help_8),
+        context.getString(R.string.help_9)
+    )
+    var dbList = viewModel.getHelp()
+    while(dbList.size != list.size){
         viewModel.deleteWithTitle("")
-        for ((count, item) in list.withIndex()){
-            runBlocking {
-                val job = GlobalScope.launch {
-                    viewModel.insert(InfoList(UUID.randomUUID().toString(), count, "",false, item))
-                }
-                job.join()
+        for ((count, item) in list.withIndex()) runBlocking {
+            val job = GlobalScope.launch {
+                viewModel.insert(InfoList(UUID.randomUUID().toString(), count, "", false, item))
             }
+            job.join()
         }
+        dbList = viewModel.getHelp()
     }
-    mainJob.join()
 }

@@ -8,6 +8,7 @@ import com.wsr.checklist.info_list_database.InfoListDatabase
 import com.wsr.checklist.repository.AppRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 class AppViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -24,6 +25,18 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
     fun insert(infoList: InfoList) = viewModelScope.launch(Dispatchers.IO){
         repository.insert(infoList)
     }
+
+    fun getHelp(): List<InfoList>{
+        var list: List<InfoList> = emptyList()
+        runBlocking {
+            val job = viewModelScope.launch(Dispatchers.IO){
+                list = repository.getHelp()
+            }
+            job.join()
+        }
+        return list
+    }
+
 
     fun update(id: String, number: Int, check: Boolean, item: String) = viewModelScope.launch(Dispatchers.IO){
         repository.update(id, number, check, item)
