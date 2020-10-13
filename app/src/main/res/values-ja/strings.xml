@@ -17,6 +17,11 @@
     <string name="edit_title_positive">完了</string>
     <string name="edit_title_negative">キャンセル</string>
 
+    <!--欄を削除した際のスナックバー-->
+    <string name="snack_bar_message">欄を一つ削除しました</string>
+    <string name="snack_bar_action">元に戻す</string>
+    <string name="snack_bar_after">元に戻しました</string>
+
     <!--チェックアウトの警告-->
     <string name="check_out_title">警告</string>
     <string name="check_out_message">チェックした要素をすべて削除しますか？</string>

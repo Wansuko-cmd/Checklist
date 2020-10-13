@@ -17,6 +17,11 @@
     <string name="edit_title_positive">OK</string>
     <string name="edit_title_negative">Cancel</string>
 
+    <!--欄を削除した際のスナックバー-->
+    <string name="snack_bar_message">A column was deleted</string>
+    <string name="snack_bar_action">UNDO</string>
+    <string name="snack_bar_after">The column was restored.</string>
+
     <!--チェックアウトの警告-->
     <string name="check_out_title">Waring</string>
     <string name="check_out_message">Do you want to delete all checked elements?</string>

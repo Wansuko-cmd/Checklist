@@ -9,10 +9,12 @@ import com.wsr.checklist.type_file.RecordNumber
 class EditViewModel(application: Application) : AndroidViewModel(application) {
 
     //InfoListをデータベースに共有せずに保持するための変数
-    private val numList: MutableList<RecordNumber> = mutableListOf()
+    private var numList: MutableList<RecordNumber> = mutableListOf()
     private var editList: MutableList<InfoList> = mutableListOf()
 
-    private var deleteItem: MutableList<InfoList> = mutableListOf()
+    //Undo処理を適用する欄の情報を保持するための変数
+    var deleteEditItem: InfoList? = null
+    private var deleteNum: RecordNumber? = null
 
     //idを入れることでListのポジションを返り値に持つ変数
     val setPosition: (String) -> Int = fun(id: String): Int {
@@ -24,12 +26,14 @@ class EditViewModel(application: Application) : AndroidViewModel(application) {
 
     //idを入れることでNumberを返り値に持つ関数
     val setNumber: (String) -> Int = fun(id: String): Int{
-        for (i in editList){
+        return editList.find{it.id == id}?.number ?: -1
+        /*for (i in editList){
             if (id == i.id) return i.number
         }
-        return -1
+        return -1*/
     }
 
+    //falseの要素の数を数える関数
     fun nonCheckNumber(): Int{
         val list = editList.filter { !it.check }
         return list.size - 1
@@ -76,12 +80,13 @@ class EditViewModel(application: Application) : AndroidViewModel(application) {
 
     //idで指定された要素を消す関数
     fun delete(id: String){
+        deleteNum = numList.find{it.id == id}
         numList.removeAll{it.id == id}
         numList.sortBy { it.number }
         for ((count, _) in numList.withIndex()){
             numList[count] = numList[count].copy(number = count)
         }
-        deleteItem = editList
+        deleteEditItem = editList.find {it.id == id}
         editList.removeAll{it.id == id}
         for(i in numList){
             editList[setPosition(i.id)] = editList[setPosition(i.id)].copy(number = i.number)
@@ -89,10 +94,20 @@ class EditViewModel(application: Application) : AndroidViewModel(application) {
         sortTrueFalse(editList)
     }
 
+    //Undo処理を行う関数
     fun backDeleteItem(){
-        if(deleteItem != mutableListOf<InfoList>()){
-            editList = deleteItem
+        if(deleteNum != null && deleteEditItem != null){
+            for(i in numList) {
+                if (i.number >= deleteNum!!.number) i.number++
+            }
+            numList.add(deleteNum!!)
+            for(i in editList){
+                if (i.number >= deleteEditItem!!.number) i.number++
+            }
+            editList.add(deleteEditItem!!)
         }
+        editList.sortBy{ it.number }
+        sortTrueFalse(editList)
     }
 
     //指定された要素の次の要素が何もないか確認するための関数

@@ -14,6 +14,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import com.wsr.checklist.R
 import com.wsr.checklist.adapter.ListAdapter
 import com.wsr.checklist.info_list_database.InfoList
@@ -43,6 +44,7 @@ class ShowContentsFragment : Fragment(){
     private lateinit var viewModel: AppViewModel
     private lateinit var editViewModel: EditViewModel
     private lateinit var showContentsAdapter: ListAdapter
+    private lateinit var snackBar: Snackbar
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -65,6 +67,9 @@ class ShowContentsFragment : Fragment(){
         //toolbarの設定
         setToolbar()
 
+        //snackBarの設定
+        snackBar = setSnackBar()
+
         if(title == "") setHelp(requireContext(), viewModel)
 
         //recyclerViewの初期化
@@ -86,13 +91,8 @@ class ShowContentsFragment : Fragment(){
         //editボタンが押された際の処理
         edit_button.setOnClickListener {
             addElements()
-        }
-
-        //renameボタンが押された際の処理
-        /*rename_button.setOnClickListener {
-            //renameAlert(requireContext(), changeTitle, titleList, title)
             showContentsAdapter.notifyDataSetChanged()
-        }*/
+        }
 
         //delete_checkボタンが押された際の処理
         delete_check_button.setOnClickListener {
@@ -116,6 +116,7 @@ class ShowContentsFragment : Fragment(){
 
         //テキストが変更された際の処理
         showContentsAdapter.changeText = { p0, position ->
+            snackBar.dismiss()
             for (i in editViewModel.getList()) {
                 if (position == i.number) {
                     //一番下の要素の中でエンターキーを押した際に新しく空欄を作る機能
@@ -132,6 +133,7 @@ class ShowContentsFragment : Fragment(){
 
         //チェックの状態が変更されたときの処理
         showContentsAdapter.changeCheck = { check, holder ->
+            snackBar.dismiss()
             val position = holder.adapterPosition
             for (i in editViewModel.getList()) {
                 if (position == i.number) {
@@ -164,6 +166,7 @@ class ShowContentsFragment : Fragment(){
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 viewHolder.let{
                     showContentsAdapter.deleteElement(it.adapterPosition)
+                    snackBar.show()
                 }
             }
         }
@@ -180,6 +183,7 @@ class ShowContentsFragment : Fragment(){
     //アプリ停止時にデータをデータベースに保存する処理
     override fun onStop() {
         super.onStop()
+        snackBar.dismiss()
         if(title != ""){
             val numList = editViewModel.getNumList()
             for(i in editViewModel.getList()){
@@ -209,7 +213,10 @@ class ShowContentsFragment : Fragment(){
         toolbar.setOnMenuItemClickListener { menuItem ->
             when(menuItem.itemId){
                 R.id.settings -> showSettings()
-                R.id.rename_title -> if(title != "") renameAlert(requireContext(), changeTitle, titleList, title)
+                R.id.rename_title -> {
+                    snackBar.dismiss()
+                    if(title != "") renameAlert(requireContext(), changeTitle, titleList, title)
+                }
             }
             true
         }
@@ -270,6 +277,26 @@ class ShowContentsFragment : Fragment(){
                 job.join()
             }
         }
+    }
+
+    //Undo機能の設定
+    private fun setSnackBar(): Snackbar{
+        return Snackbar.make(
+            requireActivity().findViewById(R.id.coordinatorLayout),
+            getString(R.string.snack_bar_message),
+            Snackbar.LENGTH_INDEFINITE)
+            .setAction(getString(R.string.snack_bar_action)) {
+                val item = editViewModel.deleteEditItem
+                if(item != null){
+                    editViewModel.backDeleteItem()
+                    showContentsAdapter.notifyItemInserted(item.number)
+                    Snackbar.make(
+                        requireActivity().findViewById(R.id.coordinatorLayout),
+                        getString(R.string.snack_bar_after),
+                        Snackbar.LENGTH_SHORT)
+                        .show()
+                }
+            }
     }
 
     //設定、ヘルプ画面に画面遷移するための処理
