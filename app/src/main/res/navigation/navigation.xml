@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/title_fragment"
-        android:name="com.wsr.checklist.fragments.ShowTitleFragment"
+        android:name="com.wsr.shopping_friend.fragments.ShowTitleFragment"
         android:label="title_fragment"
         tools:layout="@layout/fragment_show_title">
         <action
@@ -20,7 +20,7 @@
 
     <fragment
         android:id="@+id/contents_fragment"
-        android:name="com.wsr.checklist.fragments.ShowContentsFragment"
+        android:name="com.wsr.shopping_friend.fragments.ShowContentsFragment"
         android:label="contents_fragment"
         tools:layout="@layout/fragment_show_contents">
         <action
@@ -37,7 +37,7 @@
 
     <fragment
         android:id="@+id/settings_fragment"
-        android:name="com.wsr.checklist.preference.PreferenceFragment"
+        android:name="com.wsr.shopping_friend.preference.PreferenceFragment"
         android:label="setting_fragment"
         tools:layout="@layout/show_preference">
     </fragment>

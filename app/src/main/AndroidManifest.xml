@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.wsr.checklist">
+    package="com.wsr.shopping_friend">
 
     <application
         android:allowBackup="true"
@@ -10,10 +10,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".preference.ShowPreference"
+            android:name="com.wsr.shopping_friend.preference.ShowPreference"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".view.MainActivity"
+            android:name="com.wsr.shopping_friend.view.MainActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
