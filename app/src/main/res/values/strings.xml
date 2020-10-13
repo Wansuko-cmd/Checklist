@@ -29,7 +29,7 @@
     <string name="rename_title" >rename title</string>
 
     <!--設定画面-->
-    <string name="default_title">Default title</string>
+    <string name="default_title">Default title(You Can\'t set Empty.)</string>
     <string name="non_title">Non-title</string>
 
     <string name="text_size">Text size</string>
@@ -41,11 +41,12 @@
     <string name="help_1">This is help screen.</string>
     <string name="help_2">Check off this column and it goes down.</string>
     <string name="help_3">This app has automatic save function.</string>
-    <string name="help_4">Push the garbage button and all checked column will disappear.</string>
-    <string name="help_5">Swipe the column left and it will delete.</string>
-    <string name="help_6">Push + button and a new column will appear.</string>
-    <string name="help_7">Tap the column when you want to edit.</string>
-    <string name="help_8">Pushing enter in the bottom column also make a new column</string>
-    <string name="help_9">Default title will set when you enter empty as list title.</string>
+    <string name="help_4">Empty column won\'t save.</string>
+    <string name="help_5">Push the garbage button and all checked column will disappear.</string>
+    <string name="help_6">Swipe the column left and it will delete.</string>
+    <string name="help_7">Push + button and a new column will appear.</string>
+    <string name="help_8">Tap the column when you want to edit.</string>
+    <string name="help_9">Pushing enter in the bottom column also make a new column</string>
+    <string name="help_10">Default title will set when you enter empty as list title.</string>
 
 </resources>

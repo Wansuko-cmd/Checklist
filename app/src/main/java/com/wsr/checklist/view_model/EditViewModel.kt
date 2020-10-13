@@ -1,6 +1,7 @@
 package com.wsr.checklist.view_model
 
 import android.app.Application
+import android.icu.text.IDNA
 import androidx.lifecycle.AndroidViewModel
 import com.wsr.checklist.info_list_database.InfoList
 import com.wsr.checklist.type_file.RecordNumber
@@ -9,7 +10,9 @@ class EditViewModel(application: Application) : AndroidViewModel(application) {
 
     //InfoListをデータベースに共有せずに保持するための変数
     private val numList: MutableList<RecordNumber> = mutableListOf()
-    private val editList: MutableList<InfoList> = mutableListOf()
+    private var editList: MutableList<InfoList> = mutableListOf()
+
+    private var deleteItem: MutableList<InfoList> = mutableListOf()
 
     //idを入れることでListのポジションを返り値に持つ変数
     val setPosition: (String) -> Int = fun(id: String): Int {
@@ -78,11 +81,18 @@ class EditViewModel(application: Application) : AndroidViewModel(application) {
         for ((count, _) in numList.withIndex()){
             numList[count] = numList[count].copy(number = count)
         }
+        deleteItem = editList
         editList.removeAll{it.id == id}
         for(i in numList){
             editList[setPosition(i.id)] = editList[setPosition(i.id)].copy(number = i.number)
         }
         sortTrueFalse(editList)
+    }
+
+    fun backDeleteItem(){
+        if(deleteItem != mutableListOf<InfoList>()){
+            editList = deleteItem
+        }
     }
 
     //指定された要素の次の要素が何もないか確認するための関数

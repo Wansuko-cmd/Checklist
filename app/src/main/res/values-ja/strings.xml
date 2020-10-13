@@ -29,7 +29,7 @@
     <string name="rename_title" >タイトル編集</string>
 
     <!--設定画面-->
-    <string name="default_title">デフォルトタイトル名</string>
+    <string name="default_title">デフォルトタイトル名（空欄はセットできません）</string>
     <string name="non_title">タイトル名なし</string>
 
     <string name="text_size">文字の大きさ</string>
@@ -41,11 +41,12 @@
     <string name="help_1">これはヘルプ画面です</string>
     <string name="help_2">チェックをつけると下に行きます</string>
     <string name="help_3">このアプリでは自動的にセーブされます</string>
-    <string name="help_4">ゴミ箱を押すとチェックのついた欄が削除されます</string>
-    <string name="help_5">欄を左にスワイプするとその欄を削除します</string>
-    <string name="help_6">＋を押すと新たに要素を追加します</string>
-    <string name="help_7">欄をタップすると入力することが出来ます</string>
-    <string name="help_8">一番下の要素でエンターを押すと新たに欄を作ります</string>
-    <string name="help_9">デフォルトタイトルは、タイトル名が空欄である時に設定されるものです</string>
+    <string name="help_4">空欄はセーブされません</string>
+    <string name="help_5">ゴミ箱を押すとチェックのついた欄が削除されます</string>
+    <string name="help_6">欄を左にスワイプするとその欄を削除します</string>
+    <string name="help_7">＋を押すと新たに要素を追加します</string>
+    <string name="help_8">欄をタップすると入力することが出来ます</string>
+    <string name="help_9">一番下の要素でエンターを押すと新たに欄を作ります</string>
+    <string name="help_10">デフォルトタイトルは、タイトル名が空欄である時に設定されるものです</string>
 
 </resources>

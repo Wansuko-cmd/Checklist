@@ -19,7 +19,8 @@ fun setHelp(context: Context, viewModel: AppViewModel) {
         context.getString(R.string.help_6),
         context.getString(R.string.help_7),
         context.getString(R.string.help_8),
-        context.getString(R.string.help_9)
+        context.getString(R.string.help_9),
+        context.getString(R.string.help_10)
     )
     var dbList = viewModel.getHelp()
     while(dbList.size != list.size){
