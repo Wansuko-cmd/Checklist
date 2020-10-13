@@ -107,7 +107,7 @@ class ShowTitleFragment : Fragment(){
     //toolbarの設定
     private fun setToolbar(){
         val toolbar = requireActivity().main_toolbar
-        toolbar.title = "CheckList"
+        toolbar.title = getString(R.string.app_name)
         toolbar.navigationIcon = null
         toolbar.menu.setGroupVisible(R.id.rename_group, false)
         toolbar.menu.setGroupVisible(R.id.help_group, true)
