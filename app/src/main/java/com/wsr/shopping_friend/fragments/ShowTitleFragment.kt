@@ -11,10 +11,12 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdView
 import com.wsr.shopping_friend.R
 import com.wsr.shopping_friend.adapter.MainAdapter
-import com.wsr.shopping_friend.type_file.renameAlert
 import com.wsr.shopping_friend.preference.ShowPreference
+import com.wsr.shopping_friend.type_file.renameAlert
 import com.wsr.shopping_friend.view_model.AppViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_show_title.*
@@ -56,7 +58,7 @@ class ShowTitleFragment : Fragment(){
 
         //viewModelが更新された際の処理
         viewModel.infoList.observe(viewLifecycleOwner, { list ->
-            list?.let{mainAdapter.setInfoList(it)}
+            list?.let { mainAdapter.setInfoList(it) }
         })
 
         //fabボタンが押された際の処理
@@ -65,12 +67,12 @@ class ShowTitleFragment : Fragment(){
         }
 
         //タイトルが押されたときの処理
-        mainAdapter.clickTitleOnListener = {title ->
+        mainAdapter.clickTitleOnListener = { title ->
             makeShowContents(title)
         }
 
         //deleteボタンが押された際の処理
-        mainAdapter.clickDeleteOnListener = {title, position ->
+        mainAdapter.clickDeleteOnListener = { title, position ->
             AlertDialog.Builder(context)
                 .setTitle(R.string.delete_with_title_title)
                 .setMessage(R.string.delete_with_title_message)
@@ -83,6 +85,9 @@ class ShowTitleFragment : Fragment(){
                 .setCancelable(true)
                 .show()
         }
+        /*val mAdView: AdView = requireActivity().findViewById(R.id.adView)
+        val adRequest: AdRequest = AdRequest.Builder().build()
+        mAdView.loadAd(adRequest)*/
     }
 
     //設定から戻ったときに結果を反映するための処理
@@ -115,7 +120,8 @@ class ShowTitleFragment : Fragment(){
             when(menuItem.itemId){
                 R.id.settings -> showSettings()
                 R.id.help -> {
-                    val action = ShowTitleFragmentDirections.actionTitleFragmentToContentsFragment("")
+                    val action =
+                        ShowTitleFragmentDirections.actionTitleFragmentToContentsFragment("")
                     findNavController().navigate(action)
                 }
             }

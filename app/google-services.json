@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1086160720142",
+    "firebase_url": "https://shopping-friend-279e8.firebaseio.com",
+    "project_id": "shopping-friend-279e8",
+    "storage_bucket": "shopping-friend-279e8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1086160720142:android:a348c9de922d499397075f",
+        "android_client_info": {
+          "package_name": "com.wsr.shopping_friend"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1086160720142-rt31gg2259v4gf1frqu5fg6ocsog7fhd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDe0L38EJcexMAyWAu-ssnLjKBkyCmqe_w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1086160720142-rt31gg2259v4gf1frqu5fg6ocsog7fhd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
