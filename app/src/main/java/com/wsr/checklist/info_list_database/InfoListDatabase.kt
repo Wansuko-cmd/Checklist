@@ -11,7 +11,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import java.util.*
 
-@Database(entities = [InfoList::class], version = 1, exportSchema = false)
+@Database(entities = [InfoList::class], version = 1, exportSchema = true)
 abstract class InfoListDatabase : RoomDatabase(){
 
     abstract fun infoListDao(): InfoListDao
