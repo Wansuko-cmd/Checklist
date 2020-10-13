@@ -43,15 +43,16 @@
     <string name="large_size">Large</string>
 
     <!--ヘルプ画面-->
-    <string name="help_1">This is help screen.</string>
-    <string name="help_2">Check off this column and it goes down.</string>
-    <string name="help_3">This app has automatic save function.</string>
-    <string name="help_4">Empty column won\'t save.</string>
-    <string name="help_5">Push the garbage button and all checked column will disappear.</string>
-    <string name="help_6">Swipe the column left and it will delete.</string>
-    <string name="help_7">Push + button and a new column will appear.</string>
-    <string name="help_8">Tap the column when you want to edit.</string>
-    <string name="help_9">Pushing enter in the bottom column also make a new column</string>
-    <string name="help_10">Default title will set when you enter empty as list title.</string>
-
+    <string-array name="help">
+        <item>This is help screen.</item>
+        <item>Check off this column and it goes down.</item>
+        <item>This app has automatic save function.</item>
+        <item>Empty column won\'t save.</item>
+        <item>Push the garbage button and all checked column will disappear.</item>
+        <item>Swipe the column left and it will delete.</item>
+        <item>Push + button and a new column will appear.</item>
+        <item>Tap the column when you want to edit.</item>
+        <item>Pushing enter in the bottom column also make a new column</item>
+        <item>Default title will set when you enter empty as list title.</item>
+    </string-array>
 </resources>

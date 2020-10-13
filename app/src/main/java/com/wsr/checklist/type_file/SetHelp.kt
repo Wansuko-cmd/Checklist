@@ -10,7 +10,7 @@ import kotlinx.coroutines.runBlocking
 import java.util.*
 
 fun setHelp(context: Context, viewModel: AppViewModel) {
-    val list: List<String> = listOf(
+    /*val list: List<String> = listOf(
         context.getString(R.string.help_1),
         context.getString(R.string.help_2),
         context.getString(R.string.help_3),
@@ -21,7 +21,8 @@ fun setHelp(context: Context, viewModel: AppViewModel) {
         context.getString(R.string.help_8),
         context.getString(R.string.help_9),
         context.getString(R.string.help_10)
-    )
+    )*/
+    val list = context.resources.getStringArray(R.array.help)
     var dbList = viewModel.getHelp()
     while(dbList.size != list.size){
         viewModel.deleteWithTitle("")

@@ -43,15 +43,16 @@
     <string name="large_size">大きめ</string>
 
     <!--ヘルプ画面-->
-    <string name="help_1">これはヘルプ画面です</string>
-    <string name="help_2">チェックをつけると下に行きます</string>
-    <string name="help_3">このアプリでは自動的にセーブされます</string>
-    <string name="help_4">空欄はセーブされません</string>
-    <string name="help_5">ゴミ箱を押すとチェックのついた欄が削除されます</string>
-    <string name="help_6">欄を左にスワイプするとその欄を削除します</string>
-    <string name="help_7">＋を押すと新たに要素を追加します</string>
-    <string name="help_8">欄をタップすると入力することが出来ます</string>
-    <string name="help_9">一番下の要素でエンターを押すと新たに欄を作ります</string>
-    <string name="help_10">デフォルトタイトルは、タイトル名が空欄である時に設定されるものです</string>
-
+    <string-array name="help">
+        <item>これはヘルプ画面です</item>
+        <item>チェックをつけると下に行きます</item>
+        <item>このアプリでは自動的にセーブされます</item>
+        <item>空欄はセーブされません</item>
+        <item>ゴミ箱を押すとチェックのついた欄が削除されます</item>
+        <item>欄を左にスワイプするとその欄を削除します</item>
+        <item>＋を押すと新たに要素を追加します</item>
+        <item>欄をタップすると入力することが出来ます</item>
+        <item>一番下の要素でエンターを押すと新たに欄を作ります</item>
+        <item>デフォルトタイトルは、タイトル名が空欄である時に設定されるものです</item>
+    </string-array>
 </resources>
