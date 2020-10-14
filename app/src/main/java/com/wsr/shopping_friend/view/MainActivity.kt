@@ -5,6 +5,7 @@ import android.os.Bundle
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdView
 import com.wsr.shopping_friend.R
+import com.wsr.shopping_friend.preference.checkVersion
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -16,8 +17,12 @@ class MainActivity : AppCompatActivity() {
         //toolbarの設定
         main_toolbar.inflateMenu(R.menu.menu_for_show)
 
-        val mAdView: AdView = findViewById(R.id.adView)
+        //設定のバージョンの確認
+        checkVersion(this)
+
+        //広告
+        /*val mAdView: AdView = findViewById(R.id.adView)
         val adRequest: AdRequest = AdRequest.Builder().build()
-        mAdView.loadAd(adRequest)
+        mAdView.loadAd(adRequest)*/
     }
 }

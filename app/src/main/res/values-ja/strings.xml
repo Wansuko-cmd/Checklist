@@ -1,9 +1,14 @@
 <resources>
+    <!--アプリの基本情報-->
     <string name="app_name">買い物の友</string>
 
     <string name="title">タイトル</string>
     <string name="check">チェック</string>
     <string name="memo">メモ</string>
+
+    <!--ImageButtonの文字の設定-->
+    <string name="add">要素を足す</string>
+    <string name="delete">削除</string>
 
     <!--タイトル名で削除の警告-->
     <string name="delete_with_title_title">警告</string>
@@ -34,6 +39,8 @@
     <string name="rename_title" >タイトル編集</string>
 
     <!--設定画面-->
+    <string name="setting_version">1.0</string>
+
     <string name="default_title">デフォルトタイトル名（空欄はセットできません）</string>
     <string name="non_title">タイトル名なし</string>
 

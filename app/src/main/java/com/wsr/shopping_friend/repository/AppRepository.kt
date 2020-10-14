@@ -17,6 +17,7 @@ class AppRepository(private val infoListDao: InfoListDao) {
         return infoListDao.getHelp()
     }
 
+    /*
     fun update(id: String, number: Int, check: Boolean, item: String){
         infoListDao.update(id, number, check, item)
     }
@@ -26,14 +27,14 @@ class AppRepository(private val infoListDao: InfoListDao) {
         infoListDao.changeCheck(id, check)
     }
 
-    //タイトルを変更するための関数
-    fun changeTitle(oldTitle: String, newTitle: String){
-        infoListDao.changeTitle(oldTitle, newTitle)
-    }
-
     //指定したId名のものを削除する関数
     fun deleteWithId(id: String){
         infoListDao.deleteWithId(id)
+    }*/
+
+    //タイトルを変更するための関数
+    fun changeTitle(oldTitle: String, newTitle: String){
+        infoListDao.changeTitle(oldTitle, newTitle)
     }
 
     //指定したタイトル名のものを削除する関数

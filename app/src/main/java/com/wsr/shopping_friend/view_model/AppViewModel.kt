@@ -37,14 +37,14 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
         return list
     }
 
-
-    fun update(id: String, number: Int, check: Boolean, item: String) = viewModelScope.launch(Dispatchers.IO){
-        repository.update(id, number, check, item)
-    }
-
     //タイトルのみを変更するための関数
     fun changeTitle(oldTitle: String, newTitle: String) = viewModelScope.launch(Dispatchers.IO){
         repository.changeTitle(oldTitle, newTitle)
+    }
+
+    /*
+    fun update(id: String, number: Int, check: Boolean, item: String) = viewModelScope.launch(Dispatchers.IO){
+        repository.update(id, number, check, item)
     }
 
     //チェックの有り無しのみを記録するための関数
@@ -55,7 +55,7 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
     //指定したId名のものを削除する関数
     fun deleteWithId(id: String) = viewModelScope.launch(Dispatchers.IO){
         repository.deleteWithId(id)
-    }
+    }*/
 
     //タイトル名が一致するものをすべて消すための関数
     fun deleteWithTitle(title: String) = viewModelScope.launch(Dispatchers.IO){

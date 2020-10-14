@@ -18,7 +18,7 @@ fun renameAlert(context: Context, Function: (String) -> Unit, titleList: List<St
         .setPositiveButton(R.string.edit_title_positive) { _, _ ->
             //新しく作成するチェックリストのタイトルの入った変数
             val title = when(editText.text.toString()){
-                "" -> checkTitle(defaultTitle!!, titleList)
+                "" -> checkTitle(defaultTitle, titleList)
                 setTitle -> setTitle
                 else -> checkTitle(editText.text.toString(), titleList)
             }

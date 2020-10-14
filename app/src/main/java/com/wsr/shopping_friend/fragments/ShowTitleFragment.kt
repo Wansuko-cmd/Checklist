@@ -11,8 +11,6 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.AdView
 import com.wsr.shopping_friend.R
 import com.wsr.shopping_friend.adapter.MainAdapter
 import com.wsr.shopping_friend.preference.ShowPreference
