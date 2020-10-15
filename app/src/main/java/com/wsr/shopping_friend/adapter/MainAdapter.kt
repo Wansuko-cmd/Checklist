@@ -15,18 +15,18 @@ class MainAdapter(private val context: Context):
     //全てのタイトル名を保存するリスト
     var titleList = mutableListOf<String>()
 
-    //Titleをクリックされたときに実行される関数名
+    //使用する関数の定義
     var clickTitleOnListener: (title: String) -> Unit = {}
     var clickDeleteOnListener: (title: String, position: Int) -> Unit = {_, _ ->}
 
-    //ViewHolderのインスタンス化
+    //ViewHolderのインスタンスを形成
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         val view = layoutInflater.inflate(R.layout.show_title, parent, false)
         return MainViewHolder(view)
     }
 
-    //LiveDataの入っている変数の長さを返す関数
+    //titleListの長さを返す関数
     override fun getItemCount(): Int {
         return  titleList.size
     }

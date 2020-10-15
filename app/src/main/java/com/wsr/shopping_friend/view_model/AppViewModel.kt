@@ -8,7 +8,6 @@ import com.wsr.shopping_friend.info_list_database.InfoListDatabase
 import com.wsr.shopping_friend.repository.AppRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import java.util.*
 
 class AppViewModel(application: Application) : AndroidViewModel(application) {
@@ -29,7 +28,7 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
             for (i in 1..10){
                 testList.add(InfoList(UUID.randomUUID().toString(), i, "Test", false, i.toString()))
             }
-            val code = mutableListOf<String>("Alpha", "Bravo", "Charlie", "Delta")
+            val code = mutableListOf("Alpha", "Bravo", "Charlie", "Delta")
             for((count, i) in code.withIndex()){
                 testList.add(InfoList(UUID.randomUUID().toString(), count, "code", false, i))
             }
@@ -40,18 +39,6 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
     //データベースに値を代入するための関数
     fun insert(infoList: MutableList<InfoList>) = viewModelScope.launch(Dispatchers.IO){
         repository.insert(infoList)
-    }
-
-    //ヘルプの情報を取得するための関数
-    fun getHelp(): List<InfoList>{
-        var list: List<InfoList> = emptyList()
-        runBlocking {
-            val job = viewModelScope.launch(Dispatchers.IO){
-                list = repository.getHelp()
-            }
-            job.join()
-        }
-        return list
     }
 
     //タイトルのみを変更するための関数

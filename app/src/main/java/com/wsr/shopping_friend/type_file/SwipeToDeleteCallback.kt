@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 abstract class SwipeToDeleteCallback
     : ItemTouchHelper.SimpleCallback(0, (ItemTouchHelper.LEFT)) {
 
+    //スワイプした時の処理
     override fun onMove(
         recyclerView: RecyclerView,
         viewHolder: RecyclerView.ViewHolder,

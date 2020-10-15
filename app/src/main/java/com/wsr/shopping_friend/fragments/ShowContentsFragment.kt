@@ -33,9 +33,8 @@ class ShowContentsFragment : Fragment() {
     //recyclerViewの定義
     private var recyclerView: RecyclerView? = null
 
-    private val args: ShowContentsFragmentArgs by navArgs()
-
     //使う変数の定義
+    private val args: ShowContentsFragmentArgs by navArgs()
     private var titleList = mutableListOf<String>()
     private lateinit var title: String
     private lateinit var viewModel: AppViewModel
@@ -67,12 +66,12 @@ class ShowContentsFragment : Fragment() {
         //snackBarの設定
         snackBar = setSnackBar()
 
-        if (title == "") setHelp(requireContext(), viewModel)
+        if (title == "") setHelp(requireContext(), editViewModel)
 
         //recyclerViewの初期化
         this.recyclerView = show_contents_recycler_view
         this.recyclerView!!.setOnClickListener { it.requestFocus() }
-        this.recyclerView?.apply {
+        this.recyclerView?.apply{
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(context)
             adapter = showContentsAdapter
@@ -216,6 +215,12 @@ class ShowContentsFragment : Fragment() {
                 R.id.rename_title -> {
                     snackBar.dismiss()
                     if (title != "") renameAlert(requireContext(), changeTitle, titleList, title)
+                    else{
+                        AlertDialog.Builder(requireContext())
+                            .setMessage(getString(R.string.no_edit_title_message))
+                            .setPositiveButton(getString(R.string.no_edit_title_positive), null)
+                            .show()
+                    }
                 }
             }
             true

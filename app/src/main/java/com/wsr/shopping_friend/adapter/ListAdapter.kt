@@ -30,15 +30,17 @@ class ListAdapter(
         return ListViewHolder(view)
     }
 
-    //LiveDataの入っている変数の長さを返す関数
+    //入っている要素の数を返す関数
     override fun getItemCount(): Int {
         return editViewModel.getList().size
     }
 
     //ViewHolderのインスタンスの保持する値を変更
     override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
+        //設定の内容を反映するための処理
         holder.item.textSize = getTextSize(context).toFloat()
-        //データベースの情報を格納するためのプロセス
+
+        //editViewModelの情報を格納するためのプロセス
         for (i in editViewModel.getList()) {
             if (holder.adapterPosition == i.number) {
                 holder.check.isChecked = editViewModel.getCheck(i.id)
@@ -66,7 +68,7 @@ class ListAdapter(
             }
         })
 
-        //チェックの状態が変更したときにデータベースに保存するためのプロセス
+        //チェックの状態が変更したときにeditViewModelに保存するためのプロセス
         holder.check.setOnClickListener {
             changeCheck(holder.check.isChecked, holder)
         }

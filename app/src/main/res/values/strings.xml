@@ -22,6 +22,10 @@
     <string name="edit_title_positive">OK</string>
     <string name="edit_title_negative">Cancel</string>
 
+    <!--タイトル変更不可画面-->
+    <string name="no_edit_title_message">Sorry, but you can\'t change it.</string>
+    <string name="no_edit_title_positive">OK</string>
+
     <!--欄を削除した際のスナックバー-->
     <string name="snack_bar_message">A column was deleted</string>
     <string name="snack_bar_action">UNDO</string>

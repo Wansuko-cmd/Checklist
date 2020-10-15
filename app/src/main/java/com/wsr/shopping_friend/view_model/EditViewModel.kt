@@ -1,7 +1,6 @@
 package com.wsr.shopping_friend.view_model
 
 import android.app.Application
-import android.icu.text.IDNA
 import androidx.lifecycle.AndroidViewModel
 import com.wsr.shopping_friend.info_list_database.InfoList
 import com.wsr.shopping_friend.type_file.RecordNumber
@@ -63,10 +62,6 @@ class EditViewModel(application: Application) : AndroidViewModel(application) {
     //ここに保存されている、本来の数字の並びを保存するリストを返り値に持つ関数
     fun getNumList(): MutableList<RecordNumber> {
         return numList
-    }
-
-    fun getDeleteList(): MutableList<InfoList>{
-        return deleteList
     }
 
     //idと結びついている要素のアイテムを返す関数

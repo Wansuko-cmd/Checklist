@@ -9,7 +9,6 @@ import io.reactivex.Completable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import java.util.*
 
 @Database(entities = [InfoList::class], version = 1, exportSchema = true)
 abstract class InfoListDatabase : RoomDatabase(){

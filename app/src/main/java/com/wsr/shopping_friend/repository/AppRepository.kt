@@ -1,11 +1,8 @@
 package com.wsr.shopping_friend.repository
 
-import android.icu.text.IDNA
-import androidx.appcompat.widget.ActivityChooserView
 import androidx.lifecycle.LiveData
 import com.wsr.shopping_friend.info_list_database.InfoList
 import com.wsr.shopping_friend.info_list_database.InfoListDao
-import java.util.*
 
 class AppRepository(private val infoListDao: InfoListDao) {
     val infoList: LiveData<MutableList<InfoList>> = infoListDao.getAll()
@@ -14,10 +11,6 @@ class AppRepository(private val infoListDao: InfoListDao) {
     //データを挿入するための関数
     suspend fun insert(infoList: MutableList<InfoList>){
         infoListDao.insert(infoList)
-    }
-
-    fun getHelp(): List<InfoList>{
-        return infoListDao.getHelp()
     }
 
     //タイトルを変更するための関数
@@ -40,6 +33,7 @@ class AppRepository(private val infoListDao: InfoListDao) {
         infoListDao.deleteWithTitle(title)
     }
 
+    //全データを削除するための関数
     fun deleteAll(){
         infoListDao.deleteAll()
     }

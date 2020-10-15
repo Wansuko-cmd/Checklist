@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.preference.PreferenceManager
 import com.wsr.shopping_friend.R
 
+//設定のバージョンを確認する関数
 fun checkVersion(context: Context){
     val pref = PreferenceManager.getDefaultSharedPreferences(context)
     if(pref.getString("version", "1.0") != context.getString(R.string.setting_version)){
@@ -13,6 +14,7 @@ fun checkVersion(context: Context){
     }
 }
 
+//設定された文字のサイズを確認するための関数
 fun getTextSize(context: Context): Int{
     val pref = PreferenceManager.getDefaultSharedPreferences(context)
     return when(pref.getString("text_size", "medium")){
@@ -23,6 +25,7 @@ fun getTextSize(context: Context): Int{
     }
 }
 
+//デフォルトタイトルを確認するための関数
 fun getDefaultTitle(context: Context): String{
     val pref = PreferenceManager.getDefaultSharedPreferences(context)
     return when(pref.getString("default_title", "Non-title")){
