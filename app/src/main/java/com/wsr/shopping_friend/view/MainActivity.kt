@@ -21,8 +21,8 @@ class MainActivity : AppCompatActivity() {
         checkVersion(this)
 
         //広告
-        /*val mAdView: AdView = findViewById(R.id.adView)
+        val mAdView: AdView = findViewById(R.id.adView)
         val adRequest: AdRequest = AdRequest.Builder().build()
-        mAdView.loadAd(adRequest)*/
+        mAdView.loadAd(adRequest)
     }
 }

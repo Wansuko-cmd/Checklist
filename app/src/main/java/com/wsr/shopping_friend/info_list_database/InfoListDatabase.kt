@@ -30,7 +30,7 @@ abstract class InfoListDatabase : RoomDatabase(){
 
         fun populateDatabase(infoListDao: InfoListDao){
             Completable.fromAction{
-                infoListDao.deleteAll()
+                /*infoListDao.deleteAll()
                 for (i in 0..10){
                     val id = UUID.randomUUID().toString()
                     infoListDao.insert(InfoList(id, i, "Test", false, i.toString()))
@@ -39,6 +39,7 @@ abstract class InfoListDatabase : RoomDatabase(){
                 infoListDao.insert(InfoList(UUID.randomUUID().toString(), 1, "code",false, "Bravo"))
                 infoListDao.insert(InfoList(UUID.randomUUID().toString(), 2, "code",false, "Charlie"))
                 infoListDao.insert(InfoList(UUID.randomUUID().toString(), 3, "code",false, "Delta"))
+                infoListDao.insert(InfoList(UUID.randomUUID().toString(), 4, "code",false, "Echo"))*/
                 //infoListDao.deleteWithTitle("Te")*/
 
                 /*infoListDao.insert(InfoList(false, "Watch"))
@@ -68,7 +69,7 @@ abstract class InfoListDatabase : RoomDatabase(){
                     InfoListDatabase::class.java,
                     "info_list_database"
                 )
-                    .addCallback(InfoListDatabaseCallback(scope))
+                    //.addCallback(InfoListDatabaseCallback(scope))
                     .build()
                 INSTANCE = instance
                 return instance

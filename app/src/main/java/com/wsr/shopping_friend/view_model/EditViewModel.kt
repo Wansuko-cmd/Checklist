@@ -1,6 +1,7 @@
 package com.wsr.shopping_friend.view_model
 
 import android.app.Application
+import android.icu.text.IDNA
 import androidx.lifecycle.AndroidViewModel
 import com.wsr.shopping_friend.info_list_database.InfoList
 import com.wsr.shopping_friend.type_file.RecordNumber
@@ -8,8 +9,9 @@ import com.wsr.shopping_friend.type_file.RecordNumber
 class EditViewModel(application: Application) : AndroidViewModel(application) {
 
     //InfoListをデータベースに共有せずに保持するための変数
-    private var numList: MutableList<RecordNumber> = mutableListOf()
-    private var editList: MutableList<InfoList> = mutableListOf()
+    private val numList: MutableList<RecordNumber> = mutableListOf()
+    private val editList: MutableList<InfoList> = mutableListOf()
+    private val deleteList: MutableList<InfoList> = mutableListOf()
 
     //Undo処理を適用する欄の情報を保持するための変数
     var deleteEditItem: InfoList? = null
@@ -26,10 +28,6 @@ class EditViewModel(application: Application) : AndroidViewModel(application) {
     //idを入れることでNumberを返り値に持つ関数
     val setNumber: (String) -> Int = fun(id: String): Int{
         return editList.find{it.id == id}?.number ?: -1
-        /*for (i in editList){
-            if (id == i.id) return i.number
-        }
-        return -1*/
     }
 
     //falseの要素の数を数える関数
@@ -67,6 +65,10 @@ class EditViewModel(application: Application) : AndroidViewModel(application) {
         return numList
     }
 
+    fun getDeleteList(): MutableList<InfoList>{
+        return deleteList
+    }
+
     //idと結びついている要素のアイテムを返す関数
     fun getItem(id: String): String{
         return editList[setPosition(id)].item
@@ -86,6 +88,7 @@ class EditViewModel(application: Application) : AndroidViewModel(application) {
             numList[count] = numList[count].copy(number = count)
         }
         deleteEditItem = editList.find {it.id == id}
+        if(deleteEditItem != null) deleteList.add(deleteEditItem!!)
         editList.removeAll{it.id == id}
         for(i in numList){
             editList[setPosition(i.id)] = editList[setPosition(i.id)].copy(number = i.number)
@@ -104,6 +107,7 @@ class EditViewModel(application: Application) : AndroidViewModel(application) {
                 if (i.number >= deleteEditItem!!.number) i.number++
             }
             editList.add(deleteEditItem!!)
+            deleteList.removeAll {it.id == deleteEditItem!!.id}
         }
         editList.sortBy{ it.number }
         sortTrueFalse(editList)

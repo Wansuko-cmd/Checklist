@@ -10,28 +10,15 @@ import kotlinx.coroutines.runBlocking
 import java.util.*
 
 fun setHelp(context: Context, viewModel: AppViewModel) {
-    /*val list: List<String> = listOf(
-        context.getString(R.string.help_1),
-        context.getString(R.string.help_2),
-        context.getString(R.string.help_3),
-        context.getString(R.string.help_4),
-        context.getString(R.string.help_5),
-        context.getString(R.string.help_6),
-        context.getString(R.string.help_7),
-        context.getString(R.string.help_8),
-        context.getString(R.string.help_9),
-        context.getString(R.string.help_10)
-    )*/
-    val list = context.resources.getStringArray(R.array.help)
+    val helpList = context.resources.getStringArray(R.array.help)
     var dbList = viewModel.getHelp()
-    while(dbList.size != list.size){
+    while(dbList.size != helpList.size){
         viewModel.deleteWithTitle("")
-        for ((count, item) in list.withIndex()) runBlocking {
-            val job = GlobalScope.launch {
-                viewModel.insert(InfoList(UUID.randomUUID().toString(), count, "", false, item))
-            }
-            job.join()
+        val list: MutableList<InfoList> = mutableListOf()
+        for((count, item) in helpList.withIndex()){
+            list.add(InfoList(UUID.randomUUID().toString(), count, "", false, item))
         }
+        viewModel.insert(list)
         dbList = viewModel.getHelp()
     }
 }

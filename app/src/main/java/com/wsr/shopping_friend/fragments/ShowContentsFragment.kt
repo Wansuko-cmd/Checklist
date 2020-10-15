@@ -27,12 +27,9 @@ import com.wsr.shopping_friend.view_model.EditViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_show_contents.*
 import kotlinx.android.synthetic.main.fragment_show_contents.edit_button
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import java.util.*
 
-class ShowContentsFragment : Fragment(){
+class ShowContentsFragment : Fragment() {
     //recyclerViewの定義
     private var recyclerView: RecyclerView? = null
 
@@ -70,11 +67,11 @@ class ShowContentsFragment : Fragment(){
         //snackBarの設定
         snackBar = setSnackBar()
 
-        if(title == "") setHelp(requireContext(), viewModel)
+        if (title == "") setHelp(requireContext(), viewModel)
 
         //recyclerViewの初期化
         this.recyclerView = show_contents_recycler_view
-        this.recyclerView!!.setOnClickListener{it.requestFocus()}
+        this.recyclerView!!.setOnClickListener { it.requestFocus() }
         this.recyclerView?.apply {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(context)
@@ -100,12 +97,13 @@ class ShowContentsFragment : Fragment(){
                 .setTitle(R.string.check_out_title)
                 .setMessage(R.string.check_out_message)
                 .setPositiveButton(R.string.check_out_positive) { _, _ ->
-                    val idList = mutableListOf<String>()
-                    for(i in editViewModel.getList()){
-                        if(i.check) idList.add(i.id)
+                    val list = mutableListOf<InfoList>()
+                    for (i in editViewModel.getList()) {
+                        if (i.check) list.add(i)
                     }
-                    for(i in idList){
-                        editViewModel.delete(i)
+                    viewModel.deleteList(list)
+                    for (i in list) {
+                        editViewModel.delete(i.id)
                     }
                     showContentsAdapter.notifyDataSetChanged()
                 }
@@ -116,15 +114,16 @@ class ShowContentsFragment : Fragment(){
 
         //テキストが変更された際の処理
         showContentsAdapter.changeText = { p0, position ->
-            snackBar.dismiss()
+            //snackBar.dismiss()
             for (i in editViewModel.getList()) {
                 if (position == i.number) {
                     //一番下の要素の中でエンターキーを押した際に新しく空欄を作る機能
                     if (p0.endsWith("\n") && (editViewModel.checkEmpty(i.id))) {
                         showContentsAdapter.notifyDataSetChanged()
                         addElements()
-                    } else if (p0 != i.item){
+                    } else if (p0 != i.item) {
                         editViewModel.changeItem(i.id, p0)
+                        snackBar.dismiss()
                     }
                     break
                 }
@@ -156,17 +155,18 @@ class ShowContentsFragment : Fragment(){
                 if (position == i.number) {
                     showContentsAdapter.notifyItemRemoved(position)
                     editViewModel.delete(i.id)
+                    viewModel.delete(editViewModel.deleteEditItem!!)
                     break
                 }
             }
+            snackBar.show()
         }
 
         //スワイプでアイテムを消す処理
-        val swipeHandler = object : SwipeToDeleteCallback(){
+        val swipeHandler = object : SwipeToDeleteCallback() {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                viewHolder.let{
+                viewHolder.let {
                     showContentsAdapter.deleteElement(it.adapterPosition)
-                    snackBar.show()
                 }
             }
         }
@@ -184,13 +184,13 @@ class ShowContentsFragment : Fragment(){
     override fun onStop() {
         super.onStop()
         snackBar.dismiss()
-        if(title != ""){
+        if (title != "") {
             val numList = editViewModel.getNumList()
-            for(i in editViewModel.getList()){
-                if(i.item == "") numList.removeAll {it.id == i.id}
+            for (i in editViewModel.getList()) {
+                if (i.item == "") numList.removeAll { it.id == i.id }
             }
             numList.sortBy { it.number }
-            for ((count, _) in numList.withIndex()){
+            for ((count, _) in numList.withIndex()) {
                 numList[count] = numList[count].copy(number = count)
             }
             updateDatabase()
@@ -204,18 +204,18 @@ class ShowContentsFragment : Fragment(){
     }
 
     //toolbarの設定
-    private fun setToolbar(){
+    private fun setToolbar() {
         val toolbar = requireActivity().main_toolbar
-        toolbar.title = if(title != "") title else "Help"
+        toolbar.title = if (title != "") title else "Help"
         toolbar.setNavigationIcon(R.drawable.ic_back_arrow)
         toolbar.menu.setGroupVisible(R.id.rename_group, true)
         toolbar.menu.setGroupVisible(R.id.help_group, false)
         toolbar.setOnMenuItemClickListener { menuItem ->
-            when(menuItem.itemId){
+            when (menuItem.itemId) {
                 R.id.settings -> showSettings()
                 R.id.rename_title -> {
                     snackBar.dismiss()
-                    if(title != "") renameAlert(requireContext(), changeTitle, titleList, title)
+                    if (title != "") renameAlert(requireContext(), changeTitle, titleList, title)
                 }
             }
             true
@@ -223,7 +223,7 @@ class ShowContentsFragment : Fragment(){
         toolbar.setNavigationOnClickListener {
             findNavController().navigate(R.id.back_to_title_fragment)
         }
-        toolbar.setOnClickListener{it.requestFocus()}
+        toolbar.setOnClickListener { it.requestFocus() }
     }
 
     //LiveDataの内容を反映させる関数
@@ -247,7 +247,7 @@ class ShowContentsFragment : Fragment(){
     //タイトルが変更された際の処理
     private val changeTitle: (String) -> Unit = { newTitle ->
         viewModel.changeTitle(title, newTitle)
-        title =  newTitle
+        title = newTitle
         requireActivity().main_toolbar.title = newTitle
     }
 
@@ -262,45 +262,46 @@ class ShowContentsFragment : Fragment(){
     }
 
     //editViewModelの内容をデータベースに反映させる関数
-    private fun updateDatabase(){
-        runBlocking {
-            val job = GlobalScope.launch {
-                viewModel.deleteWithTitle(title)
-            }
-            job.join()
-        }
+    private fun updateDatabase() {
+        val list: MutableList<InfoList> = mutableListOf()
         for (i in editViewModel.getNumList()) {
-            runBlocking {
-                val job = GlobalScope.launch {
-                    viewModel.insert(InfoList(i.id, i.number, title, editViewModel.getCheck(i.id), editViewModel.getItem(i.id)))
-                }
-                job.join()
-            }
+            list.add(
+                InfoList(
+                    i.id,
+                    i.number,
+                    title,
+                    editViewModel.getCheck(i.id),
+                    editViewModel.getItem(i.id)
+                )
+            )
         }
+        viewModel.insert(list)
     }
 
     //Undo機能の設定
-    private fun setSnackBar(): Snackbar{
+    private fun setSnackBar(): Snackbar {
         return Snackbar.make(
             requireActivity().findViewById(R.id.coordinatorLayout),
             getString(R.string.snack_bar_message),
-            Snackbar.LENGTH_INDEFINITE)
+            Snackbar.LENGTH_INDEFINITE
+        )
             .setAction(getString(R.string.snack_bar_action)) {
                 val item = editViewModel.deleteEditItem
-                if(item != null){
+                if (item != null) {
                     editViewModel.backDeleteItem()
                     showContentsAdapter.notifyItemInserted(item.number)
                     Snackbar.make(
                         requireActivity().findViewById(R.id.coordinatorLayout),
                         getString(R.string.snack_bar_after),
-                        Snackbar.LENGTH_SHORT)
+                        Snackbar.LENGTH_SHORT
+                    )
                         .show()
                 }
             }
     }
 
     //設定、ヘルプ画面に画面遷移するための処理
-    private fun showSettings(){
+    private fun showSettings() {
         val intent = Intent(requireActivity(), ShowPreference::class.java)
         intent.putExtra("Purpose", "settings")
         startActivity(intent)
