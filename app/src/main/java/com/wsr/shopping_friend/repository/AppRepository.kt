@@ -8,9 +8,14 @@ class AppRepository(private val infoListDao: InfoListDao) {
     val infoList: LiveData<MutableList<InfoList>> = infoListDao.getAll()
 
     //ローカルデータベースへの操作内容
-    //データを挿入するための関数
-    suspend fun insert(infoList: MutableList<InfoList>){
+
+    suspend fun insert(infoList: InfoList){
         infoListDao.insert(infoList)
+    }
+
+    //データを挿入するための関数
+    suspend fun insertList(infoList: MutableList<InfoList>){
+        infoListDao.insertList(infoList)
     }
 
     //タイトルを変更するための関数

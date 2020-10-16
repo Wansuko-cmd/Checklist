@@ -261,6 +261,7 @@ class ShowContentsFragment : Fragment() {
         val id = UUID.randomUUID().toString()
         val number = showContentsAdapter.itemCount
         editViewModel.insert(InfoList(id, number, title, false, ""))
+        viewModel.insert(InfoList(id, number, title, false, ""))
         recyclerView!!.scrollToPosition(editViewModel.setNumber(id))
         showContentsAdapter.focus = editViewModel.setNumber(id)
         showContentsAdapter.notifyItemInserted(editViewModel.nonCheckNumber())
@@ -280,7 +281,7 @@ class ShowContentsFragment : Fragment() {
                 )
             )
         }
-        viewModel.insert(list)
+        viewModel.insertList(list)
     }
 
     //Undo機能の設定

@@ -22,7 +22,7 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
 
         //テストコード
         //deleteAll()
-        if(false){
+        /*if(false){
             //deleteAll()
             val testList: MutableList<InfoList> = mutableListOf()
             for (i in 1..10){
@@ -33,12 +33,15 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
                 testList.add(InfoList(UUID.randomUUID().toString(), count, "code", false, i))
             }
             insert(testList)
-        }
+        }*/
     }
 
-    //データベースに値を代入するための関数
-    fun insert(infoList: MutableList<InfoList>) = viewModelScope.launch(Dispatchers.IO){
+    fun insert(infoList: InfoList) = viewModelScope.launch(Dispatchers.IO){
         repository.insert(infoList)
+    }
+    //データベースに値を代入するための関数
+    fun insertList(infoList: MutableList<InfoList>) = viewModelScope.launch(Dispatchers.IO){
+        repository.insertList(infoList)
     }
 
     //タイトルのみを変更するための関数
