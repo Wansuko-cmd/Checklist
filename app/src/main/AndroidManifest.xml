@@ -14,9 +14,6 @@
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-1648529608275820~9286028196"/>
         <activity
-            android:name="com.wsr.shopping_friend.preference.ShowPreference"
-            android:screenOrientation="portrait" />
-        <activity
             android:name="com.wsr.shopping_friend.view.MainActivity"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -25,6 +22,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="com.wsr.shopping_friend.preference.ShowPreference"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

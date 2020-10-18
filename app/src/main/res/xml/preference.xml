@@ -19,6 +19,13 @@
             android:dialogTitle="@string/text_size"
             android:defaultValue="medium"/>
 
+        <SwitchPreferenceCompat
+            android:key="share_all"
+            android:title="@string/share_all_title"
+            android:summaryOn="@string/share_all_on"
+            android:summaryOff="@string/share_all_off"
+            android:defaultValue="true"/>
+
         <EditTextPreference
             app:key="version"
             app:title="version"

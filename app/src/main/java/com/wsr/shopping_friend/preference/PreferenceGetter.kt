@@ -34,3 +34,8 @@ fun getDefaultTitle(context: Context): String{
         else -> pref.getString("default_title", "Non-title")!!
     }
 }
+
+fun getShareAll(context: Context): Boolean{
+    val pref = PreferenceManager.getDefaultSharedPreferences(context)
+    return pref.getBoolean("share_all", true)
+}

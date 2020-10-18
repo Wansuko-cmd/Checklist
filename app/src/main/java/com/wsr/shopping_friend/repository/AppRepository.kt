@@ -44,9 +44,4 @@ class AppRepository(private val infoListDao: InfoListDao) {
     suspend fun deleteWithTitle(title:String){
         infoListDao.deleteWithTitle(title)
     }
-
-    //全データを削除するための関数
-    fun deleteAll(){
-        infoListDao.deleteAll()
-    }
 }

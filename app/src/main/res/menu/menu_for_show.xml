@@ -9,6 +9,12 @@
             android:title="@string/rename_title"
             android:icon="@drawable/ic_edit"
             app:showAsAction="ifRoom"/>
+
+        <item
+            android:id="@+id/share"
+            android:title="@string/share"
+            android:icon="@drawable/ic_share"
+            app:showAsAction="ifRoom"/>
     </group>
 
     <group
@@ -18,12 +24,12 @@
             android:title="@string/help"
             android:icon="@drawable/ic_help"
             app:showAsAction="ifRoom"/>
-    </group>
 
-    <item
-        android:id="@+id/settings"
-        android:title="@string/settings"
-        android:icon="@drawable/ic_settings"
-        app:showAsAction="ifRoom"/>
+        <item
+            android:id="@+id/settings"
+            android:title="@string/settings"
+            android:icon="@drawable/ic_settings"
+            app:showAsAction="ifRoom"/>
+    </group>
 
 </menu>

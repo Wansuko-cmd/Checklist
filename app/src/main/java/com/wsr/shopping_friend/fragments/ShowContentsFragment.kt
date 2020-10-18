@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
@@ -19,16 +20,15 @@ import com.google.android.material.snackbar.Snackbar
 import com.wsr.shopping_friend.R
 import com.wsr.shopping_friend.adapter.ListAdapter
 import com.wsr.shopping_friend.info_list_database.InfoList
+import com.wsr.shopping_friend.preference.getShareAll
 import com.wsr.shopping_friend.type_file.SwipeToDeleteCallback
 import com.wsr.shopping_friend.type_file.renameAlert
-import com.wsr.shopping_friend.preference.ShowPreference
 import com.wsr.shopping_friend.type_file.setHelp
 import com.wsr.shopping_friend.view_model.AppViewModel
 import com.wsr.shopping_friend.view_model.EditViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_show_contents.*
 import kotlinx.android.synthetic.main.fragment_show_contents.edit_button
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import java.util.*
 
@@ -217,7 +217,7 @@ class ShowContentsFragment : Fragment() {
         toolbar.menu.setGroupVisible(R.id.help_group, false)
         toolbar.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
-                R.id.settings -> showSettings()
+                R.id.share -> shareText()
                 R.id.rename_title -> {
                     snackBar.dismiss()
                     if (title != "") renameAlert(requireContext(), changeTitle, titleList, title)
@@ -294,12 +294,9 @@ class ShowContentsFragment : Fragment() {
             job1.join()
         }
         runBlocking {
-            //val job1 = viewModel.deleteList(deleteList)
             val job2 = viewModel.insertList(list)
-            //job1.join()
             job2.join()
         }
-        //Log.i(tag, list.toString())
     }
 
     //Undo機能の設定
@@ -325,9 +322,25 @@ class ShowContentsFragment : Fragment() {
     }
 
     //設定、ヘルプ画面に画面遷移するための処理
-    private fun showSettings() {
-        val intent = Intent(requireActivity(), ShowPreference::class.java)
-        intent.putExtra("Purpose", "settings")
-        startActivity(intent)
+    private fun shareText() {
+        var text = ""
+        val setting = getShareAll(requireContext())
+        for (i in editViewModel.getList()){
+            if(!i.check || !setting){
+                text += i.item + "\n"
+            }
+        }
+        if(text.length >= 2){
+            text = text.dropLast(1)
+            val intent = Intent().apply {
+                action = Intent.ACTION_SEND
+                type = "text/plain"
+                putExtra(Intent.EXTRA_TEXT, text)
+            }
+            startActivity(intent)
+        }
+        else{
+            Toast.makeText(requireContext(), requireActivity().getString(R.string.no_value), Toast.LENGTH_LONG).show()
+        }
     }
 }

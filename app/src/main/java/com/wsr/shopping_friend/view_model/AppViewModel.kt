@@ -8,7 +8,6 @@ import com.wsr.shopping_friend.info_list_database.InfoListDatabase
 import com.wsr.shopping_friend.repository.AppRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.util.*
 
 class AppViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -19,21 +18,6 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
         val infoListDao: InfoListDao = InfoListDatabase.getDatabase(application,viewModelScope).infoListDao()
         repository = AppRepository(infoListDao)
         infoList = repository.infoList
-
-        //テストコード
-        //deleteAll()
-        /*if(false){
-            //deleteAll()
-            val testList: MutableList<InfoList> = mutableListOf()
-            for (i in 1..10){
-                testList.add(InfoList(UUID.randomUUID().toString(), i, "Test", false, i.toString()))
-            }
-            val code = mutableListOf("Alpha", "Bravo", "Charlie", "Delta")
-            for((count, i) in code.withIndex()){
-                testList.add(InfoList(UUID.randomUUID().toString(), count, "code", false, i))
-            }
-            insert(testList)
-        }*/
     }
 
     fun insert(infoList: InfoList) = viewModelScope.launch(Dispatchers.IO){
@@ -66,10 +50,5 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
     //タイトル名が一致するものをすべて消すための関数
     fun deleteWithTitle(title: String) = viewModelScope.launch(Dispatchers.IO){
         repository.deleteWithTitle(title)
-    }
-
-    //要素をすべて削除する関数
-    private fun deleteAll() = viewModelScope.launch(Dispatchers.IO){
-        repository.deleteAll()
     }
 }

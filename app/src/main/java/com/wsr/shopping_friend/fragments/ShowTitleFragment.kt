@@ -14,12 +14,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.wsr.shopping_friend.R
 import com.wsr.shopping_friend.adapter.MainAdapter
 import com.wsr.shopping_friend.preference.ShowPreference
+import com.wsr.shopping_friend.preference.checkVersion
 import com.wsr.shopping_friend.type_file.renameAlert
 import com.wsr.shopping_friend.view_model.AppViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_show_title.*
+import kotlin.concurrent.thread
 
-class ShowTitleFragment : Fragment(){
+class ShowTitleFragment : Fragment() {
     //recyclerViewの定義
     private var recyclerView: RecyclerView? = null
 
@@ -43,21 +45,16 @@ class ShowTitleFragment : Fragment(){
         viewModel = ViewModelProviders.of(this).get(AppViewModel::class.java)
         mainAdapter = MainAdapter(requireContext())
 
-        //toolbarの設定
-        setToolbar()
-
         //recyclerViewの初期化
         this.recyclerView = show_title_recycler_view
-        this.recyclerView?.apply{
+        this.recyclerView?.apply {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(context)
             adapter = mainAdapter
         }
 
-        //viewModelが更新された際の処理
-        viewModel.infoList.observe(viewLifecycleOwner, { list ->
-            list?.let { mainAdapter.setInfoList(it) }
-        })
+        //toolbarの設定
+        setToolbar()
 
         //fabボタンが押された際の処理
         fab.setOnClickListener {
@@ -82,6 +79,11 @@ class ShowTitleFragment : Fragment(){
                 .setCancelable(true)
                 .show()
         }
+
+        //viewModelが更新された際の処理
+        viewModel.infoList.observe(viewLifecycleOwner, { list ->
+            list?.let { mainAdapter.setInfoList(it) }
+        })
     }
 
     //設定から戻ったときに結果を反映するための処理
@@ -105,14 +107,14 @@ class ShowTitleFragment : Fragment(){
     }
 
     //toolbarの設定
-    private fun setToolbar(){
+    private fun setToolbar() {
         val toolbar = requireActivity().main_toolbar
         toolbar.title = getString(R.string.app_name)
         toolbar.navigationIcon = null
         toolbar.menu.setGroupVisible(R.id.rename_group, false)
         toolbar.menu.setGroupVisible(R.id.help_group, true)
         toolbar.setOnMenuItemClickListener { menuItem ->
-            when(menuItem.itemId){
+            when (menuItem.itemId) {
                 R.id.settings -> showSettings()
                 R.id.help -> {
                     val action =
@@ -125,7 +127,7 @@ class ShowTitleFragment : Fragment(){
     }
 
     //設定、ヘルプ画面に画面遷移するための処理
-    private fun showSettings(){
+    private fun showSettings() {
         val intent = Intent(requireActivity(), ShowPreference::class.java)
         intent.putExtra("Purpose", "settings")
         startActivity(intent)

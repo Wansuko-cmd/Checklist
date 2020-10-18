@@ -35,8 +35,4 @@ interface InfoListDao {
     //タイトル名が一致するものをすべて消すための関数
     @Query("Delete From info_list_table WHERE title = :Title")
     suspend fun deleteWithTitle(Title: String)
-
-    //全データを削除するための関数
-    @Query("DELETE FROM info_list_table")
-    fun deleteAll()
 }
