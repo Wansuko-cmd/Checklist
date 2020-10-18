@@ -17,6 +17,9 @@ interface InfoListDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertList(infoList: MutableList<InfoList>)
 
+    @Update
+    suspend fun update(infoList: InfoList)
+
     //タイトルのみを変更するための関数
     @Query("UPDATE info_list_table SET 'title' = :newTitle WHERE title = :oldTitle")
     fun changeTitle(oldTitle: String, newTitle: String)

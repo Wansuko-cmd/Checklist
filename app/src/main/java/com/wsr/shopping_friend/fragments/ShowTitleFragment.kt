@@ -88,6 +88,7 @@ class ShowTitleFragment : Fragment(){
     override fun onResume() {
         super.onResume()
         mainAdapter.notifyDataSetChanged()
+        requireActivity().reportFullyDrawn()
     }
 
     override fun onDestroyView() {

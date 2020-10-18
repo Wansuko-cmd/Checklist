@@ -4,6 +4,7 @@ import android.app.AlertDialog
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,6 +28,8 @@ import com.wsr.shopping_friend.view_model.EditViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_show_contents.*
 import kotlinx.android.synthetic.main.fragment_show_contents.edit_button
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
 import java.util.*
 
 class ShowContentsFragment : Fragment() {
@@ -122,6 +125,7 @@ class ShowContentsFragment : Fragment() {
                         addElements()
                     } else if (p0 != i.item) {
                         editViewModel.changeItem(i.id, p0)
+                        viewModel.update(i)
                         snackBar.dismiss()
                     }
                     break
@@ -183,16 +187,18 @@ class ShowContentsFragment : Fragment() {
     override fun onStop() {
         super.onStop()
         snackBar.dismiss()
+        val deleteList = mutableListOf<InfoList>()
         if (title != "") {
             val numList = editViewModel.getNumList()
             for (i in editViewModel.getList()) {
+                deleteList.add(i)
                 if (i.item == "") numList.removeAll { it.id == i.id }
             }
             numList.sortBy { it.number }
             for ((count, _) in numList.withIndex()) {
                 numList[count] = numList[count].copy(number = count)
             }
-            updateDatabase()
+            updateDatabase(deleteList)
         }
     }
 
@@ -268,7 +274,7 @@ class ShowContentsFragment : Fragment() {
     }
 
     //editViewModelの内容をデータベースに反映させる関数
-    private fun updateDatabase() {
+    private fun updateDatabase(deleteList: MutableList<InfoList>) {
         val list: MutableList<InfoList> = mutableListOf()
         for (i in editViewModel.getNumList()) {
             list.add(
@@ -281,7 +287,19 @@ class ShowContentsFragment : Fragment() {
                 )
             )
         }
-        viewModel.insertList(list)
+        val tag = "SendList"
+        Log.i(tag, list.toString())
+        runBlocking {
+            val job1 = viewModel.deleteList(deleteList)
+            job1.join()
+        }
+        runBlocking {
+            //val job1 = viewModel.deleteList(deleteList)
+            val job2 = viewModel.insertList(list)
+            //job1.join()
+            job2.join()
+        }
+        //Log.i(tag, list.toString())
     }
 
     //Undo機能の設定
@@ -295,13 +313,13 @@ class ShowContentsFragment : Fragment() {
                 val item = editViewModel.deleteEditItem
                 if (item != null) {
                     editViewModel.backDeleteItem()
+                    viewModel.insert(editViewModel.deleteEditItem!!)
                     showContentsAdapter.notifyItemInserted(item.number)
                     Snackbar.make(
                         requireActivity().findViewById(R.id.coordinatorLayout),
                         getString(R.string.snack_bar_after),
                         Snackbar.LENGTH_SHORT
-                    )
-                        .show()
+                    ).show()
                 }
             }
     }
