@@ -14,12 +14,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.wsr.shopping_friend.R
 import com.wsr.shopping_friend.adapter.MainAdapter
 import com.wsr.shopping_friend.preference.ShowPreference
-import com.wsr.shopping_friend.preference.checkVersion
 import com.wsr.shopping_friend.type_file.renameAlert
 import com.wsr.shopping_friend.view_model.AppViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_show_title.*
-import kotlin.concurrent.thread
 
 class ShowTitleFragment : Fragment() {
     //recyclerViewの定義

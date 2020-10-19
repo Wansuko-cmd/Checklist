@@ -16,8 +16,8 @@ class AppRepository(private val infoListDao: InfoListDao) {
 
     //データを挿入するための関数
     suspend fun insertList(infoList: MutableList<InfoList>){
-        val tag = "Repository"
-        Log.i(tag, infoList.toString())
+        //val tag = "Repository"
+        //Log.i(tag, infoList.toString())
         infoListDao.insertList(infoList)
     }
 

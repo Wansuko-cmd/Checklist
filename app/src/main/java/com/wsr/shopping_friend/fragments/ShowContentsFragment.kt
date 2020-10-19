@@ -287,8 +287,8 @@ class ShowContentsFragment : Fragment() {
                 )
             )
         }
-        val tag = "SendList"
-        Log.i(tag, list.toString())
+        //val tag = "SendList"
+        //Log.i(tag, list.toString())
         runBlocking {
             val job1 = viewModel.deleteList(deleteList)
             job1.join()
