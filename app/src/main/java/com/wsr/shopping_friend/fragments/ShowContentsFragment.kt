@@ -324,10 +324,11 @@ class ShowContentsFragment : Fragment() {
     //設定、ヘルプ画面に画面遷移するための処理
     private fun shareText() {
         var text = ""
+        val listTop: String = requireActivity().getString(R.string.list_top)
         val setting = getShareAll(requireContext())
         for (i in editViewModel.getList()){
             if(!i.check || !setting){
-                text += i.item + "\n"
+                text += listTop + i.item + "\n"
             }
         }
         if(text.length >= 2){

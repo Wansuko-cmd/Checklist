@@ -27,13 +27,13 @@
     <string name="no_edit_title_positive">OK</string>
 
     <!--欄を削除した際のスナックバー-->
-    <string name="snack_bar_message">A column was deleted</string>
+    <string name="snack_bar_message">An item was deleted</string>
     <string name="snack_bar_action">UNDO</string>
-    <string name="snack_bar_after">The column was restored.</string>
+    <string name="snack_bar_after">The item was restored.</string>
 
     <!--チェックアウトの警告-->
     <string name="check_out_title">Waring</string>
-    <string name="check_out_message">Do you want to delete all checked elements?</string>
+    <string name="check_out_message">Do you want to delete all checked item?</string>
     <string name="check_out_positive">Yes</string>
     <string name="check_out_negative">Cancel</string>
 
@@ -42,6 +42,7 @@
     <string name="settings">settings</string>
     <string name="rename_title" >rename title</string>
     <string name="share">share</string>
+    <string name="list_top">-&#160;</string>
     <string name="no_value">There is no value to share</string>
 
     <!--設定画面-->
@@ -56,20 +57,20 @@
     <string name="large_size">Large</string>
 
     <string name="share_all_title">Setting of share</string>
-    <string name="share_all_on">Only non-checked column will be shared.</string>
-    <string name="share_all_off">All column will be shared.</string>
+    <string name="share_all_on">Only non-checked item will be shared.</string>
+    <string name="share_all_off">All item will be shared.</string>
 
     <!--ヘルプ画面-->
     <string-array name="help">
         <item>This is help screen.</item>
-        <item>Check off this column and it goes down.</item>
+        <item>Check off this item and it goes down.</item>
         <item>This app has automatic save function.</item>
-        <item>Empty column won\'t save.</item>
-        <item>Push the garbage button and all checked column will disappear.</item>
-        <item>Swipe the column left and it will delete.</item>
-        <item>Push + button and a new column will appear.</item>
-        <item>Tap the column when you want to edit.</item>
-        <item>Pushing enter in the bottom column also make a new column</item>
+        <item>Empty item won\'t save.</item>
+        <item>Push the garbage button and all checked item will disappear.</item>
+        <item>Swipe the item left and it will delete.</item>
+        <item>Push + button and a new item will appear.</item>
+        <item>Tap the item when you want to edit.</item>
+        <item>Pushing enter in the bottom item also make a new item.</item>
         <item>Default title will set when you enter empty as list title.</item>
     </string-array>
 </resources>
