@@ -39,7 +39,7 @@
         android:layout_alignParentBottom="true"
         app:layout_constraintBottom_toBottomOf="parent"
         ads:adSize="SMART_BANNER"
-        ads:adUnitId="ca-app-pub-3940256099942544/6300978111">
+        ads:adUnitId="ca-app-pub-1648529608275820/8004736114">
 
         <!--
         本番：ca-app-pub-1648529608275820/8004736114

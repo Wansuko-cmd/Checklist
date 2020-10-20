@@ -4,7 +4,6 @@ import android.app.AlertDialog
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -213,6 +212,7 @@ class ShowContentsFragment : Fragment() {
         val toolbar = requireActivity().main_toolbar
         toolbar.title = if (title != "") title else "Help"
         toolbar.setNavigationIcon(R.drawable.ic_back_arrow)
+        toolbar.navigationContentDescription=getString(R.string.back)
         toolbar.menu.setGroupVisible(R.id.rename_group, true)
         toolbar.menu.setGroupVisible(R.id.help_group, false)
         toolbar.setOnMenuItemClickListener { menuItem ->

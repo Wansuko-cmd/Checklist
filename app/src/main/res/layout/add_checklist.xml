@@ -11,6 +11,7 @@
 
     <CheckBox
         android:id="@+id/CheckBox"
+        android:contentDescription="@string/check"
         android:layout_gravity="center_vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
@@ -24,10 +25,11 @@
         android:layout_weight="1"
         android:layout_gravity="center_vertical"
         android:background="#00000000"
-        android:textSize="30sp"
         android:layout_height="wrap_content"
         android:layout_width="0dp"
         android:text="@string/memo"
+        android:textSize="30sp"
+        android:contentDescription="@string/memo"
         android:autofillHints=""
         tools:ignore="LabelFor" />
 

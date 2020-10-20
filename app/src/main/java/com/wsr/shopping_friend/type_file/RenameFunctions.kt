@@ -10,6 +10,7 @@ import com.wsr.shopping_friend.preference.getDefaultTitle
 fun renameAlert(context: Context, Function: (String) -> Unit, titleList: List<String>, setTitle: String){
     val defaultTitle = getDefaultTitle(context)
     val editText = EditText(context)
+    editText.setHint(R.string.edit_title_hint)
     editText.setText(setTitle)
     AlertDialog.Builder(context)
         .setTitle(R.string.edit_title_title)
