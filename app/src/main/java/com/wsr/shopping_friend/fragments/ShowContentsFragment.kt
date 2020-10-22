@@ -328,7 +328,7 @@ class ShowContentsFragment : Fragment() {
         val setting = getShareAll(requireContext())
         for (i in editViewModel.getList()){
             if(!i.check || !setting){
-                text += listTop + i.item + "\n"
+                text += "${listTop}${i.item}\n"
             }
         }
         if(text.length >= 2){

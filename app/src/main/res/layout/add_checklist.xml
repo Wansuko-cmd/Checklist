@@ -29,7 +29,6 @@
         android:layout_width="0dp"
         android:text="@string/memo"
         android:textSize="30sp"
-        android:contentDescription="@string/memo"
         android:autofillHints=""
         tools:ignore="LabelFor" />
 
