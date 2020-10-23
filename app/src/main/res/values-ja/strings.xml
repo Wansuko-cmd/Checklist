@@ -11,7 +11,7 @@
     <string name="delete">削除</string>
 
     <!--タイトル名で削除の警告-->
-    <string name="delete_with_title_title">警告</string>
+    <string name="delete_with_title_title">確認</string>
     <string name="delete_with_title_message">本当にこのリストを消しますか？</string>
     <string name="delete_with_title_positive">はい</string>
     <string name="delete_with_title_negative">キャンセル</string>
@@ -33,7 +33,7 @@
     <string name="snack_bar_after">元に戻しました</string>
 
     <!--チェックアウトの警告-->
-    <string name="check_out_title">警告</string>
+    <string name="check_out_title">確認</string>
     <string name="check_out_message">チェックした要素をすべて削除しますか？</string>
     <string name="check_out_positive">はい</string>
     <string name="check_out_negative">キャンセル</string>
@@ -73,7 +73,7 @@
     <!--ヘルプ画面-->
     <string-array name="help">
         <item>これはヘルプ画面です</item>
-        <item>チェックをつけると下に行きます</item>
+        <item>ボックスにチェックをつけると下に移動します</item>
         <item>このアプリでは自動的にセーブされます</item>
         <item>空欄はセーブされません</item>
         <item>ゴミ箱を押すとチェックのついた欄が削除されます</item>
