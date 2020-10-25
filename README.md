@@ -1,11 +1,17 @@
 <h1>アプリの概要を表す画像集</h1>
 <img src="https://user-images.githubusercontent.com/63241922/97106398-b17d0280-1704-11eb-943a-2709c324fbee.png" width="480px"/>
-<img src="https://user-images.githubusercontent.com/63241922/97106433-eee19000-1704-11eb-85a3-71ca1c79201a.png" width="300px"/>
-<img src="https://user-images.githubusercontent.com/63241922/97106437-f30dad80-1704-11eb-970b-c526e4cb044f.png" width="300px"/>
-<img src="https://user-images.githubusercontent.com/63241922/97106438-f30dad80-1704-11eb-9f1b-17bcc3b38b1a.png" width="300px"/>
-<img src="https://user-images.githubusercontent.com/63241922/97106439-f3a64400-1704-11eb-87b1-8b670ca963d9.png" width="300px"/>
-<img src="https://user-images.githubusercontent.com/63241922/97106435-f2751700-1704-11eb-991b-03492ce94284.png" width="300px"/>
-<img src="https://user-images.githubusercontent.com/63241922/97106436-f2751700-1704-11eb-80a9-8e795be92d15.png" width="300px"/>
+<table>
+    <tr>
+        <td><img src="https://user-images.githubusercontent.com/63241922/97106433-eee19000-1704-11eb-85a3-71ca1c79201a.png" width="300px"/></td>
+        <td><img src="https://user-images.githubusercontent.com/63241922/97106437-f30dad80-1704-11eb-970b-c526e4cb044f.png" width="300px"/></td>
+        <td><img src="https://user-images.githubusercontent.com/63241922/97106438-f30dad80-1704-11eb-9f1b-17bcc3b38b1a.png" width="300px"/></td>
+    </tr>
+    <tr>
+        <td><img src="https://user-images.githubusercontent.com/63241922/97106439-f3a64400-1704-11eb-87b1-8b670ca963d9.png" width="300px"/></td>
+        <td><img src="https://user-images.githubusercontent.com/63241922/97106435-f2751700-1704-11eb-991b-03492ce94284.png" width="300px"/></td>
+        <td><img src="https://user-images.githubusercontent.com/63241922/97106436-f2751700-1704-11eb-80a9-8e795be92d15.png" width="300px"/></td>
+    </tr>
+</table>
 
 <h1>アプリの説明</h1>
 買い物リスト - 買い物の友
