@@ -1,13 +1,13 @@
-#アプリの概要を表す画像集
+<h1>アプリの概要を表す画像集</h1>
 <img src="https://user-images.githubusercontent.com/63241922/97106398-b17d0280-1704-11eb-943a-2709c324fbee.png" width="320px"/>
-<img src="https://user-images.githubusercontent.com/63241922/97106433-eee19000-1704-11eb-85a3-71ca1c79201a.png" width="320px"/>
-<img src="https://user-images.githubusercontent.com/63241922/97106437-f30dad80-1704-11eb-970b-c526e4cb044f.png" width="320px"/>
-<img src="https://user-images.githubusercontent.com/63241922/97106438-f30dad80-1704-11eb-9f1b-17bcc3b38b1a.png" width="320px"/>
-<img src="https://user-images.githubusercontent.com/63241922/97106439-f3a64400-1704-11eb-87b1-8b670ca963d9.png" width="320px"/>
-<img src="https://user-images.githubusercontent.com/63241922/97106435-f2751700-1704-11eb-991b-03492ce94284.png" width="320px"/>
-<img src="https://user-images.githubusercontent.com/63241922/97106436-f2751700-1704-11eb-80a9-8e795be92d15.png" width="320px"/>
+<img src="https://user-images.githubusercontent.com/63241922/97106433-eee19000-1704-11eb-85a3-71ca1c79201a.png" width="33%"/>
+<img src="https://user-images.githubusercontent.com/63241922/97106437-f30dad80-1704-11eb-970b-c526e4cb044f.png" width="33%"/>
+<img src="https://user-images.githubusercontent.com/63241922/97106438-f30dad80-1704-11eb-9f1b-17bcc3b38b1a.png" width="33%"/>
+<img src="https://user-images.githubusercontent.com/63241922/97106439-f3a64400-1704-11eb-87b1-8b670ca963d9.png" width="33%"/>
+<img src="https://user-images.githubusercontent.com/63241922/97106435-f2751700-1704-11eb-991b-03492ce94284.png" width="33%"/>
+<img src="https://user-images.githubusercontent.com/63241922/97106436-f2751700-1704-11eb-80a9-8e795be92d15.png" width="33%"/>
 
-#アプリの説明
+<h1>アプリの説明</h1>
 買い物リスト - 買い物の友
 
 本アプリは忙しい買い物の現場で真価を発揮できるように考えられたアプリです！
@@ -27,18 +27,18 @@
 
 皆様もぜひ利用してみてください！
 
-#URL系統
+<h1>URL系統</h1>
 Google Play:https://play.google.com/store/apps/details?id=com.wsr.shopping_friend
 プライバシポリシー（全部英語）:https://shopping-friend-279e8.firebaseapp.com/
 
 プライバシポリシーの方はGitにShopping-Friend-webの名前で上げてます。
 
-#アプリの構造（概要）
+<h1>アプリの構造（概要）</h1>
 アクティビィティはMainActivityと、設定用のShowPreferenceの二つ
 フラグメントはリストのタイトルを表示するためのShowTitleFragment、リストの内容を表示するためのShowContentsFragment、設定のためのPreferenceFragmentの３つ
 AdapterはShowTitleFragmentのためのMainAdapter、ShowContentsFragmentのためのListAdapterの２つ
 ViewModelはデータベースの中身を繋ぐためのAppViewModel、ShowContentsFragmentで表示順番などを保持するためのEditViewModelの２つ
 あとはところどころソースコードにコメントを書いてますので頑張れ
 
-#ただ今の課題
+#<h1>ただ今の課題</h1>
 アプリの起動速度の向上
