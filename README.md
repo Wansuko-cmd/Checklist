@@ -49,6 +49,7 @@
 
 <h1>ただ今の課題</h1>
 <ul>
+    <li style="color:red">データベースの修理</li>
     <li>アプリの起動速度の向上</li>
     <li>ASOを考える</li>
 </ul>
