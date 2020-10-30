@@ -10,13 +10,15 @@ interface InfoListDao {
     @Query("SELECT * FROM info_list_table")
     fun getAll(): LiveData<MutableList<InfoList>>
 
+    //データを一つずつ挿入するための関数
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(infoList: InfoList)
 
-    //データを挿入するための関数
+    //データをリストで挿入するための関数
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertList(infoList: MutableList<InfoList>)
 
+    //データをアップデートするための関数
     @Update
     suspend fun update(infoList: InfoList)
 

@@ -5,6 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import com.wsr.shopping_friend.info_list_database.InfoList
 import com.wsr.shopping_friend.type_file.RecordNumber
 
+//リストのデータを、並び順とかを加工して保存するためのViewModel
 class EditViewModel(application: Application) : AndroidViewModel(application) {
 
     //InfoListをデータベースに共有せずに保持するための変数

@@ -19,6 +19,7 @@ import com.wsr.shopping_friend.view_model.AppViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_show_title.*
 
+//タイトル名を並べるためのFragment
 class ShowTitleFragment : Fragment() {
     //recyclerViewの定義
     private var recyclerView: RecyclerView? = null

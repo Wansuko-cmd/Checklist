@@ -1,6 +1,5 @@
 package com.wsr.shopping_friend.repository
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import com.wsr.shopping_friend.info_list_database.InfoList
 import com.wsr.shopping_friend.info_list_database.InfoListDao
@@ -10,17 +9,17 @@ class AppRepository(private val infoListDao: InfoListDao) {
 
     //ローカルデータベースへの操作内容
 
+    //データを一つずつ挿入するための関数
     suspend fun insert(infoList: InfoList){
         infoListDao.insert(infoList)
     }
 
-    //データを挿入するための関数
+    //データをリストで挿入するための関数
     suspend fun insertList(infoList: MutableList<InfoList>){
-        //val tag = "Repository"
-        //Log.i(tag, infoList.toString())
         infoListDao.insertList(infoList)
     }
 
+    //データをアップデートするための関数
     suspend fun update(infoList: InfoList){
         infoListDao.update(infoList)
     }
