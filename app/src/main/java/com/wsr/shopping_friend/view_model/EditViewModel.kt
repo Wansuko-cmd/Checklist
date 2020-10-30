@@ -65,6 +65,11 @@ class EditViewModel(application: Application) : AndroidViewModel(application) {
         return numList
     }
 
+    //消された要素を保存しているリストを返り値に持つ関数
+    fun getDeleteList(): MutableList<InfoList>{
+        return deleteList
+    }
+
     //idと結びついている要素のアイテムを返す関数
     fun getItem(id: String): String{
         return editList[setPosition(id)].item

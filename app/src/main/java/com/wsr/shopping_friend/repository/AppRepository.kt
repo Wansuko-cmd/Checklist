@@ -20,7 +20,7 @@ class AppRepository(private val infoListDao: InfoListDao) {
     }
 
     //データをアップデートするための関数
-    suspend fun update(infoList: InfoList){
+    suspend fun update(infoList: MutableList<InfoList>){
         infoListDao.update(infoList)
     }
 

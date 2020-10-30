@@ -20,7 +20,7 @@ interface InfoListDao {
 
     //データをアップデートするための関数
     @Update
-    suspend fun update(infoList: InfoList)
+    suspend fun update(infoList: MutableList<InfoList>)
 
     //タイトルのみを変更するための関数
     @Query("UPDATE info_list_table SET 'title' = :newTitle WHERE title = :oldTitle")

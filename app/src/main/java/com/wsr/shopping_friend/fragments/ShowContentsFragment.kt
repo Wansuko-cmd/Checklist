@@ -188,18 +188,20 @@ class ShowContentsFragment : Fragment() {
     override fun onStop() {
         super.onStop()
         snackBar.dismiss()
-        val deleteList = mutableListOf<InfoList>()
+        val deleteList = editViewModel.getDeleteList()
         if (title != "") {
             val numList = editViewModel.getNumList()
             for (i in editViewModel.getList()) {
-                deleteList.add(i)
-                if (i.item == "") numList.removeAll { it.id == i.id }
+                if (i.item == "") {
+                    deleteList.add(i)
+                    numList.removeAll { it.id == i.id }
+                }
             }
             numList.sortBy { it.number }
             for ((count, _) in numList.withIndex()) {
                 numList[count] = numList[count].copy(number = count)
             }
-            updateDatabase(deleteList)
+            updateDatabase(editViewModel.getDeleteList())
         }
     }
 
@@ -298,7 +300,7 @@ class ShowContentsFragment : Fragment() {
             job1.join()
         }
         runBlocking {
-            val job2 = viewModel.insertList(list)
+            val job2 = viewModel.update(list)
             job2.join()
         }
     }

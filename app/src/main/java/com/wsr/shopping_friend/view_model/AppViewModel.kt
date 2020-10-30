@@ -25,15 +25,15 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
     fun insert(infoList: InfoList) = viewModelScope.launch(Dispatchers.IO){
         repository.insert(infoList)
     }
-    //データをリストで挿入するための関数
-    fun insertList(infoList: MutableList<InfoList>) = viewModelScope.launch(Dispatchers.IO){
+    //データをリストで挿入するための関数　ただ今保留
+    /*fun insertList(infoList: MutableList<InfoList>) = viewModelScope.launch(Dispatchers.IO){
         repository.insertList(infoList)
-    }
+    }*/
 
     //データをアップデートするための関数　ただ今保留
-    /*fun updates(infoList: InfoList) = viewModelScope.launch(Dispatchers.IO){
+    fun update(infoList: MutableList<InfoList>) = viewModelScope.launch(Dispatchers.IO){
         repository.update(infoList)
-    }*/
+    }
 
     //タイトルのみを変更するための関数
     fun changeTitle(oldTitle: String, newTitle: String) = viewModelScope.launch(Dispatchers.IO){
