@@ -31,6 +31,7 @@ import kotlinx.android.synthetic.main.fragment_show_contents.edit_button
 import kotlinx.coroutines.runBlocking
 import java.util.*
 
+//リストの中身を見せるためのFragment
 class ShowContentsFragment : Fragment() {
     //recyclerViewの定義
     private var recyclerView: RecyclerView? = null
@@ -68,6 +69,7 @@ class ShowContentsFragment : Fragment() {
         //snackBarの設定
         snackBar = setSnackBar()
 
+        //ヘルプを選択した時の処理
         if (title == "") setHelp(requireContext(), editViewModel)
 
         //recyclerViewの初期化
@@ -124,7 +126,7 @@ class ShowContentsFragment : Fragment() {
                         addElements()
                     } else if (p0 != i.item) {
                         editViewModel.changeItem(i.id, p0)
-                        viewModel.update(i)
+                        //viewModel.update(i)
                         snackBar.dismiss()
                     }
                     break
@@ -289,6 +291,8 @@ class ShowContentsFragment : Fragment() {
         }
         //val tag = "SendList"
         //Log.i(tag, list.toString())
+
+        //メインスレッドを止めて実行
         runBlocking {
             val job1 = viewModel.deleteList(deleteList)
             job1.join()

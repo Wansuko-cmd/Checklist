@@ -12,12 +12,13 @@ import com.wsr.shopping_friend.preference.getTextSize
 import com.wsr.shopping_friend.type_file.CustomTextWatcher
 import com.wsr.shopping_friend.view_model.EditViewModel
 
+//リストの内容を見せるRecyclerViewのためのアダプター
 class ListAdapter(
     private val context: Context,
     private val editViewModel: EditViewModel):
     RecyclerView.Adapter<ListViewHolder>() {
 
-    //使用する関数の定義
+    //使用する関数、変数の定義
     var changeText: (p0: String, position: Int) -> Unit = {_,_  ->}
     var changeCheck: (check: Boolean, holder: ListViewHolder) -> Unit = {_, _ ->}
     var deleteElement: (position: Int) -> Unit = {}

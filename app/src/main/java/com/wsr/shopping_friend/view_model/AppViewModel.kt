@@ -9,6 +9,7 @@ import com.wsr.shopping_friend.repository.AppRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
+//データベースとやり取りするためのViewModel
 class AppViewModel(application: Application) : AndroidViewModel(application) {
 
     //RepositoryとLiveDataのインスタンスの定義と初期化
@@ -20,17 +21,19 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
         infoList = repository.infoList
     }
 
+    //データを一つずつ挿入するための関数
     fun insert(infoList: InfoList) = viewModelScope.launch(Dispatchers.IO){
         repository.insert(infoList)
     }
-    //データベースに値を代入するための関数
+    //データをリストで挿入するための関数
     fun insertList(infoList: MutableList<InfoList>) = viewModelScope.launch(Dispatchers.IO){
         repository.insertList(infoList)
     }
 
-    fun update(infoList: InfoList) = viewModelScope.launch(Dispatchers.IO){
+    //データをアップデートするための関数　ただ今保留
+    /*fun updates(infoList: InfoList) = viewModelScope.launch(Dispatchers.IO){
         repository.update(infoList)
-    }
+    }*/
 
     //タイトルのみを変更するための関数
     fun changeTitle(oldTitle: String, newTitle: String) = viewModelScope.launch(Dispatchers.IO){

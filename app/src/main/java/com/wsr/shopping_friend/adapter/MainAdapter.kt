@@ -9,6 +9,7 @@ import com.wsr.shopping_friend.R
 import com.wsr.shopping_friend.info_list_database.InfoList
 import com.wsr.shopping_friend.preference.getTextSize
 
+//リストのタイトルを並べるRecyclerViewのためのアダプター
 class MainAdapter(private val context: Context):
     RecyclerView.Adapter<MainViewHolder>(){
 

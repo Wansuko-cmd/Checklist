@@ -35,6 +35,7 @@ fun getDefaultTitle(context: Context): String{
     }
 }
 
+//共有の設定内容を確認するための関数
 fun getShareAll(context: Context): Boolean{
     val pref = PreferenceManager.getDefaultSharedPreferences(context)
     return pref.getBoolean("share_all", true)
