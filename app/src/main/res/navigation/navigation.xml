@@ -13,9 +13,6 @@
         <action
             android:id="@+id/action_title_fragment_to_contents_fragment"
             app:destination="@id/contents_fragment" />
-        <action
-            android:id="@+id/title_fragment_to_setting"
-            app:destination="@id/settings_fragment"/>
     </fragment>
 
     <fragment
@@ -26,20 +23,10 @@
         <action
             android:id="@+id/back_to_title_fragment"
             app:popUpTo="@id/title_fragment"/>
-        <action
-            android:id="@+id/contents_fragment_to_setting"
-            app:destination="@id/settings_fragment"/>
         <argument
             android:name="content"
             app:argType="string"/>
 
-    </fragment>
-
-    <fragment
-        android:id="@+id/settings_fragment"
-        android:name="com.wsr.shopping_friend.preference.PreferenceFragment"
-        android:label="setting_fragment"
-        tools:layout="@layout/show_preference">
     </fragment>
 
 </navigation>

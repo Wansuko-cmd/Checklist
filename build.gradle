@@ -10,7 +10,8 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
 
         //safeargs
-        classpath "android.arch.navigation:navigation-safe-args-gradle-plugin:1.0.0"
+        def nav_version = "2.3.1"
+        classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$nav_version"
 
         //ads
         classpath 'com.google.gms:google-services:4.3.4'
