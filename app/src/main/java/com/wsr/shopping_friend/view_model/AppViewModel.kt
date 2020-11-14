@@ -26,9 +26,9 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
         repository.insert(infoList)
     }
     //データをリストで挿入するための関数　ただ今保留
-    /*fun insertList(infoList: MutableList<InfoList>) = viewModelScope.launch(Dispatchers.IO){
+    fun insertList(infoList: MutableList<InfoList>) = viewModelScope.launch(Dispatchers.IO){
         repository.insertList(infoList)
-    }*/
+    }
 
     //データをアップデートするための関数　ただ今保留
     fun update(infoList: MutableList<InfoList>) = viewModelScope.launch(Dispatchers.IO){

@@ -303,6 +303,10 @@ class ShowContentsFragment : Fragment() {
             val job2 = viewModel.update(list)
             job2.join()
         }
+        runBlocking {
+            val job3 = viewModel.insertList(list)
+            job3.join()
+        }
     }
 
     //Undo機能の設定

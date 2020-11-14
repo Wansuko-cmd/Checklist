@@ -7,7 +7,7 @@
     <string name="memo">メモ</string>
 
     <!--ImageButtonの文字の設定-->
-    <string name="add">要素を足す</string>
+    <string name="add">アイテムを足す</string>
     <string name="delete">削除</string>
 
     <!--タイトル名で削除の警告-->
@@ -28,13 +28,13 @@
     <string name="no_edit_title_positive">確認</string>
 
     <!--欄を削除した際のスナックバー-->
-    <string name="snack_bar_message">欄を一つ削除しました</string>
+    <string name="snack_bar_message">アイテムを一つ削除しました</string>
     <string name="snack_bar_action">元に戻す</string>
     <string name="snack_bar_after">元に戻しました</string>
 
     <!--チェックアウトの警告-->
     <string name="check_out_title">確認</string>
-    <string name="check_out_message">チェックした要素をすべて削除しますか？</string>
+    <string name="check_out_message">チェックしたアイテムをすべて削除しますか？</string>
     <string name="check_out_positive">はい</string>
     <string name="check_out_negative">キャンセル</string>
 
@@ -49,7 +49,7 @@
     <string name="rename_title" >タイトル編集</string>
     <string name="share">共有</string>
     <string name="list_top">・</string>
-    <string name="no_value">共有できる要素がありません</string>
+    <string name="no_value">共有できるアイテムがありません</string>
 
     <!--設定画面-->
     <!--バージョン-->
@@ -67,8 +67,8 @@
 
     <!--共有の設定-->
     <string name="share_all_title">共有の設定</string>
-    <string name="share_all_on">チェックのついた要素のみ共有</string>
-    <string name="share_all_off">全ての要素を共有</string>
+    <string name="share_all_on">チェックのついたアイテムのみ共有</string>
+    <string name="share_all_off">全てのアイテムを共有</string>
 
     <!--ヘルプ画面-->
     <string-array name="help">
@@ -76,11 +76,11 @@
         <item>ボックスにチェックをつけると下に移動します</item>
         <item>このアプリでは自動的にセーブされます</item>
         <item>空欄はセーブされません</item>
-        <item>ゴミ箱を押すとチェックのついた欄が削除されます</item>
-        <item>欄を左にスワイプするとその欄を削除します</item>
-        <item>＋を押すと新たに要素を追加します</item>
-        <item>欄をタップすると入力することが出来ます</item>
-        <item>一番下の要素でエンターを押すと新たに欄を作ります</item>
+        <item>ゴミ箱を押すとチェックのついたアイテムが削除されます</item>
+        <item>欄を左にスワイプするとそのアイテムを削除します</item>
+        <item>＋を押すと新たにアイテムを追加します</item>
+        <item>アイテムをタップすると入力することが出来ます</item>
+        <item>一番下の要素でエンターを押すと新たにアイテムを作ります</item>
         <item>デフォルトタイトルは、タイトル名が空欄である時に設定されるものです</item>
     </string-array>
 </resources>
