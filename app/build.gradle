@@ -13,8 +13,8 @@ android {
         applicationId "com.wsr.shopping_friend"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 7
-        versionName "1.4"
+        versionCode 8
+        versionName "1.5"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         javaCompileOptions {
             annotationProcessorOptions {
@@ -43,7 +43,7 @@ dependencies {
     implementation 'androidx.core:core-ktx:1.3.2'
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
-    testImplementation 'junit:junit:4.13'
+    testImplementation 'junit:junit:4.13.1'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
@@ -71,7 +71,7 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.0-beta01'
 
     //fab
-    implementation 'com.google.android.material:material:1.3.0-alpha03'
+    implementation 'com.google.android.material:material:1.3.0-alpha04'
 
     //preference
     implementation 'androidx.preference:preference-ktx:1.1.1'
@@ -86,7 +86,7 @@ dependencies {
     implementation "android.arch.navigation:navigation-ui:1.0.0"
 
     //snackBar
-    implementation 'com.google.android.material:material:1.3.0-alpha03'
+    implementation 'com.google.android.material:material:1.3.0-alpha04'
 
     //coordinatorLayout
     implementation "androidx.coordinatorlayout:coordinatorlayout:1.1.0"

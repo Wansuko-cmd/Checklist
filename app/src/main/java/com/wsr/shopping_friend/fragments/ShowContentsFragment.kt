@@ -28,6 +28,7 @@ import com.wsr.shopping_friend.view_model.EditViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_show_contents.*
 import kotlinx.android.synthetic.main.fragment_show_contents.edit_button
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import java.util.*
 
@@ -296,16 +297,19 @@ class ShowContentsFragment : Fragment() {
 
         //メインスレッドを止めて実行
         runBlocking {
-            val job1 = viewModel.deleteList(deleteList)
-            job1.join()
+            launch{
+                viewModel.deleteList(deleteList)
+            }
         }
         runBlocking {
-            val job2 = viewModel.update(list)
-            job2.join()
+            launch {
+                viewModel.update(list)
+            }
         }
         runBlocking {
-            val job3 = viewModel.insertList(list)
-            job3.join()
+            launch {
+                viewModel.insertList(list)
+            }
         }
     }
 
