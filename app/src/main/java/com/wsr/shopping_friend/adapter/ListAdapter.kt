@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.wsr.shopping_friend.view_holder.ListViewHolder
 import com.wsr.shopping_friend.R
+import com.wsr.shopping_friend.databinding.AddChecklistBinding
 import com.wsr.shopping_friend.preference.getTextSize
 import com.wsr.shopping_friend.type_file.CustomTextWatcher
 import com.wsr.shopping_friend.view_model.EditViewModel
@@ -26,9 +27,8 @@ class ListAdapter(
 
     //ViewHolderのインスタンスを形成
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {
-        val layoutInflater = LayoutInflater.from(parent.context)
-        val view = layoutInflater.inflate(R.layout.add_checklist, parent, false)
-        return ListViewHolder(view)
+        val inflater = LayoutInflater.from(parent.context)
+        return ListViewHolder(AddChecklistBinding.inflate(inflater, parent, false))
     }
 
     //入っている要素の数を返す関数

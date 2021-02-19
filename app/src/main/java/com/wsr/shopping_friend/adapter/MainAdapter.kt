@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.wsr.shopping_friend.view_holder.MainViewHolder
 import com.wsr.shopping_friend.R
+import com.wsr.shopping_friend.databinding.ShowTitleBinding
 import com.wsr.shopping_friend.info_list_database.InfoList
 import com.wsr.shopping_friend.preference.getTextSize
 
@@ -22,9 +23,8 @@ class MainAdapter(private val context: Context):
 
     //ViewHolderのインスタンスを形成
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainViewHolder {
-        val layoutInflater = LayoutInflater.from(parent.context)
-        val view = layoutInflater.inflate(R.layout.show_title, parent, false)
-        return MainViewHolder(view)
+        val inflater = LayoutInflater.from(parent.context)
+        return MainViewHolder(ShowTitleBinding.inflate(inflater, parent, false))
     }
 
     //titleListの長さを返す関数

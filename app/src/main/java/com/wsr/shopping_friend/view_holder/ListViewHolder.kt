@@ -4,11 +4,13 @@ import android.view.View
 import android.widget.CheckBox
 import android.widget.EditText
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.add_checklist.view.*
+import com.wsr.shopping_friend.databinding.AddChecklistBinding
+import com.wsr.shopping_friend.databinding.ShowPreferenceBinding
 
 //ListAdapterのためのホルダー
-class ListViewHolder(val view: View): RecyclerView.ViewHolder(view){
-    val check: CheckBox = view.CheckBox
-    val item: EditText = view.Item
+class ListViewHolder(binding: AddChecklistBinding): RecyclerView.ViewHolder(binding.root){
+    val check: CheckBox = binding.CheckBox
+    val item: EditText = binding.Item
+    val view: View = binding.root
 }
 

@@ -9,8 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
-import androidx.navigation.fragment.findNavController
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,22 +17,24 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.wsr.shopping_friend.R
 import com.wsr.shopping_friend.adapter.ListAdapter
+import com.wsr.shopping_friend.databinding.FragmentShowContentsBinding
 import com.wsr.shopping_friend.info_list_database.InfoList
 import com.wsr.shopping_friend.preference.getShareAll
 import com.wsr.shopping_friend.type_file.SwipeToDeleteCallback
-import com.wsr.shopping_friend.type_file.renameAlert
 import com.wsr.shopping_friend.type_file.setHelp
 import com.wsr.shopping_friend.view_model.AppViewModel
 import com.wsr.shopping_friend.view_model.EditViewModel
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_show_contents.*
-import kotlinx.android.synthetic.main.fragment_show_contents.edit_button
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import java.util.*
 
 //リストの中身を見せるためのFragment
 class ShowContentsFragment : Fragment() {
+
+    //viewBindingを利用するための宣言
+    private var _binding: FragmentShowContentsBinding? = null
+    private val binding get() = _binding!!
+
     //recyclerViewの定義
     private var recyclerView: RecyclerView? = null
 
@@ -50,9 +51,9 @@ class ShowContentsFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        super.onCreateView(inflater, container, savedInstanceState)
-        return inflater.inflate(R.layout.fragment_show_contents, container, false)
+    ): View {
+        _binding = FragmentShowContentsBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -60,12 +61,18 @@ class ShowContentsFragment : Fragment() {
 
         //変数の初期化
         title = args.content
-        viewModel = ViewModelProviders.of(this).get(AppViewModel::class.java)
-        editViewModel = ViewModelProviders.of(this).get(EditViewModel::class.java)
+        viewModel = ViewModelProvider(
+            this,
+            ViewModelProvider.AndroidViewModelFactory(requireActivity().application)
+        ).get(AppViewModel::class.java)
+        editViewModel = ViewModelProvider(
+            this,
+            ViewModelProvider.AndroidViewModelFactory(requireActivity().application)
+        ).get(EditViewModel::class.java)
         showContentsAdapter = ListAdapter(requireContext(), editViewModel)
 
         //toolbarの設定
-        setToolbar()
+        //setToolbar()
 
         //snackBarの設定
         snackBar = setSnackBar()
@@ -74,7 +81,7 @@ class ShowContentsFragment : Fragment() {
         if (title == "") setHelp(requireContext(), editViewModel)
 
         //recyclerViewの初期化
-        this.recyclerView = show_contents_recycler_view
+        this.recyclerView = binding.showContentsRecyclerView
         this.recyclerView!!.setOnClickListener { it.requestFocus() }
         this.recyclerView?.apply{
             setHasFixedSize(true)
@@ -90,13 +97,13 @@ class ShowContentsFragment : Fragment() {
         })
 
         //editボタンが押された際の処理
-        edit_button.setOnClickListener {
+        binding.editButton.setOnClickListener {
             addElements()
             showContentsAdapter.notifyDataSetChanged()
         }
 
         //delete_checkボタンが押された際の処理
-        delete_check_button.setOnClickListener {
+        binding.deleteCheckButton.setOnClickListener {
             AlertDialog.Builder(context)
                 .setTitle(R.string.check_out_title)
                 .setMessage(R.string.check_out_message)
@@ -210,10 +217,11 @@ class ShowContentsFragment : Fragment() {
         super.onDestroyView()
         this.recyclerView?.adapter = null
         this.recyclerView = null
+        _binding = null
     }
 
     //toolbarの設定
-    private fun setToolbar() {
+    /*private fun setToolbar() {
         val toolbar = requireActivity().main_toolbar
         toolbar.title = if (title != "") title else "Help"
         toolbar.setNavigationIcon(R.drawable.ic_back_arrow)
@@ -240,7 +248,7 @@ class ShowContentsFragment : Fragment() {
             findNavController().navigate(R.id.back_to_title_fragment)
         }
         toolbar.setOnClickListener { it.requestFocus() }
-    }
+    }*/
 
     //LiveDataの内容を反映させる関数
     private fun setInfoList(lists: MutableList<InfoList>) {
@@ -261,11 +269,11 @@ class ShowContentsFragment : Fragment() {
     }
 
     //タイトルが変更された際の処理
-    private val changeTitle: (String) -> Unit = { newTitle ->
+    /*private val changeTitle: (String) -> Unit = { newTitle ->
         viewModel.changeTitle(title, newTitle)
         title = newTitle
         requireActivity().main_toolbar.title = newTitle
-    }
+    }*/
 
     //空欄を追加するための処理
     private fun addElements() {

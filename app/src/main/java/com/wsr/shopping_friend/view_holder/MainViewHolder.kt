@@ -4,10 +4,10 @@ import android.view.View
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.show_title.view.*
+import com.wsr.shopping_friend.databinding.ShowTitleBinding
 
 //MainAdapterのためのホルダー
-class MainViewHolder(view: View): RecyclerView.ViewHolder(view) {
-    val title: TextView = view.title
-    val delete: ImageButton = view.delete_button
+class MainViewHolder(binding: ShowTitleBinding): RecyclerView.ViewHolder(binding.root) {
+    val title: TextView = binding.title
+    val delete: ImageButton = binding.deleteButton
 }

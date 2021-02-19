@@ -1,26 +1,27 @@
 package com.wsr.shopping_friend.fragments
 
 import android.app.AlertDialog
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.wsr.shopping_friend.R
 import com.wsr.shopping_friend.adapter.MainAdapter
-import com.wsr.shopping_friend.preference.ShowPreference
+import com.wsr.shopping_friend.databinding.FragmentShowTitleBinding
 import com.wsr.shopping_friend.type_file.renameAlert
 import com.wsr.shopping_friend.view_model.AppViewModel
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_show_title.*
-
 //タイトル名を並べるためのFragment
 class ShowTitleFragment : Fragment() {
+
+    //viewBindingを利用するための宣言
+    private var _binding: FragmentShowTitleBinding? = null
+    private val binding get() = _binding!!
+
     //recyclerViewの定義
     private var recyclerView: RecyclerView? = null
 
@@ -32,20 +33,23 @@ class ShowTitleFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        super.onCreateView(inflater, container, savedInstanceState)
-        return inflater.inflate(R.layout.fragment_show_title, container, false)
+    ): View {
+        _binding = FragmentShowTitleBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         //変数の初期化
-        viewModel = ViewModelProviders.of(this).get(AppViewModel::class.java)
+        viewModel = ViewModelProvider(
+            this,
+            ViewModelProvider.AndroidViewModelFactory(requireActivity().application)
+        ).get(AppViewModel::class.java)
         mainAdapter = MainAdapter(requireContext())
 
         //recyclerViewの初期化
-        this.recyclerView = show_title_recycler_view
+        this.recyclerView = binding.showTitleRecyclerView
         this.recyclerView?.apply {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(context)
@@ -53,10 +57,10 @@ class ShowTitleFragment : Fragment() {
         }
 
         //toolbarの設定
-        setToolbar()
+        //setToolbar()
 
         //fabボタンが押された際の処理
-        fab.setOnClickListener {
+        binding.fab.setOnClickListener {
             renameAlert(requireContext(), makeShowContents, mainAdapter.titleList, "")
         }
 
@@ -96,6 +100,7 @@ class ShowTitleFragment : Fragment() {
         super.onDestroyView()
         this.recyclerView?.adapter = null
         this.recyclerView = null
+        _binding = null
     }
 
 
@@ -106,7 +111,7 @@ class ShowTitleFragment : Fragment() {
     }
 
     //toolbarの設定
-    private fun setToolbar() {
+    /*private fun setToolbar() {
         val toolbar = requireActivity().main_toolbar
         toolbar.title = getString(R.string.app_name)
         toolbar.navigationIcon = null
@@ -130,5 +135,5 @@ class ShowTitleFragment : Fragment() {
         val intent = Intent(requireActivity(), ShowPreference::class.java)
         intent.putExtra("Purpose", "settings")
         startActivity(intent)
-    }
+    }*/
 }
