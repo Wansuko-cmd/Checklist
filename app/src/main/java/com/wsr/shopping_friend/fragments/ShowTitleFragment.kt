@@ -1,10 +1,10 @@
 package com.wsr.shopping_friend.fragments
 
 import android.app.AlertDialog
+import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.wsr.shopping_friend.R
 import com.wsr.shopping_friend.adapter.MainAdapter
 import com.wsr.shopping_friend.databinding.FragmentShowTitleBinding
+import com.wsr.shopping_friend.preference.ShowPreference
 import com.wsr.shopping_friend.type_file.renameAlert
 import com.wsr.shopping_friend.view_model.AppViewModel
 //タイトル名を並べるためのFragment
@@ -38,6 +39,33 @@ class ShowTitleFragment : Fragment() {
         return binding.root
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.title_menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when(item.itemId){
+            R.id.settings -> {
+                val intent = Intent(requireActivity(), ShowPreference::class.java)
+                intent.putExtra("Purpose", "settings")
+                startActivity(intent)
+                true
+            }
+            R.id.help -> {
+                val action =
+                    ShowTitleFragmentDirections.actionTitleFragmentToContentsFragment("")
+                findNavController().navigate(action)
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -48,6 +76,8 @@ class ShowTitleFragment : Fragment() {
         ).get(AppViewModel::class.java)
         mainAdapter = MainAdapter(requireContext())
 
+        (activity as AppCompatActivity).supportActionBar?.title = getString(R.string.app_name)
+        
         //recyclerViewの初期化
         this.recyclerView = binding.showTitleRecyclerView
         this.recyclerView?.apply {
@@ -55,9 +85,6 @@ class ShowTitleFragment : Fragment() {
             layoutManager = LinearLayoutManager(context)
             adapter = mainAdapter
         }
-
-        //toolbarの設定
-        //setToolbar()
 
         //fabボタンが押された際の処理
         binding.fab.setOnClickListener {
@@ -103,37 +130,9 @@ class ShowTitleFragment : Fragment() {
         _binding = null
     }
 
-
     //タイトル名から、チェックリストを表示するための処理
     private val makeShowContents: (String) -> Unit = { title ->
         val action = ShowTitleFragmentDirections.actionTitleFragmentToContentsFragment(title)
         findNavController().navigate(action)
     }
-
-    //toolbarの設定
-    /*private fun setToolbar() {
-        val toolbar = requireActivity().main_toolbar
-        toolbar.title = getString(R.string.app_name)
-        toolbar.navigationIcon = null
-        toolbar.menu.setGroupVisible(R.id.rename_group, false)
-        toolbar.menu.setGroupVisible(R.id.help_group, true)
-        toolbar.setOnMenuItemClickListener { menuItem ->
-            when (menuItem.itemId) {
-                R.id.settings -> showSettings()
-                R.id.help -> {
-                    val action =
-                        ShowTitleFragmentDirections.actionTitleFragmentToContentsFragment("")
-                    findNavController().navigate(action)
-                }
-            }
-            true
-        }
-    }
-
-    //設定、ヘルプ画面に画面遷移するための処理
-    private fun showSettings() {
-        val intent = Intent(requireActivity(), ShowPreference::class.java)
-        intent.putExtra("Purpose", "settings")
-        startActivity(intent)
-    }*/
 }

@@ -5,7 +5,6 @@ import android.widget.CheckBox
 import android.widget.EditText
 import androidx.recyclerview.widget.RecyclerView
 import com.wsr.shopping_friend.databinding.AddChecklistBinding
-import com.wsr.shopping_friend.databinding.ShowPreferenceBinding
 
 //ListAdapterのためのホルダー
 class ListViewHolder(binding: AddChecklistBinding): RecyclerView.ViewHolder(binding.root){

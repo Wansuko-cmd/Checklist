@@ -4,10 +4,9 @@ import android.app.AlertDialog
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
@@ -17,10 +16,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.wsr.shopping_friend.R
 import com.wsr.shopping_friend.adapter.ListAdapter
+import com.wsr.shopping_friend.databinding.ActivityMainBinding
 import com.wsr.shopping_friend.databinding.FragmentShowContentsBinding
 import com.wsr.shopping_friend.info_list_database.InfoList
 import com.wsr.shopping_friend.preference.getShareAll
 import com.wsr.shopping_friend.type_file.SwipeToDeleteCallback
+import com.wsr.shopping_friend.type_file.renameAlert
 import com.wsr.shopping_friend.type_file.setHelp
 import com.wsr.shopping_friend.view_model.AppViewModel
 import com.wsr.shopping_friend.view_model.EditViewModel
@@ -47,6 +48,36 @@ class ShowContentsFragment : Fragment() {
     private lateinit var showContentsAdapter: ListAdapter
     private lateinit var snackBar: Snackbar
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.show_menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when(item.itemId){
+            R.id.share -> {
+                shareText()
+                true
+            }
+            R.id.rename_title -> {
+                snackBar.dismiss()
+                if (title != "") renameAlert(requireContext(), changeTitle, titleList, title)
+                else{
+                    AlertDialog.Builder(requireContext())
+                        .setMessage(getString(R.string.no_edit_title_message))
+                        .setPositiveButton(getString(R.string.no_edit_title_positive), null)
+                        .show()
+                }
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -71,8 +102,8 @@ class ShowContentsFragment : Fragment() {
         ).get(EditViewModel::class.java)
         showContentsAdapter = ListAdapter(requireContext(), editViewModel)
 
-        //toolbarの設定
-        //setToolbar()
+        //actionbarの設定
+        (activity as AppCompatActivity).supportActionBar?.title = title
 
         //snackBarの設定
         snackBar = setSnackBar()
@@ -220,36 +251,6 @@ class ShowContentsFragment : Fragment() {
         _binding = null
     }
 
-    //toolbarの設定
-    /*private fun setToolbar() {
-        val toolbar = requireActivity().main_toolbar
-        toolbar.title = if (title != "") title else "Help"
-        toolbar.setNavigationIcon(R.drawable.ic_back_arrow)
-        toolbar.navigationContentDescription=getString(R.string.back)
-        toolbar.menu.setGroupVisible(R.id.rename_group, true)
-        toolbar.menu.setGroupVisible(R.id.help_group, false)
-        toolbar.setOnMenuItemClickListener { menuItem ->
-            when (menuItem.itemId) {
-                R.id.share -> shareText()
-                R.id.rename_title -> {
-                    snackBar.dismiss()
-                    if (title != "") renameAlert(requireContext(), changeTitle, titleList, title)
-                    else{
-                        AlertDialog.Builder(requireContext())
-                            .setMessage(getString(R.string.no_edit_title_message))
-                            .setPositiveButton(getString(R.string.no_edit_title_positive), null)
-                            .show()
-                    }
-                }
-            }
-            true
-        }
-        toolbar.setNavigationOnClickListener {
-            findNavController().navigate(R.id.back_to_title_fragment)
-        }
-        toolbar.setOnClickListener { it.requestFocus() }
-    }*/
-
     //LiveDataの内容を反映させる関数
     private fun setInfoList(lists: MutableList<InfoList>) {
         lists.sortBy { it.number }
@@ -269,11 +270,12 @@ class ShowContentsFragment : Fragment() {
     }
 
     //タイトルが変更された際の処理
-    /*private val changeTitle: (String) -> Unit = { newTitle ->
+    private val changeTitle: (String) -> Unit = { newTitle ->
         viewModel.changeTitle(title, newTitle)
         title = newTitle
-        requireActivity().main_toolbar.title = newTitle
-    }*/
+
+        (activity as AppCompatActivity).supportActionBar?.title = newTitle
+    }
 
     //空欄を追加するための処理
     private fun addElements() {

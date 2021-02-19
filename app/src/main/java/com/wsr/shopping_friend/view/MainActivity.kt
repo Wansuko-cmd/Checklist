@@ -13,9 +13,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        //toolbarの設定
-        //main_toolbar.inflateMenu(R.menu.menu_for_show)
-
         //設定のバージョンの確認
         checkVersion(this)
 

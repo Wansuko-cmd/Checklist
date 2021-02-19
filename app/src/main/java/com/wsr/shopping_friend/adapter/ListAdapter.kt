@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.wsr.shopping_friend.view_holder.ListViewHolder
-import com.wsr.shopping_friend.R
 import com.wsr.shopping_friend.databinding.AddChecklistBinding
 import com.wsr.shopping_friend.preference.getTextSize
 import com.wsr.shopping_friend.type_file.CustomTextWatcher
