@@ -1,5 +1,6 @@
 package com.wsr.shopping_friend.repository
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import com.wsr.shopping_friend.info_list_database.InfoList
 import com.wsr.shopping_friend.info_list_database.InfoListDao
@@ -20,8 +21,10 @@ class AppRepository(private val infoListDao: InfoListDao) {
     }
 
     //データをアップデートするための関数
-    suspend fun update(infoList: MutableList<InfoList>){
-        infoListDao.update(infoList)
+    suspend fun update(infoList: MutableList<InfoList>): Boolean{
+        val list = infoListDao.update(infoList)
+        Log.d("updating", list.toString())
+        return true
     }
 
     //タイトルを変更するための関数

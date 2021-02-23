@@ -4,6 +4,7 @@ import android.app.AlertDialog
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -16,15 +17,16 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.wsr.shopping_friend.R
 import com.wsr.shopping_friend.adapter.ListAdapter
-import com.wsr.shopping_friend.databinding.ActivityMainBinding
 import com.wsr.shopping_friend.databinding.FragmentShowContentsBinding
 import com.wsr.shopping_friend.info_list_database.InfoList
 import com.wsr.shopping_friend.preference.getShareAll
-import com.wsr.shopping_friend.type_file.SwipeToDeleteCallback
+import com.wsr.shopping_friend.type_file.ItemTouchHelperCallback
 import com.wsr.shopping_friend.type_file.renameAlert
 import com.wsr.shopping_friend.type_file.setHelp
+import com.wsr.shopping_friend.view_holder.ListViewHolder
 import com.wsr.shopping_friend.view_model.AppViewModel
 import com.wsr.shopping_friend.view_model.EditViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import java.util.*
@@ -60,7 +62,8 @@ class ShowContentsFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when(item.itemId){
             R.id.share -> {
-                shareText()
+                updateDatabase(mutableListOf())
+                //shareText()
                 true
             }
             R.id.rename_title -> {
@@ -114,7 +117,7 @@ class ShowContentsFragment : Fragment() {
         //recyclerViewの初期化
         this.recyclerView = binding.showContentsRecyclerView
         this.recyclerView!!.setOnClickListener { it.requestFocus() }
-        this.recyclerView?.apply{
+        this.recyclerView?.apply {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(context)
             adapter = showContentsAdapter
@@ -206,7 +209,7 @@ class ShowContentsFragment : Fragment() {
         }
 
         //スワイプでアイテムを消す処理
-        val swipeHandler = object : SwipeToDeleteCallback() {
+        /*val swipeHandler = object : SwipeToDeleteCallback() {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 viewHolder.let {
                     showContentsAdapter.deleteElement(it.adapterPosition)
@@ -214,7 +217,39 @@ class ShowContentsFragment : Fragment() {
             }
         }
         val itemTouchHelper = ItemTouchHelper(swipeHandler)
-        itemTouchHelper.attachToRecyclerView(recyclerView)
+        itemTouchHelper.attachToRecyclerView(recyclerView)*/
+
+        val itemTouchHelperCallback = ItemTouchHelper(
+            object : ItemTouchHelperCallback() {
+                override fun onMove(
+                    recyclerView: RecyclerView,
+                    viewHolder: RecyclerView.ViewHolder,
+                    target: RecyclerView.ViewHolder
+                ): Boolean {
+                    if (viewHolder is ListViewHolder
+                        && !viewHolder.check.isChecked) {
+                        val fromPosition = viewHolder.adapterPosition
+                        val toPosition = target.adapterPosition
+
+                        if(editViewModel.changePlace(fromPosition, toPosition)){
+                            showContentsAdapter.notifyItemMoved(fromPosition, toPosition)
+                            return true
+                        }
+                    }
+                    return false
+                }
+
+                override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                    viewHolder.let {
+                        showContentsAdapter.deleteElement(it.adapterPosition)
+                    }
+                }
+            }
+        )
+
+        itemTouchHelperCallback.attachToRecyclerView(recyclerView)
+
+
     }
 
     //設定から戻ったときに結果を反映するための処理
@@ -223,9 +258,7 @@ class ShowContentsFragment : Fragment() {
         showContentsAdapter.notifyDataSetChanged()
     }
 
-    //アプリ停止時にデータをデータベースに保存する処理
-    override fun onStop() {
-        super.onStop()
+    override fun onPause() {
         snackBar.dismiss()
         val deleteList = editViewModel.getDeleteList()
         if (title != "") {
@@ -240,8 +273,11 @@ class ShowContentsFragment : Fragment() {
             for ((count, _) in numList.withIndex()) {
                 numList[count] = numList[count].copy(number = count)
             }
-            updateDatabase(editViewModel.getDeleteList())
+            if(updateDatabase(editViewModel.getDeleteList())){
+                Log.i("save", "Success")
+            }
         }
+        super.onPause()
     }
 
     override fun onDestroyView() {
@@ -289,7 +325,7 @@ class ShowContentsFragment : Fragment() {
     }
 
     //editViewModelの内容をデータベースに反映させる関数
-    private fun updateDatabase(deleteList: MutableList<InfoList>) {
+    private fun updateDatabase(deleteList: MutableList<InfoList>) : Boolean {
         val list: MutableList<InfoList> = mutableListOf()
         for (i in editViewModel.getNumList()) {
             list.add(
@@ -306,6 +342,9 @@ class ShowContentsFragment : Fragment() {
         //Log.i(tag, list.toString())
 
         //メインスレッドを止めて実行
+        val checker = mutableListOf<Boolean?>(null, null, null)
+
+
         runBlocking {
             launch{
                 viewModel.deleteList(deleteList)
@@ -313,7 +352,9 @@ class ShowContentsFragment : Fragment() {
         }
         runBlocking {
             launch {
-                viewModel.update(list)
+                checker[1] = viewModel.update(list)
+
+                Log.i("list", list.toString())
             }
         }
         runBlocking {
@@ -321,6 +362,7 @@ class ShowContentsFragment : Fragment() {
                 viewModel.insertList(list)
             }
         }
+        return true
     }
 
     //Undo機能の設定

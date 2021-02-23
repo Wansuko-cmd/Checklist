@@ -8,6 +8,7 @@ import com.wsr.shopping_friend.info_list_database.InfoListDatabase
 import com.wsr.shopping_friend.repository.AppRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 //データベースとやり取りするためのViewModel
 class AppViewModel(application: Application) : AndroidViewModel(application) {
@@ -31,7 +32,7 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     //データをアップデートするための関数　ただ今保留
-    fun update(infoList: MutableList<InfoList>) = viewModelScope.launch(Dispatchers.IO){
+    suspend fun update(infoList: MutableList<InfoList>): Boolean = withContext(Dispatchers.IO){
         repository.update(infoList)
     }
 

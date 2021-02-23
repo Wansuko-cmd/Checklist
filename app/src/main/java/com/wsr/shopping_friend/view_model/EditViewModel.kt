@@ -55,6 +55,25 @@ class EditViewModel(application: Application) : AndroidViewModel(application) {
         sortTrueFalse(editList)
     }
 
+    fun changePlace(fromPosition: Int, toPosition: Int): Boolean{
+        editList.find { it.number == fromPosition }?.let{ fromList ->
+            editList.find { it.number == toPosition }?.let { toList ->
+
+                if (!toList.check
+                    && numList.find { it.id == fromList.id } != null
+                    && numList.find { it.id == toList.id } != null
+                ){
+                    val tempNum = numList.find { it.id == fromList.id }!!.number
+                    numList.find { it.id == fromList.id }!!.number = numList.find { it.id == toList.id }!!.number
+                    numList.find { it.id == toList.id }?.number = tempNum
+                    sortByNum()
+                    return true
+                }
+            }
+        }
+        return false
+    }
+
     //ここに保存されているリストを返り値に持つ関数
     fun getList(): MutableList<InfoList> {
         return editList
@@ -122,7 +141,6 @@ class EditViewModel(application: Application) : AndroidViewModel(application) {
 
     //ここに保存されているリストを、InfoListのcheckに合わせてFalse　->　Trueの順番に並べるための関数
     private fun sortTrueFalse(list: List<InfoList>): List<InfoList> {
-        list.sortedBy { it.number }
         val onlyFalseList: List<InfoList> = list.filter{ !it.check}
         val onlyTrueList: List<InfoList> = list.filter{ it.check }
         val result = onlyFalseList + onlyTrueList
@@ -130,5 +148,14 @@ class EditViewModel(application: Application) : AndroidViewModel(application) {
             i.number = num
         }
         return result
+    }
+
+    private fun sortByNum(){
+        for (i in numList){
+            editList.find { it.id == i.id  }?.let{
+                it.number = i.number
+            }
+        }
+        sortTrueFalse(editList.sortedBy { it.number })
     }
 }
