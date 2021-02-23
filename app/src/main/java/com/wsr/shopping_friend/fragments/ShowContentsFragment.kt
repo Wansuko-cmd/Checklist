@@ -26,7 +26,6 @@ import com.wsr.shopping_friend.type_file.setHelp
 import com.wsr.shopping_friend.view_holder.ListViewHolder
 import com.wsr.shopping_friend.view_model.AppViewModel
 import com.wsr.shopping_friend.view_model.EditViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import java.util.*
@@ -146,7 +145,9 @@ class ShowContentsFragment : Fragment() {
                     for (i in editViewModel.getList()) {
                         if (i.check) list.add(i)
                     }
-                    viewModel.deleteList(list)
+                    runBlocking {
+                        viewModel.deleteList(list)
+                    }
                     for (i in list) {
                         editViewModel.delete(i.id)
                     }
@@ -201,7 +202,9 @@ class ShowContentsFragment : Fragment() {
                 if (position == i.number) {
                     showContentsAdapter.notifyItemRemoved(position)
                     editViewModel.delete(i.id)
-                    viewModel.delete(editViewModel.deleteEditItem!!)
+                    runBlocking {
+                        viewModel.delete(editViewModel.deleteEditItem!!)
+                    }
                     break
                 }
             }
@@ -307,7 +310,9 @@ class ShowContentsFragment : Fragment() {
 
     //タイトルが変更された際の処理
     private val changeTitle: (String) -> Unit = { newTitle ->
-        viewModel.changeTitle(title, newTitle)
+        runBlocking {
+            viewModel.changeTitle(title, newTitle)
+        }
         title = newTitle
 
         (activity as AppCompatActivity).supportActionBar?.title = newTitle
@@ -318,7 +323,9 @@ class ShowContentsFragment : Fragment() {
         val id = UUID.randomUUID().toString()
         val number = showContentsAdapter.itemCount
         editViewModel.insert(InfoList(id, number, title, false, ""))
-        viewModel.insert(InfoList(id, number, title, false, ""))
+        runBlocking {
+            viewModel.insert(InfoList(id, number, title, false, ""))
+        }
         recyclerView!!.scrollToPosition(editViewModel.setNumber(id))
         showContentsAdapter.focus = editViewModel.setNumber(id)
         showContentsAdapter.notifyItemInserted(editViewModel.nonCheckNumber())
@@ -376,7 +383,9 @@ class ShowContentsFragment : Fragment() {
                 val item = editViewModel.deleteEditItem
                 if (item != null) {
                     editViewModel.backDeleteItem()
-                    viewModel.insert(editViewModel.deleteEditItem!!)
+                    runBlocking {
+                        viewModel.insert(editViewModel.deleteEditItem!!)
+                    }
                     showContentsAdapter.notifyItemInserted(item.number)
                     Snackbar.make(
                         requireActivity().findViewById(R.id.coordinatorLayout),

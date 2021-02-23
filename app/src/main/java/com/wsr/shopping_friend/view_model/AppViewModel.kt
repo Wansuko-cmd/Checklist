@@ -23,11 +23,11 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     //データを一つずつ挿入するための関数
-    fun insert(infoList: InfoList) = viewModelScope.launch(Dispatchers.IO){
+    suspend fun insert(infoList: InfoList) = withContext(Dispatchers.IO){
         repository.insert(infoList)
     }
     //データをリストで挿入するための関数　ただ今保留
-    fun insertList(infoList: MutableList<InfoList>) = viewModelScope.launch(Dispatchers.IO){
+    suspend fun insertList(infoList: MutableList<InfoList>): Boolean = withContext(Dispatchers.IO){
         repository.insertList(infoList)
     }
 
@@ -37,22 +37,22 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     //タイトルのみを変更するための関数
-    fun changeTitle(oldTitle: String, newTitle: String) = viewModelScope.launch(Dispatchers.IO){
+    suspend fun changeTitle(oldTitle: String, newTitle: String) = withContext(Dispatchers.IO){
         repository.changeTitle(oldTitle, newTitle)
     }
 
     //特定の要素を削除する関数
-    fun delete(infoList: InfoList) = viewModelScope.launch(Dispatchers.IO){
+    suspend fun delete(infoList: InfoList) = withContext(Dispatchers.IO){
         repository.delete(infoList)
     }
 
     //リストに記載されている要素を削除する関数
-    fun deleteList(infoList: MutableList<InfoList>) = viewModelScope.launch(Dispatchers.IO){
+    suspend fun deleteList(infoList: MutableList<InfoList>) = withContext(Dispatchers.IO){
         repository.deleteList(infoList)
     }
 
     //タイトル名が一致するものをすべて消すための関数
-    fun deleteWithTitle(title: String) = viewModelScope.launch(Dispatchers.IO){
+    suspend fun deleteWithTitle(title: String) = withContext(Dispatchers.IO){
         repository.deleteWithTitle(title)
     }
 }

@@ -11,13 +11,15 @@ class AppRepository(private val infoListDao: InfoListDao) {
     //ローカルデータベースへの操作内容
 
     //データを一つずつ挿入するための関数
-    suspend fun insert(infoList: InfoList){
+    suspend fun insert(infoList: InfoList): Boolean{
         infoListDao.insert(infoList)
+        return true
     }
 
     //データをリストで挿入するための関数
-    suspend fun insertList(infoList: MutableList<InfoList>){
+    suspend fun insertList(infoList: MutableList<InfoList>): Boolean{
         infoListDao.insertList(infoList)
+        return true
     }
 
     //データをアップデートするための関数
@@ -28,22 +30,26 @@ class AppRepository(private val infoListDao: InfoListDao) {
     }
 
     //タイトルを変更するための関数
-    fun changeTitle(oldTitle: String, newTitle: String){
+    fun changeTitle(oldTitle: String, newTitle: String): Boolean{
         infoListDao.changeTitle(oldTitle, newTitle)
+        return true
     }
 
     //特定の要素を削除する関数
-    suspend fun delete(infoList: InfoList){
+    suspend fun delete(infoList: InfoList): Boolean{
         infoListDao.delete(infoList)
+        return true
     }
 
     //リストに記載されている要素を削除する関数
-    suspend fun deleteList(infoList: MutableList<InfoList>){
+    suspend fun deleteList(infoList: MutableList<InfoList>): Boolean{
         infoListDao.deleteList(infoList)
+        return true
     }
 
     //指定したタイトル名のものを削除する関数
-    suspend fun deleteWithTitle(title:String){
+    suspend fun deleteWithTitle(title:String): Boolean{
         infoListDao.deleteWithTitle(title)
+        return true
     }
 }

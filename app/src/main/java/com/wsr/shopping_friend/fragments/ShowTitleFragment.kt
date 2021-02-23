@@ -16,6 +16,8 @@ import com.wsr.shopping_friend.databinding.FragmentShowTitleBinding
 import com.wsr.shopping_friend.preference.ShowPreference
 import com.wsr.shopping_friend.type_file.renameAlert
 import com.wsr.shopping_friend.view_model.AppViewModel
+import kotlinx.coroutines.runBlocking
+
 //タイトル名を並べるためのFragment
 class ShowTitleFragment : Fragment() {
 
@@ -103,7 +105,9 @@ class ShowTitleFragment : Fragment() {
                 .setMessage(R.string.delete_with_title_message)
                 .setPositiveButton(R.string.delete_with_title_positive) { _, _ ->
                     mainAdapter.notifyItemRemoved(position)
-                    viewModel.deleteWithTitle(title)
+                    runBlocking {
+                        viewModel.deleteWithTitle(title)
+                    }
                 }
                 .setNegativeButton(R.string.delete_with_title_negative, null)
                 .setCancelable(true)
