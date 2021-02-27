@@ -1,9 +1,11 @@
 package com.wsr.shopping_friend.adapter
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
 import android.text.Editable
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.wsr.shopping_friend.view_holder.ListViewHolder
@@ -36,6 +38,7 @@ class ListAdapter(
     }
 
     //ViewHolderのインスタンスの保持する値を変更
+    @SuppressLint("ClickableViewAccessibility")
     override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
         //設定の内容を反映するための処理
         holder.item.textSize = getTextSize(context).toFloat()
@@ -67,6 +70,11 @@ class ListAdapter(
                 changeText(p0.toString(), holder.adapterPosition)
             }
         })
+
+        holder.item.setOnLongClickListener{
+            holder.view.setBackgroundColor(Color.parseColor("#FFD5EC"))
+            true
+        }
 
         //チェックの状態が変更したときにeditViewModelに保存するためのプロセス
         holder.check.setOnClickListener {

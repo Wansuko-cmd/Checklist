@@ -61,8 +61,7 @@ class ShowContentsFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when(item.itemId){
             R.id.share -> {
-                updateDatabase(mutableListOf())
-                //shareText()
+                shareText()
                 true
             }
             R.id.rename_title -> {
@@ -211,16 +210,7 @@ class ShowContentsFragment : Fragment() {
             snackBar.show()
         }
 
-        //スワイプでアイテムを消す処理
-        /*val swipeHandler = object : SwipeToDeleteCallback() {
-            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                viewHolder.let {
-                    showContentsAdapter.deleteElement(it.adapterPosition)
-                }
-            }
-        }
-        val itemTouchHelper = ItemTouchHelper(swipeHandler)
-        itemTouchHelper.attachToRecyclerView(recyclerView)*/
+        //スワイプでアイテムを消したり動かしたりするための処理
 
         val itemTouchHelperCallback = ItemTouchHelper(
             object : ItemTouchHelperCallback() {
@@ -236,7 +226,7 @@ class ShowContentsFragment : Fragment() {
 
                         if(editViewModel.changePlace(fromPosition, toPosition)){
                             showContentsAdapter.notifyItemMoved(fromPosition, toPosition)
-                            return true
+                            return false
                         }
                     }
                     return false
@@ -246,6 +236,20 @@ class ShowContentsFragment : Fragment() {
                     viewHolder.let {
                         showContentsAdapter.deleteElement(it.adapterPosition)
                     }
+                }
+
+                override fun clearView(
+                    recyclerView: RecyclerView,
+                    viewHolder: RecyclerView.ViewHolder
+                ) {
+                    if (viewHolder is ListViewHolder){
+                        if (viewHolder.check.isChecked) {
+                            viewHolder.view.setBackgroundColor(Color.parseColor("#FFFFFF"))
+                        } else {
+                            viewHolder.view.setBackgroundColor(Color.parseColor("#AFEEEE"))
+                        }
+                    }
+                    super.clearView(recyclerView, viewHolder)
                 }
             }
         )
