@@ -40,19 +40,19 @@ class EditViewModel(application: Application) : AndroidViewModel(application) {
     fun insert(List: InfoList) {
         numList.add(RecordNumber(List.id, List.number))
         editList.add(List)
-        sortTrueFalse(editList)
+        sortTrueFalse(editList.sortedBy { it.number })
     }
 
     //アイテムを変更するための変数
     fun changeItem(id: String, Item: String) {
         editList[setPosition(id)] = editList[setPosition(id)].copy(item = Item)
-        sortTrueFalse(editList)
+        sortTrueFalse(editList.sortedBy { it.number })
     }
 
     //チェックの状態を変更するための関数
     fun changeCheck(id: String, Check: Boolean) {
         editList[setPosition(id)] = editList[setPosition(id)].copy(check = Check)
-        sortTrueFalse(editList)
+        sortTrueFalse(editList.sortedBy { it.number })
     }
 
     fun changePlace(fromPosition: Int, toPosition: Int): Boolean{
@@ -113,7 +113,7 @@ class EditViewModel(application: Application) : AndroidViewModel(application) {
         for(i in numList){
             editList[setPosition(i.id)] = editList[setPosition(i.id)].copy(number = i.number)
         }
-        sortTrueFalse(editList)
+        sortTrueFalse(editList.sortedBy { it.number })
     }
 
     //Undo処理を行う関数
@@ -130,7 +130,7 @@ class EditViewModel(application: Application) : AndroidViewModel(application) {
             deleteList.removeAll {it.id == deleteEditItem!!.id}
         }
         editList.sortBy{ it.number }
-        sortTrueFalse(editList)
+        sortTrueFalse(editList.sortedBy { it.number })
     }
 
     //指定された要素の次の要素が何もないか確認するための関数
@@ -141,8 +141,12 @@ class EditViewModel(application: Application) : AndroidViewModel(application) {
 
     //ここに保存されているリストを、InfoListのcheckに合わせてFalse　->　Trueの順番に並べるための関数
     private fun sortTrueFalse(list: List<InfoList>): List<InfoList> {
-        val onlyFalseList: List<InfoList> = list.filter{ !it.check}
-        val onlyTrueList: List<InfoList> = list.filter{ it.check }
+        val tempList = mutableListOf<InfoList>()
+        for(i in numList.sortedBy { it.number }){
+            if(list.find{it.id == i.id} != null)tempList.add(list.find{it.id == i.id}!!)
+        }
+        val onlyFalseList: List<InfoList> = tempList.filter{ !it.check}
+        val onlyTrueList: List<InfoList> = tempList.filter{ it.check }
         val result = onlyFalseList + onlyTrueList
         for ((num, i) in result.withIndex()){
             i.number = num

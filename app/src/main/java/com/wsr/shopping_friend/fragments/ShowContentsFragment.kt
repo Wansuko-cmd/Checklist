@@ -61,6 +61,7 @@ class ShowContentsFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when(item.itemId){
             R.id.share -> {
+                //showContentsAdapter.notifyDataSetChanged()
                 shareText()
                 true
             }
@@ -189,6 +190,7 @@ class ShowContentsFragment : Fragment() {
                     }
                     editViewModel.changeCheck(i.id, check)
                     showContentsAdapter.notifyItemMoved(position, editViewModel.setNumber(i.id))
+                    //showContentsAdapter.notifyDataSetChanged()
                     recyclerView!!.scrollToPosition(position)
                     break
                 }
@@ -379,7 +381,7 @@ class ShowContentsFragment : Fragment() {
     //Undo機能の設定
     private fun setSnackBar(): Snackbar {
         return Snackbar.make(
-            requireActivity().findViewById(R.id.coordinatorLayout),
+            binding.coordinatorLayout,
             getString(R.string.snack_bar_message),
             Snackbar.LENGTH_INDEFINITE
         )
@@ -392,7 +394,7 @@ class ShowContentsFragment : Fragment() {
                     }
                     showContentsAdapter.notifyItemInserted(item.number)
                     Snackbar.make(
-                        requireActivity().findViewById(R.id.coordinatorLayout),
+                        binding.coordinatorLayout,
                         getString(R.string.snack_bar_after),
                         Snackbar.LENGTH_SHORT
                     ).show()
