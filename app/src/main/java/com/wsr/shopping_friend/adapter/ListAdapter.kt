@@ -33,7 +33,7 @@ class ListAdapter(
 
     //入っている要素の数を返す関数
     override fun getItemCount(): Int {
-        return editViewModel.getList().size
+        return editViewModel.list.value?.size ?: 0
     }
 
     //ViewHolderのインスタンスの保持する値を変更
@@ -42,7 +42,7 @@ class ListAdapter(
         //設定の内容を反映するための処理
         holder.item.textSize = getTextSize(context).toFloat()
 
-        holder.setBind(editViewModel)
+        holder.setBind(editViewModel, position)
 
         /*
         //editViewModelの情報を格納するためのプロセス

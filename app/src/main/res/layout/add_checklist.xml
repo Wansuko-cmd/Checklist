@@ -26,6 +26,7 @@
         <CheckBox
             android:id="@+id/CheckBox"
             android:contentDescription="@string/check"
+            android:checked="@{editViewModel.list[index].check}"
             android:layout_gravity="center_vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />

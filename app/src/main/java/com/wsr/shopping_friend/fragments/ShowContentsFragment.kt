@@ -26,8 +26,7 @@ import com.wsr.shopping_friend.type_file.setHelp
 import com.wsr.shopping_friend.view_holder.ListViewHolder
 import com.wsr.shopping_friend.view_model.AppViewModel
 import com.wsr.shopping_friend.view_model.EditViewModel
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.*
 import java.util.*
 
 //リストの中身を見せるためのFragment
@@ -48,6 +47,7 @@ class ShowContentsFragment : Fragment() {
     private lateinit var editViewModel: EditViewModel
     private lateinit var showContentsAdapter: ListAdapter
     private lateinit var snackBar: Snackbar
+    private lateinit var checkSetData: Job
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -126,7 +126,7 @@ class ShowContentsFragment : Fragment() {
         viewModel.infoList.observe(viewLifecycleOwner, { list ->
             list?.let {
                 setInfoList(it)
-                editViewModel.list.postValue(list)
+                //editViewModel.list.postValue(list)
             }
         })
 
@@ -260,6 +260,10 @@ class ShowContentsFragment : Fragment() {
         itemTouchHelperCallback.attachToRecyclerView(recyclerView)
 
 
+        checkSetData = GlobalScope.launch(Dispatchers.Main) {
+            if (editViewModel.checkSetData()) showContentsAdapter.notifyDataSetChanged()
+        }
+
     }
 
     //設定から戻ったときに結果を反映するための処理
@@ -298,21 +302,32 @@ class ShowContentsFragment : Fragment() {
     }
 
     //LiveDataの内容を反映させる関数
-    private fun setInfoList(lists: MutableList<InfoList>) {
-        lists.sortBy { it.number }
-        for (numOfTitle in lists) {
-            if (!titleList.contains(numOfTitle.title)) {
-                titleList.add(numOfTitle.title)
-            }
-        }
+    private fun setInfoList(infoList: MutableList<InfoList>) {
         if (editViewModel.getList() == emptyList<InfoList>()) {
-            for (numOfTitle in lists) {
+            for (numOfTitle in infoList) {
                 if (numOfTitle.title == title) {
                     editViewModel.insert(numOfTitle)
                 }
             }
-            showContentsAdapter.notifyDataSetChanged()
         }
+
+        val list = infoList.sortedBy { it.number }
+        for (numOfTitle in list) {
+            if (!titleList.contains(numOfTitle.title)) {
+                titleList.add(numOfTitle.title)
+            }
+        }
+        val tempList = mutableListOf<InfoList>()
+        for (value in list) {
+            if (value.title == title) {
+                tempList.add(value)
+            }
+        }
+        editViewModel.list.postValue(tempList)
+        //showContentsAdapter.notifyDataSetChanged()
+//        if (editViewModel.list.value == emptyList<InfoList>()) {
+//
+//        }
     }
 
     //タイトルが変更された際の処理

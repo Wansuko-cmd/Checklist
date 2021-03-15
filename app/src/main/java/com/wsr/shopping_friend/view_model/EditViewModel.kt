@@ -1,17 +1,39 @@
 package com.wsr.shopping_friend.view_model
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.wsr.shopping_friend.info_list_database.InfoList
 import com.wsr.shopping_friend.type_file.RecordNumber
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.withTimeout
+import java.lang.Exception
 
 //リストのデータを、並び順とかを加工して保存するためのViewModel
 class EditViewModel(application: Application) : AndroidViewModel(application) {
 
     //InfoListをデータベースに共有せずに保持するための変数
 
-    val list = MutableLiveData<List<InfoList>>()
+    val list: MutableLiveData<List<InfoList>> = MutableLiveData<List<InfoList>>()
+
+    suspend fun checkSetData(): Boolean {
+        return try {
+            Log.i("ok", "I'll get the title...")
+            withTimeout(1000) {
+                while (true) {
+                    if (list.value != null) break
+                    Log.i("I wait for", "getting title...")
+                    delay(100)
+                }
+                true
+            }
+        } catch (e: Exception) {
+            Log.e("I missed getting title", "error: $e")
+            false
+        }
+    }
+
 
     private val numList: MutableList<RecordNumber> = mutableListOf()
     private val editList: MutableList<InfoList> = mutableListOf()

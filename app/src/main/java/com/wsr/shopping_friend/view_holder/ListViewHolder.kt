@@ -10,11 +10,13 @@ import com.wsr.shopping_friend.view_model.EditViewModel
 //ListAdapterのためのホルダー
 class ListViewHolder(private val binding: AddChecklistBinding): RecyclerView.ViewHolder(binding.root){
     val item: EditText = binding.Item
+    val check = binding.CheckBox
+    val view = binding.root
 
-    fun setBind(editViewModel: EditViewModel){
+    fun setBind(editViewModel: EditViewModel, index: Int){
         binding.run{
             this.editViewModel = editViewModel
-            this.index = 1
+            this.index = index
         }
     }
 }
