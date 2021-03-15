@@ -84,8 +84,8 @@ dependencies {
     implementation 'androidx.preference:preference-ktx:1.1.1'
 
     //navigation
-    implementation "androidx.navigation:navigation-fragment-ktx:2.3.3"
-    implementation "androidx.navigation:navigation-ui-ktx:2.3.3"
+    implementation "androidx.navigation:navigation-fragment-ktx:2.3.4"
+    implementation "androidx.navigation:navigation-ui-ktx:2.3.4"
 
     //safeargs
     implementation "android.arch.navigation:navigation-fragment:1.0.0"
