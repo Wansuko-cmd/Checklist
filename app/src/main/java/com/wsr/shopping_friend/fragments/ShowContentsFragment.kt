@@ -354,26 +354,11 @@ class ShowContentsFragment : Fragment() {
         //val tag = "SendList"
         //Log.i(tag, list.toString())
 
-        //メインスレッドを止めて実行
-        val checker = mutableListOf<Boolean?>(null, null, null)
-
 
         runBlocking {
-            launch{
-                viewModel.deleteList(deleteList)
-            }
-        }
-        runBlocking {
-            launch {
-                checker[1] = viewModel.update(list)
-
-                Log.i("list", list.toString())
-            }
-        }
-        runBlocking {
-            launch {
-                viewModel.insertList(list)
-            }
+            viewModel.deleteList(deleteList)
+            viewModel.update(list)
+            viewModel.insertList(list)
         }
         return true
     }

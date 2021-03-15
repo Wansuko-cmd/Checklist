@@ -52,12 +52,14 @@ class ShowTitleFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when(item.itemId){
+            //設定画面
             R.id.settings -> {
                 val intent = Intent(requireActivity(), ShowPreference::class.java)
                 intent.putExtra("Purpose", "settings")
                 startActivity(intent)
                 true
             }
+            //ヘルプ画面
             R.id.help -> {
                 val action =
                     ShowTitleFragmentDirections.actionTitleFragmentToContentsFragment("")
@@ -78,6 +80,7 @@ class ShowTitleFragment : Fragment() {
         ).get(AppViewModel::class.java)
         mainAdapter = MainAdapter(requireContext())
 
+        //ActionBarのタイトルの設定
         (activity as AppCompatActivity).supportActionBar?.title = getString(R.string.app_name)
         
         //recyclerViewの初期化
@@ -88,30 +91,31 @@ class ShowTitleFragment : Fragment() {
             adapter = mainAdapter
         }
 
+        //mainAdapterの設定
+        mainAdapter.apply {
+            //タイトルが押されたときの処理
+            clickTitleOnListener = { title -> makeShowContents(title) }
+
+            //deleteボタンが押された際の処理
+            clickDeleteOnListener = { title, position ->
+                AlertDialog.Builder(context)
+                    .setTitle(R.string.delete_with_title_title)
+                    .setMessage(R.string.delete_with_title_message)
+                    .setPositiveButton(R.string.delete_with_title_positive) { _, _ ->
+                        mainAdapter.notifyItemRemoved(position)
+                        runBlocking {
+                            viewModel.deleteWithTitle(title)
+                        }
+                    }
+                    .setNegativeButton(R.string.delete_with_title_negative, null)
+                    .setCancelable(true)
+                    .show()
+            }
+        }
+
         //fabボタンが押された際の処理
         binding.fab.setOnClickListener {
             renameAlert(requireContext(), makeShowContents, mainAdapter.titleList, "")
-        }
-
-        //タイトルが押されたときの処理
-        mainAdapter.clickTitleOnListener = { title ->
-            makeShowContents(title)
-        }
-
-        //deleteボタンが押された際の処理
-        mainAdapter.clickDeleteOnListener = { title, position ->
-            AlertDialog.Builder(context)
-                .setTitle(R.string.delete_with_title_title)
-                .setMessage(R.string.delete_with_title_message)
-                .setPositiveButton(R.string.delete_with_title_positive) { _, _ ->
-                    mainAdapter.notifyItemRemoved(position)
-                    runBlocking {
-                        viewModel.deleteWithTitle(title)
-                    }
-                }
-                .setNegativeButton(R.string.delete_with_title_negative, null)
-                .setCancelable(true)
-                .show()
         }
 
         //viewModelが更新された際の処理
