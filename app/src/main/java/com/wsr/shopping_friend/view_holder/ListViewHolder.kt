@@ -5,11 +5,17 @@ import android.widget.CheckBox
 import android.widget.EditText
 import androidx.recyclerview.widget.RecyclerView
 import com.wsr.shopping_friend.databinding.AddChecklistBinding
+import com.wsr.shopping_friend.view_model.EditViewModel
 
 //ListAdapterのためのホルダー
-class ListViewHolder(binding: AddChecklistBinding): RecyclerView.ViewHolder(binding.root){
-    val check: CheckBox = binding.CheckBox
+class ListViewHolder(private val binding: AddChecklistBinding): RecyclerView.ViewHolder(binding.root){
     val item: EditText = binding.Item
-    val view: View = binding.root
+
+    fun setBind(editViewModel: EditViewModel){
+        binding.run{
+            this.editViewModel = editViewModel
+            this.index = 1
+        }
+    }
 }
 

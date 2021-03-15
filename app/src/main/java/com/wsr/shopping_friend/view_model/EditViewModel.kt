@@ -2,6 +2,7 @@ package com.wsr.shopping_friend.view_model
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.MutableLiveData
 import com.wsr.shopping_friend.info_list_database.InfoList
 import com.wsr.shopping_friend.type_file.RecordNumber
 
@@ -9,6 +10,9 @@ import com.wsr.shopping_friend.type_file.RecordNumber
 class EditViewModel(application: Application) : AndroidViewModel(application) {
 
     //InfoListをデータベースに共有せずに保持するための変数
+
+    val list = MutableLiveData<List<InfoList>>()
+
     private val numList: MutableList<RecordNumber> = mutableListOf()
     private val editList: MutableList<InfoList> = mutableListOf()
     private val deleteList: MutableList<InfoList> = mutableListOf()

@@ -37,6 +37,11 @@ android {
         jvmTarget = '1.8'
     }
 
+    //データバインディングを有効化
+    dataBinding {
+        enabled = true
+    }
+
     //ViewBindingを有効化
     viewBinding {
         enabled = true

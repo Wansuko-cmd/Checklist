@@ -126,6 +126,7 @@ class ShowContentsFragment : Fragment() {
         viewModel.infoList.observe(viewLifecycleOwner, { list ->
             list?.let {
                 setInfoList(it)
+                editViewModel.list.postValue(list)
             }
         })
 

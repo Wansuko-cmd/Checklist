@@ -5,7 +5,6 @@ import android.content.Context
 import android.graphics.Color
 import android.text.Editable
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.wsr.shopping_friend.view_holder.ListViewHolder
@@ -43,6 +42,9 @@ class ListAdapter(
         //設定の内容を反映するための処理
         holder.item.textSize = getTextSize(context).toFloat()
 
+        holder.setBind(editViewModel)
+
+        /*
         //editViewModelの情報を格納するためのプロセス
         for (i in editViewModel.getList()) {
             if (holder.adapterPosition == i.number) {
@@ -80,5 +82,7 @@ class ListAdapter(
         holder.check.setOnClickListener {
             changeCheck(holder.check.isChecked, holder)
         }
+
+         */
     }
 }
