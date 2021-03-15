@@ -1,0 +1,19 @@
+@startuml
+
+entity "info_list_table"{
+    +id [PK]
+    number: Int
+    title: String
+    check: Boolean
+    item: String
+}
+
+note left
+    id : UUID
+    number : リストでの並び順
+    title : チェックリストの題名
+    check : チェックの有り無し
+    item : チェックする項目
+end note
+
+@enduml
