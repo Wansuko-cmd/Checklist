@@ -10,6 +10,6 @@ import java.util.*
 fun setHelp(context: Context, editViewModel: EditViewModel) {
     val helpList = context.resources.getStringArray(R.array.help)
     for((count, i) in helpList.withIndex()){
-        editViewModel.insert(InfoList(UUID.randomUUID().toString(), count, "", false, i))
+        //editViewModel.insert(InfoList(UUID.randomUUID().toString(), count, "", false, i))
     }
 }

@@ -23,17 +23,20 @@ class ListViewHolder(private val binding: AddChecklistBinding): RecyclerView.Vie
             check.setOnClickListener {
                 setColor(editViewModel, index)
             }
+
+            item.setOnLongClickListener {
+                root.setBackgroundColor(Color.parseColor("#FFD5EC"))
+                true
+            }
         }
     }
 
     private fun setColor(editViewModel: EditViewModel, index: Int) {
         binding.run {
-            editViewModel.list.value?.let {
-                root.setBackgroundColor(
-                    if (it[index].check) Color.parseColor("#FFFFFF")
-                    else Color.parseColor("#AFEEEE")
-                )
-            }
+            root.setBackgroundColor(
+                if (editViewModel.getList[index].check) Color.parseColor("#FFFFFF")
+                else Color.parseColor("#AFEEEE")
+            )
         }
     }
 }

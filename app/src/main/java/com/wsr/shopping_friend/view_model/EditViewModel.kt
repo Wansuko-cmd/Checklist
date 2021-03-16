@@ -15,7 +15,8 @@ class EditViewModel(application: Application) : AndroidViewModel(application) {
 
     //InfoListをデータベースに共有せずに保持するための変数
 
-    val list: MutableLiveData<List<InfoList>> = MutableLiveData<List<InfoList>>()
+    val list: MutableLiveData<MutableList<InfoList>> = MutableLiveData<MutableList<InfoList>>()
+    val getList get() = list.value ?: mutableListOf()
 
     suspend fun checkSetData(): Boolean {
         return try {
@@ -34,6 +35,7 @@ class EditViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    /*
 
     private val numList: MutableList<RecordNumber> = mutableListOf()
     private val editList: MutableList<InfoList> = mutableListOf()
@@ -187,5 +189,5 @@ class EditViewModel(application: Application) : AndroidViewModel(application) {
             }
         }
         sortTrueFalse(editList.sortedBy { it.number })
-    }
+    }*/
 }
