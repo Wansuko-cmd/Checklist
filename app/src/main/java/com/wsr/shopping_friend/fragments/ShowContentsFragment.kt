@@ -92,17 +92,11 @@ class ShowContentsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        //変数の初期化
+        //タイトルの初期化
         title = args.content
-        viewModel = ViewModelProvider(
-            this,
-            ViewModelProvider.AndroidViewModelFactory(requireActivity().application)
-        ).get(AppViewModel::class.java)
-        editViewModel = ViewModelProvider(
-            this,
-            ViewModelProvider.AndroidViewModelFactory(requireActivity().application)
-        ).get(EditViewModel::class.java)
-        showContentsAdapter = ListAdapter(requireContext(), editViewModel)
+
+        //ヘルプを選択した時の処理
+        if (title == "") setHelp(requireContext(), editViewModel)
 
         //actionbarの設定
         (activity as AppCompatActivity).supportActionBar?.title = title
@@ -110,47 +104,57 @@ class ShowContentsFragment : Fragment() {
         //snackBarの設定
         snackBar = setSnackBar()
 
-        //ヘルプを選択した時の処理
-        if (title == "") setHelp(requireContext(), editViewModel)
+        //DBとの接続用のViewModelの初期化
+        viewModel = ViewModelProvider(
+            this,
+            ViewModelProvider.AndroidViewModelFactory(requireActivity().application)
+        ).get(AppViewModel::class.java).apply {
+            //editViewModelにLiveDataで流れてきた値を入れる処理
+            infoList.observe(viewLifecycleOwner, { list ->
+                list?.let { setInfoList(it) }
+            })
+        }
+
+        //編集用のViewModelの初期化
+        editViewModel = ViewModelProvider(
+            this,
+            ViewModelProvider.AndroidViewModelFactory(requireActivity().application)
+        ).get(EditViewModel::class.java)
+
+        //Adapterの初期化
+        showContentsAdapter = ListAdapter(requireContext(), editViewModel)
 
         //recyclerViewの初期化
-        this.recyclerView = binding.showContentsRecyclerView
-        this.recyclerView!!.setOnClickListener { it.requestFocus() }
-        this.recyclerView?.apply {
+        this.recyclerView = binding.showContentsRecyclerView.apply{
+            setOnClickListener { it.requestFocus() }
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(context)
             adapter = showContentsAdapter
         }
 
-        //viewModelが更新された際の処理
-        viewModel.infoList.observe(viewLifecycleOwner, { list ->
-            list?.let {
-                setInfoList(it)
+        binding.apply {
+
+            editButton.setOnClickListener{
+                addElements()
+                showContentsAdapter.notifyDataSetChanged()
             }
-        })
 
-        //editボタンが押された際の処理
-        binding.editButton.setOnClickListener {
-            addElements()
-            showContentsAdapter.notifyDataSetChanged()
-        }
+            deleteCheckButton.setOnClickListener {
+                AlertDialog.Builder(context)
+                    .setTitle(R.string.check_out_title)
+                    .setMessage(R.string.check_out_message)
+                    .setPositiveButton(R.string.check_out_positive) { _, _ ->
+                        val list = editViewModel.getList.filter { !it.check }
 
-        //delete_checkボタンが押された際の処理
-        binding.deleteCheckButton.setOnClickListener {
-            AlertDialog.Builder(context)
-                .setTitle(R.string.check_out_title)
-                .setMessage(R.string.check_out_message)
-                .setPositiveButton(R.string.check_out_positive) { _, _ ->
-                    val list = editViewModel.getList.filter { !it.check }
-
-                    editViewModel.list.postValue(list as MutableList<InfoList>?)
+                        editViewModel.list.postValue(list as MutableList<InfoList>?)
 
 
-                    showContentsAdapter.notifyDataSetChanged()
-                }
-                .setNegativeButton(R.string.check_out_negative, null)
-                .setCancelable(false)
-                .show()
+                        showContentsAdapter.notifyDataSetChanged()
+                    }
+                    .setNegativeButton(R.string.check_out_negative, null)
+                    .setCancelable(false)
+                    .show()
+            }
         }
 
         /*
