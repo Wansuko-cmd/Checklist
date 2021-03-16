@@ -61,8 +61,8 @@ class ShowContentsFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when(item.itemId){
             R.id.share -> {
-                //showContentsAdapter.notifyDataSetChanged()
-                shareText()
+                showContentsAdapter.notifyDataSetChanged()
+                //shareText()
                 true
             }
             R.id.rename_title -> {
@@ -356,7 +356,12 @@ class ShowContentsFragment : Fragment() {
     //editViewModelの内容をデータベースに反映させる関数
     private fun updateDatabase(deleteList: MutableList<InfoList>) : Boolean {
         val list: MutableList<InfoList> = mutableListOf()
-        for (i in editViewModel.getNumList()) {
+        editViewModel.list.value?.let{
+            for (i in it){
+                list.add(i)
+            }
+        }
+        /*for (i in editViewModel.getNumList()) {
             list.add(
                 InfoList(
                     i.id,
@@ -366,7 +371,7 @@ class ShowContentsFragment : Fragment() {
                     editViewModel.getItem(i.id)
                 )
             )
-        }
+        }*/
         //val tag = "SendList"
         //Log.i(tag, list.toString())
 
