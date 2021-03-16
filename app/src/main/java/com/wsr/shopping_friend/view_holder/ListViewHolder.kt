@@ -31,10 +31,11 @@ class ListViewHolder(private val binding: AddChecklistBinding): RecyclerView.Vie
         }
     }
 
+    //チェックの状態に合わせて色を変える処理
     private fun setColor(editViewModel: EditViewModel, index: Int) {
-        binding.run {
-            root.setBackgroundColor(
-                if (editViewModel.getList[index].check) Color.parseColor("#FFFFFF")
+        binding.root.run {
+            setBackgroundColor(
+                if (editViewModel.list[index].check) Color.parseColor("#FFFFFF")
                 else Color.parseColor("#AFEEEE")
             )
         }

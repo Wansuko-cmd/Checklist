@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
         <variable
@@ -26,7 +25,7 @@
         <CheckBox
             android:id="@+id/CheckBox"
             android:contentDescription="@string/check"
-            android:checked="@={editViewModel.list[index].check}"
+            android:checked="@={editViewModel.liveList[index].check}"
             android:layout_gravity="center_vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
@@ -43,7 +42,7 @@
             android:background="#00000000"
             android:layout_height="wrap_content"
             android:layout_width="0dp"
-            android:text="@={editViewModel.list[index].item}"
+            android:text="@={editViewModel.liveList[index].item}"
             android:textSize="30sp"
             android:autofillHints=""
             tools:ignore="LabelFor" />

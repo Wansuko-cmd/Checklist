@@ -17,8 +17,6 @@ class ListAdapter(
     RecyclerView.Adapter<ListViewHolder>() {
 
     //使用する関数、変数の定義
-    var changeText: (p0: String, position: Int) -> Unit = {_,_  ->}
-    var changeCheck: (check: Boolean, holder: ListViewHolder) -> Unit = {_, _ ->}
     var deleteElement: (position: Int) -> Unit = {}
     var focus = -1
 
@@ -30,7 +28,7 @@ class ListAdapter(
 
     //入っている要素の数を返す関数
     override fun getItemCount(): Int {
-        return editViewModel.getList.size
+        return editViewModel.list.size
     }
 
     //ViewHolderのインスタンスの保持する値を変更

@@ -144,9 +144,9 @@ class ShowContentsFragment : Fragment() {
                     .setTitle(R.string.check_out_title)
                     .setMessage(R.string.check_out_message)
                     .setPositiveButton(R.string.check_out_positive) { _, _ ->
-                        val list = editViewModel.getList.filter { !it.check }
+                        val list = editViewModel.list.filter { !it.check }
 
-                        editViewModel.list.postValue(list as MutableList<InfoList>?)
+                        editViewModel.list = (list as MutableList<InfoList>)
 
 
                         showContentsAdapter.notifyDataSetChanged()
@@ -300,7 +300,7 @@ class ShowContentsFragment : Fragment() {
                 tempList.add(value)
             }
         }
-        editViewModel.list.postValue(tempList)
+        editViewModel.list = tempList
     }
 
     //タイトルが変更された際の処理
@@ -319,9 +319,9 @@ class ShowContentsFragment : Fragment() {
         val number = showContentsAdapter.itemCount
         val newColumn = InfoList(id, number, title, false, "")
 
-        editViewModel.list.value?.let{
+        editViewModel.list.let{
             it.add(newColumn)
-            editViewModel.list.postValue(it)
+            editViewModel.list = it
         }
         runBlocking {
             viewModel.insert(newColumn)
@@ -334,7 +334,7 @@ class ShowContentsFragment : Fragment() {
     //editViewModelの内容をデータベースに反映させる関数
     private fun updateDatabase(deleteList: MutableList<InfoList>) : Boolean {
         val list: MutableList<InfoList> =
-            (editViewModel.list.value?.sortedBy { it.number } ?: listOf()) as MutableList<InfoList>
+            (editViewModel.list.sortedBy { it.number }) as MutableList<InfoList>
         /*for (i in editViewModel.getNumList()) {
             list.add(
                 InfoList(
@@ -387,7 +387,7 @@ class ShowContentsFragment : Fragment() {
         var text = ""
         val listTop: String = requireActivity().getString(R.string.list_top)
         val setting = getShareAll(requireContext())
-        for (i in editViewModel.getList){
+        for (i in editViewModel.list){
             if(!i.check || !setting){
                 text += "${listTop}${i.item}\n"
             }

@@ -14,16 +14,22 @@ import java.lang.Exception
 class EditViewModel(application: Application) : AndroidViewModel(application) {
 
     //InfoListをデータベースに共有せずに保持するための変数
+    val liveList: MutableLiveData<MutableList<InfoList>> = MutableLiveData<MutableList<InfoList>>()
 
-    val list: MutableLiveData<MutableList<InfoList>> = MutableLiveData<MutableList<InfoList>>()
-    val getList get() = list.value ?: mutableListOf()
+    //liveListを使いやすくするための変数
+    var list: MutableList<InfoList>
+        get() = liveList.value ?: mutableListOf()
+        set(value) {
+            liveList.postValue(value)
+        }
 
+    //データの取得が出来るまで待機する関数
     suspend fun checkSetData(): Boolean {
         return try {
             Log.i("ok", "I'll get the title...")
             withTimeout(1000) {
                 while (true) {
-                    if (list.value != null) break
+                    if (liveList.value != null) break
                     Log.i("I wait for", "getting title...")
                     delay(100)
                 }
