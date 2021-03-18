@@ -146,7 +146,7 @@ class ShowContentsFragment : Fragment() {
                     .setPositiveButton(R.string.check_out_positive) { _, _ ->
                         val list = editViewModel.list.filter { !it.check }
 
-                        editViewModel.list = (list as MutableList<InfoList>)
+                        editViewModel.updateList()
 
                         showContentsAdapter.notifyDataSetChanged()
                     }
@@ -299,7 +299,6 @@ class ShowContentsFragment : Fragment() {
         val newColumn = InfoList(id, number, title, false, "")
 
         val newList = editViewModel.list.toMutableList()
-        //editViewModel.addValue(newColumn)
         newList.add(newColumn)
         editViewModel.list  = newList
         showContentsAdapter.notifyItemInserted(editViewModel.list.filter { !it.check }.size)

@@ -24,6 +24,10 @@ class EditViewModel(application: Application) : AndroidViewModel(application) {
             _list.postValue(value.sortedBy { it.number }.sortedBy { it.check } as MutableList<InfoList>)
         }
 
+    fun updateList(){
+        list = list
+    }
+
     //データの取得が出来るまで待機する関数
     suspend fun checkSetData(): Boolean {
         return try {
@@ -40,10 +44,6 @@ class EditViewModel(application: Application) : AndroidViewModel(application) {
             Log.e("I missed getting title", "error: $e")
             false
         }
-    }
-
-    fun addValue(infoList: InfoList){
-        _list.value?.toMutableList()?.add(infoList)
     }
 
     /*

@@ -15,14 +15,15 @@ class ListViewHolder(private val binding: AddChecklistBinding): RecyclerView.Vie
     fun setBind(editViewModel: EditViewModel, id: String, listAdapter: com.wsr.shopping_friend.adapter.ListAdapter) {
         binding.run {
 
-            val index = editViewModel.list.indexOfFirst { it.id == id }
             this.value = editViewModel.list[editViewModel.list.indexOfFirst { it.id == id }]
-            setColor(editViewModel, index)
+            setColor(editViewModel, id)
 
             check.setOnClickListener {
-                editViewModel.list = editViewModel.list
-                setColor(editViewModel, index)
-                listAdapter.notifyDataSetChanged()
+                val oldIndex = editViewModel.list.indexOfFirst { it.id == id }
+                val newIndex = editViewModel.list.sortedBy { it.number }.sortedBy { it.check }.indexOfFirst { it.id == id }
+                setColor(editViewModel, id)
+                listAdapter.notifyItemMoved(oldIndex, newIndex)
+                editViewModel.updateList()
             }
 
             item.setOnLongClickListener {
@@ -33,7 +34,8 @@ class ListViewHolder(private val binding: AddChecklistBinding): RecyclerView.Vie
     }
 
     //チェックの状態に合わせて色を変える処理
-    private fun setColor(editViewModel: EditViewModel, index: Int) {
+    private fun setColor(editViewModel: EditViewModel, id: String) {
+        val index = editViewModel.list.indexOfFirst { it.id == id }
         binding.root.setBackgroundColor(
             if (editViewModel.list[index].check) Color.parseColor("#FFFFFF")
             else Color.parseColor("#AFEEEE")
