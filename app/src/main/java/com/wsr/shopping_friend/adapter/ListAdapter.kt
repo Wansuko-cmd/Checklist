@@ -17,7 +17,6 @@ import com.wsr.shopping_friend.view_model.EditViewModel
 
 //リストの内容を見せるRecyclerViewのためのアダプター
 class ListAdapter(
-    private val context: Context,
     private val editViewModel: EditViewModel,
     private val showContentsFragment: ShowContentsFragment
     ) : RecyclerView.Adapter<ListViewHolder>() {
@@ -79,14 +78,5 @@ class ListAdapter(
                 }
             }
         }
-
-        /*
-
-        //focusを当てる処理
-        if(holder.adapterPosition == focus){
-            holder.item.requestFocus()
-        }
-
-         */
     }
 }

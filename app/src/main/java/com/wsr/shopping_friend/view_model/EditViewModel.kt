@@ -4,13 +4,14 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.wsr.shopping_friend.info_list_database.InfoList
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withTimeout
 import java.lang.Exception
 
 //リストのデータを、並び順とかを加工して保存するためのViewModel
-class EditViewModel(application: Application) : AndroidViewModel(application) {
+class EditViewModel() : ViewModel() {
 
     //InfoListをデータベースに共有せずに保持するための変数
     private val _list: MutableLiveData<MutableList<InfoList>> = MutableLiveData<MutableList<InfoList>>()

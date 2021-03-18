@@ -62,8 +62,8 @@ class ShowContentsFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when(item.itemId){
             R.id.share -> {
-                showContentsAdapter.notifyDataSetChanged()
-                //shareText()
+                //showContentsAdapter.notifyDataSetChanged()
+                shareText()
                 true
             }
             R.id.rename_title -> {
@@ -96,14 +96,20 @@ class ShowContentsFragment : Fragment() {
         //タイトルの初期化
         title = args.content
 
-        //ヘルプを選択した時の処理
-        if (title == "") setHelp(requireContext(), editViewModel)
-
         //actionbarの設定
         (activity as AppCompatActivity).supportActionBar?.title = title
 
         //snackBarの設定
         snackBar = setSnackBar()
+
+        //編集用のViewModelの初期化
+        editViewModel = ViewModelProvider(
+            this,
+            ViewModelProvider.NewInstanceFactory()
+        ).get(EditViewModel::class.java)
+
+        //ヘルプを選択した時の処理
+        if (title == "") setHelp(requireContext(), editViewModel)
 
         //DBとの接続用のViewModelの初期化
         viewModel = ViewModelProvider(
@@ -116,14 +122,8 @@ class ShowContentsFragment : Fragment() {
             })
         }
 
-        //編集用のViewModelの初期化
-        editViewModel = ViewModelProvider(
-            this,
-            ViewModelProvider.AndroidViewModelFactory(requireActivity().application)
-        ).get(EditViewModel::class.java)
-
         //Adapterの初期化
-        showContentsAdapter = ListAdapter(requireContext(), editViewModel, this)
+        showContentsAdapter = ListAdapter(editViewModel, this)
 
         //recyclerViewの初期化
         this.recyclerView = binding.showContentsRecyclerView.apply{
@@ -134,14 +134,12 @@ class ShowContentsFragment : Fragment() {
         }
 
         binding.apply {
-
             editButton.setOnClickListener{ addElements() }
 
             deleteCheckButton.setOnClickListener { deleteElements() }
         }
 
         //スワイプでアイテムを消したり動かしたりするための処理
-
         val itemTouchHelperCallback = ItemTouchHelper(
             object : ItemTouchHelperCallback() {
                 override fun onMove(
@@ -201,7 +199,6 @@ class ShowContentsFragment : Fragment() {
         )
 
         itemTouchHelperCallback.attachToRecyclerView(recyclerView)
-
 
         checkSetData = GlobalScope.launch(Dispatchers.Main) {
             if (editViewModel.checkSetData()) showContentsAdapter.notifyDataSetChanged()
