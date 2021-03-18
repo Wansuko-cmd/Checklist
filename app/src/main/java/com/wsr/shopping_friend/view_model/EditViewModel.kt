@@ -5,7 +5,6 @@ import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.wsr.shopping_friend.info_list_database.InfoList
-import com.wsr.shopping_friend.type_file.RecordNumber
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withTimeout
 import java.lang.Exception
@@ -14,15 +13,15 @@ import java.lang.Exception
 class EditViewModel(application: Application) : AndroidViewModel(application) {
 
     //InfoListをデータベースに共有せずに保持するための変数
-    val liveList: MutableLiveData<MutableList<InfoList>> = MutableLiveData<MutableList<InfoList>>()
+    private val _list: MutableLiveData<MutableList<InfoList>> = MutableLiveData<MutableList<InfoList>>()
 
-    //liveListを使いやすくするための変数
+    //_listを使いやすくするための変数
     var list: MutableList<InfoList>
         get(){
-            return (liveList.value ?: mutableListOf())
+            return (_list.value ?: mutableListOf())
         }
         set(value) {
-            liveList.postValue(value.sortedBy { it.number }.sortedBy { it.check } as MutableList<InfoList>)
+            _list.postValue(value.sortedBy { it.number }.sortedBy { it.check } as MutableList<InfoList>)
         }
 
     //データの取得が出来るまで待機する関数
@@ -31,7 +30,7 @@ class EditViewModel(application: Application) : AndroidViewModel(application) {
             Log.i("ok", "I'll get the title...")
             withTimeout(1000) {
                 while (true) {
-                    if (liveList.value != null) break
+                    if (_list.value != null) break
                     Log.i("I wait for", "getting title...")
                     delay(100)
                 }
@@ -41,6 +40,10 @@ class EditViewModel(application: Application) : AndroidViewModel(application) {
             Log.e("I missed getting title", "error: $e")
             false
         }
+    }
+
+    fun addValue(infoList: InfoList){
+        _list.value?.toMutableList()?.add(infoList)
     }
 
     /*

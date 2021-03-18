@@ -136,7 +136,7 @@ class ShowContentsFragment : Fragment() {
 
             editButton.setOnClickListener{
                 addElements()
-                showContentsAdapter.notifyDataSetChanged()
+                //showContentsAdapter.notifyDataSetChanged()
             }
 
             deleteCheckButton.setOnClickListener {
@@ -298,13 +298,15 @@ class ShowContentsFragment : Fragment() {
         val number = showContentsAdapter.itemCount
         val newColumn = InfoList(id, number, title, false, "")
 
-        editViewModel.list.let{
-            it.add(newColumn)
-            editViewModel.list = it
-        }
-        runBlocking {
-            viewModel.insert(newColumn)
-        }
+        val newList = editViewModel.list.toMutableList()
+        //editViewModel.addValue(newColumn)
+        newList.add(newColumn)
+        editViewModel.list  = newList
+        showContentsAdapter.notifyItemInserted(editViewModel.list.filter { !it.check }.size)
+
+//        runBlocking {
+//            viewModel.insert(newColumn)
+//        }
 //        recyclerView!!.scrollToPosition(editViewModel.setNumber(id))
 //        showContentsAdapter.focus = editViewModel.setNumber(id)
 //        showContentsAdapter.notifyItemInserted(editViewModel.nonCheckNumber())
