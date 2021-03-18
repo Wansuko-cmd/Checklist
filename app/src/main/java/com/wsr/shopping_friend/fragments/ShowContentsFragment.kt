@@ -4,7 +4,6 @@ import android.app.AlertDialog
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -48,6 +47,7 @@ class ShowContentsFragment : Fragment() {
     private lateinit var showContentsAdapter: ListAdapter
     private lateinit var snackBar: Snackbar
     private lateinit var checkSetData: Job
+    private var deleteValue: InfoList? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -142,6 +142,10 @@ class ShowContentsFragment : Fragment() {
                     .setMessage(R.string.check_out_message)
                     .setPositiveButton(R.string.check_out_positive) { _, _ ->
                         val list = editViewModel.list.filter { !it.check }
+                        val deleteList = editViewModel.list.filter { it.check }
+                        runBlocking {
+                            viewModel.deleteList(deleteList as MutableList<InfoList>)
+                        }
 
                         editViewModel.list = (list as MutableList<InfoList>)
 
@@ -152,25 +156,6 @@ class ShowContentsFragment : Fragment() {
                     .show()
             }
         }
-
-        /*
-
-        //特定の要素を削除する処理
-        showContentsAdapter.deleteElement = { position ->
-            for (i in editViewModel.getList) {
-                if (position == i.number) {
-                    showContentsAdapter.notifyItemRemoved(position)
-                    editViewModel.delete(i.id)
-                    runBlocking {
-                        viewModel.delete(editViewModel.deleteEditItem!!)
-                    }
-                    break
-                }
-            }
-            snackBar.show()
-        }
-
-         */
 
         //スワイプでアイテムを消したり動かしたりするための処理
 
@@ -195,12 +180,19 @@ class ShowContentsFragment : Fragment() {
                 }
 
                 override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+
                     val list = editViewModel.list
                     val index = viewHolder.adapterPosition
 
-                    list.removeAt(index)
+                    list.removeAt(index).let{
+                        deleteValue = it
+                        runBlocking {
+                            viewModel.delete(it)
+                        }
+                    }
                     showContentsAdapter.notifyItemRemoved(index)
                     editViewModel.list = list
+                    snackBar.show()
                 }
 
                 override fun clearView(
@@ -273,13 +265,15 @@ class ShowContentsFragment : Fragment() {
                 titleList.add(numOfTitle.title)
             }
         }
-        val tempList = mutableListOf<InfoList>()
-        for (value in list) {
-            if (value.title == title) {
-                tempList.add(value)
+        if (editViewModel.list == emptyList<InfoList>()){
+            val tempList = mutableListOf<InfoList>()
+            for (value in list) {
+                if (value.title == title) {
+                    tempList.add(value)
+                }
             }
+            editViewModel.list = tempList
         }
-        editViewModel.list = tempList
     }
 
     //タイトルが変更された際の処理
@@ -348,19 +342,22 @@ class ShowContentsFragment : Fragment() {
             Snackbar.LENGTH_INDEFINITE
         )
             .setAction(getString(R.string.snack_bar_action)) {
-//                val item = editViewModel.deleteEditItem
-//                if (item != null) {
-//                    editViewModel.backDeleteItem()
-//                    runBlocking {
-//                        viewModel.insert(editViewModel.deleteEditItem!!)
-//                    }
-//                    showContentsAdapter.notifyItemInserted(item.number)
-//                    Snackbar.make(
-//                        binding.coordinatorLayout,
-//                        getString(R.string.snack_bar_after),
-//                        Snackbar.LENGTH_SHORT
-//                    ).show()
-//                }
+
+                deleteValue?.let { value ->
+                    val list = editViewModel.list
+                    list.add(value)
+                    editViewModel.list = list
+                    showContentsAdapter.notifyItemInserted(list.sortedBy { it.number }
+                        .sortedBy { it.check }.indexOf(value))
+                    runBlocking {
+                        viewModel.insert(value)
+                    }
+                }
+                Snackbar.make(
+                    binding.coordinatorLayout,
+                    getString(R.string.snack_bar_after),
+                    Snackbar.LENGTH_SHORT
+                ).show()
             }
     }
 
