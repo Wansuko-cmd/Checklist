@@ -18,9 +18,11 @@ class EditViewModel(application: Application) : AndroidViewModel(application) {
 
     //liveListを使いやすくするための変数
     var list: MutableList<InfoList>
-        get() = liveList.value ?: mutableListOf()
+        get(){
+            return (liveList.value ?: mutableListOf())
+        }
         set(value) {
-            liveList.postValue(value)
+            liveList.postValue(value.sortedBy { it.number }.sortedBy { it.check } as MutableList<InfoList>)
         }
 
     //データの取得が出来るまで待機する関数

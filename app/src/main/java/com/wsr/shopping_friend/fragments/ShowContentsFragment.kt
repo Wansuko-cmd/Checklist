@@ -148,7 +148,6 @@ class ShowContentsFragment : Fragment() {
 
                         editViewModel.list = (list as MutableList<InfoList>)
 
-
                         showContentsAdapter.notifyDataSetChanged()
                     }
                     .setNegativeButton(R.string.check_out_negative, null)
@@ -158,26 +157,6 @@ class ShowContentsFragment : Fragment() {
         }
 
         /*
-
-        //チェックの状態が変更されたときの処理
-        showContentsAdapter.changeCheck = { check, holder ->
-            snackBar.dismiss()
-            val position = holder.adapterPosition
-            for (i in editViewModel.getList) {
-                if (position == i.number) {
-                    if (check) {
-                        holder.view.setBackgroundColor(Color.parseColor("#FFFFFF"))
-                    } else {
-                        holder.view.setBackgroundColor(Color.parseColor("#AFEEEE"))
-                    }
-                    editViewModel.changeCheck(i.id, check)
-                    showContentsAdapter.notifyItemMoved(position, editViewModel.setNumber(i.id))
-                    //showContentsAdapter.notifyDataSetChanged()
-                    recyclerView!!.scrollToPosition(position)
-                    break
-                }
-            }
-        }
 
         //特定の要素を削除する処理
         showContentsAdapter.deleteElement = { position ->
@@ -274,7 +253,7 @@ class ShowContentsFragment : Fragment() {
                 Log.i("save", "Success")
             }
         }*/
-        updateDatabase(mutableListOf())
+        //updateDatabase(mutableListOf())
         super.onPause()
     }
 

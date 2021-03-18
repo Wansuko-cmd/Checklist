@@ -1,8 +1,6 @@
 package com.wsr.shopping_friend.view_holder
 
 import android.graphics.Color
-import android.view.View
-import android.widget.CheckBox
 import android.widget.EditText
 import androidx.recyclerview.widget.RecyclerView
 import com.wsr.shopping_friend.databinding.AddChecklistBinding
@@ -14,14 +12,17 @@ class ListViewHolder(private val binding: AddChecklistBinding): RecyclerView.Vie
     val check = binding.CheckBox
     val view = binding.root
 
-    fun setBind(editViewModel: EditViewModel, index: Int) {
+    fun setBind(editViewModel: EditViewModel, id: String, listAdapter: com.wsr.shopping_friend.adapter.ListAdapter) {
         binding.run {
-            this.editViewModel = editViewModel
-            this.index = index
+
+            val index = editViewModel.list.indexOfFirst { it.id == id }
+            this.value = editViewModel.list[editViewModel.list.indexOfFirst { it.id == id }]
             setColor(editViewModel, index)
 
             check.setOnClickListener {
+                editViewModel.list = editViewModel.list
                 setColor(editViewModel, index)
+                listAdapter.notifyDataSetChanged()
             }
 
             item.setOnLongClickListener {
@@ -33,12 +34,11 @@ class ListViewHolder(private val binding: AddChecklistBinding): RecyclerView.Vie
 
     //チェックの状態に合わせて色を変える処理
     private fun setColor(editViewModel: EditViewModel, index: Int) {
-        binding.root.run {
-            setBackgroundColor(
-                if (editViewModel.list[index].check) Color.parseColor("#FFFFFF")
-                else Color.parseColor("#AFEEEE")
-            )
-        }
+        binding.root.setBackgroundColor(
+            if (editViewModel.list[index].check) Color.parseColor("#FFFFFF")
+            else Color.parseColor("#AFEEEE")
+        )
     }
 }
+
 

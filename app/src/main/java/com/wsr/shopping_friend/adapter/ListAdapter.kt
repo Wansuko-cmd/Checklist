@@ -37,7 +37,15 @@ class ListAdapter(
         //設定の内容を反映するための処理
         holder.item.textSize = getTextSize(context).toFloat()
 
-        holder.setBind(editViewModel, position)
+        holder.setBind(editViewModel, editViewModel.list[position].id, this)
+
+//        holder.check.setOnClickListener{
+//            val oldValue = editViewModel.list[position]
+//            editViewModel.list.indexOfFirst { it.id == oldValue.id }.let{
+//                //notifyItemMoved(position, it)
+//                notifyDataSetChanged()
+//            }
+//        }
 
         /*
 
