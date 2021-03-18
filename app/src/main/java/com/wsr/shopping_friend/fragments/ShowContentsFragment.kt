@@ -3,6 +3,7 @@ package com.wsr.shopping_friend.fragments
 import android.app.AlertDialog
 import android.content.Intent
 import android.graphics.Color
+import android.icu.text.IDNA
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
@@ -304,9 +305,12 @@ class ShowContentsFragment : Fragment() {
     //editViewModelの内容をデータベースに反映させる関数
     private fun updateDatabase(){
         val list: MutableList<InfoList> = editViewModel.list
+        val updateList: MutableList<InfoList> = list.filter { it.item != "" } as MutableList<InfoList>
+        val deleteList: MutableList<InfoList> = list.filter { it.item == "" } as MutableList<InfoList>
 
         runBlocking {
-            viewModel.update(list)
+            viewModel.update(updateList)
+            viewModel.deleteList(deleteList)
         }
     }
 
