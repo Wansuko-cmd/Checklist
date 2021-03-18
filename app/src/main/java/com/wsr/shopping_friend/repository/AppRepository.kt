@@ -16,12 +16,6 @@ class AppRepository(private val infoListDao: InfoListDao) {
         return true
     }
 
-    //データをリストで挿入するための関数
-    suspend fun insertList(infoList: MutableList<InfoList>): Boolean{
-        infoListDao.insertList(infoList)
-        return true
-    }
-
     //データをアップデートするための関数
     suspend fun update(infoList: MutableList<InfoList>): Boolean{
         val list = infoListDao.update(infoList)

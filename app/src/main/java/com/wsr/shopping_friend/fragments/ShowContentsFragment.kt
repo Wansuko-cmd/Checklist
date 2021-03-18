@@ -3,7 +3,6 @@ package com.wsr.shopping_friend.fragments
 import android.app.AlertDialog
 import android.content.Intent
 import android.graphics.Color
-import android.icu.text.IDNA
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
@@ -20,7 +19,6 @@ import com.wsr.shopping_friend.adapter.ListAdapter
 import com.wsr.shopping_friend.databinding.FragmentShowContentsBinding
 import com.wsr.shopping_friend.info_list_database.InfoList
 import com.wsr.shopping_friend.preference.getShareAll
-import com.wsr.shopping_friend.type_file.ItemTouchHelperCallback
 import com.wsr.shopping_friend.type_file.renameAlert
 import com.wsr.shopping_friend.type_file.setHelp
 import com.wsr.shopping_friend.view_holder.ListViewHolder
@@ -62,7 +60,6 @@ class ShowContentsFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when(item.itemId){
             R.id.share -> {
-                //showContentsAdapter.notifyDataSetChanged()
                 shareText()
                 true
             }
@@ -141,7 +138,7 @@ class ShowContentsFragment : Fragment() {
 
         //スワイプでアイテムを消したり動かしたりするための処理
         val itemTouchHelperCallback = ItemTouchHelper(
-            object : ItemTouchHelperCallback() {
+            object : ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP or ItemTouchHelper.DOWN, ItemTouchHelper.LEFT) {
                 override fun onMove(
                     recyclerView: RecyclerView,
                     viewHolder: RecyclerView.ViewHolder,

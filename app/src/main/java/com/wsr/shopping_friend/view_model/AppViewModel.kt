@@ -26,10 +26,6 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
     suspend fun insert(infoList: InfoList) = withContext(Dispatchers.IO){
         repository.insert(infoList)
     }
-    //データをリストで挿入するための関数　ただ今保留
-    suspend fun insertList(infoList: MutableList<InfoList>): Boolean = withContext(Dispatchers.IO){
-        repository.insertList(infoList)
-    }
 
     //データをアップデートするための関数　ただ今保留
     suspend fun update(infoList: MutableList<InfoList>): Boolean = withContext(Dispatchers.IO){
