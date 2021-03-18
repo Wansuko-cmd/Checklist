@@ -136,25 +136,7 @@ class ShowContentsFragment : Fragment() {
 
             editButton.setOnClickListener{ addElements() }
 
-            deleteCheckButton.setOnClickListener {
-                AlertDialog.Builder(context)
-                    .setTitle(R.string.check_out_title)
-                    .setMessage(R.string.check_out_message)
-                    .setPositiveButton(R.string.check_out_positive) { _, _ ->
-                        val list = editViewModel.list.filter { !it.check }
-                        val deleteList = editViewModel.list.filter { it.check }
-                        runBlocking {
-                            viewModel.deleteList(deleteList as MutableList<InfoList>)
-                        }
-
-                        editViewModel.list = (list as MutableList<InfoList>)
-
-                        showContentsAdapter.notifyDataSetChanged()
-                    }
-                    .setNegativeButton(R.string.check_out_negative, null)
-                    .setCancelable(false)
-                    .show()
-            }
+            deleteCheckButton.setOnClickListener { deleteElements() }
         }
 
         //スワイプでアイテムを消したり動かしたりするための処理
@@ -167,14 +149,20 @@ class ShowContentsFragment : Fragment() {
                     target: RecyclerView.ViewHolder
                 ): Boolean {
                     if (viewHolder is ListViewHolder
-                        && !viewHolder.check.isChecked) {
+                        && target is ListViewHolder
+                        && !viewHolder.check.isChecked
+                        && !target.check.isChecked
+                    ) {
+                        val list = editViewModel.list
                         val fromPosition = viewHolder.adapterPosition
                         val toPosition = target.adapterPosition
 
-                        /*if(editViewModel.changePlace(fromPosition, toPosition)){
-                            showContentsAdapter.notifyItemMoved(fromPosition, toPosition)
-                            return false
-                        }*/
+                        val fromValue = list[fromPosition]
+                        list[fromPosition] = list[fromPosition].copy(number = list[toPosition].number)
+                        list[toPosition] = list[toPosition].copy(number = fromValue.number)
+
+                        editViewModel.list = list
+                        showContentsAdapter.notifyItemMoved(fromPosition, toPosition)
                     }
                     return false
                 }
@@ -228,24 +216,7 @@ class ShowContentsFragment : Fragment() {
 
     override fun onPause() {
         snackBar.dismiss()
-        /*val deleteList = editViewModel.getDeleteList()
-        if (title != "") {
-            val numList = editViewModel.getNumList()
-            for (i in editViewModel.getList) {
-                if (i.item == "") {
-                    deleteList.add(i)
-                    numList.removeAll { it.id == i.id }
-                }
-            }
-            numList.sortBy { it.number }
-            for ((count, _) in numList.withIndex()) {
-                numList[count] = numList[count].copy(number = count)
-            }
-            if(updateDatabase(editViewModel.getDeleteList())){
-                Log.i("save", "Success")
-            }
-        }*/
-        //updateDatabase(mutableListOf())
+        updateDatabase()
         super.onPause()
     }
 
@@ -288,6 +259,9 @@ class ShowContentsFragment : Fragment() {
 
     //空欄を追加するための処理
     private fun addElements() {
+
+        snackBar.dismiss()
+
         val id = UUID.randomUUID().toString()
         editViewModel.list.maxByOrNull { it.number }?.let{ maxNumList ->
 
@@ -297,41 +271,42 @@ class ShowContentsFragment : Fragment() {
             newList.add(newColumn)
             editViewModel.list  = newList
             showContentsAdapter.notifyItemInserted(editViewModel.list.filter { !it.check }.size)
+            runBlocking {
+                viewModel.insert(newColumn)
+            }
         }
-
-//        runBlocking {
-//            viewModel.insert(newColumn)
-//        }
 //        recyclerView!!.scrollToPosition(editViewModel.setNumber(id))
 //        showContentsAdapter.focus = editViewModel.setNumber(id)
 //        showContentsAdapter.notifyItemInserted(editViewModel.nonCheckNumber())
     }
 
-    //editViewModelの内容をデータベースに反映させる関数
-    private fun updateDatabase(deleteList: MutableList<InfoList>) : Boolean {
-        val list: MutableList<InfoList> =
-            (editViewModel.list.sortedBy { it.number }) as MutableList<InfoList>
-        /*for (i in editViewModel.getNumList()) {
-            list.add(
-                InfoList(
-                    i.id,
-                    i.number,
-                    title,
-                    editViewModel.getCheck(i.id),
-                    editViewModel.getItem(i.id)
-                )
-            )
-        }*/
-        //val tag = "SendList"
-        //Log.i(tag, list.toString())
+    private fun deleteElements(){
+        AlertDialog.Builder(context)
+            .setTitle(R.string.check_out_title)
+            .setMessage(R.string.check_out_message)
+            .setPositiveButton(R.string.check_out_positive) { _, _ ->
+                val list = editViewModel.list.filter { !it.check }
+                val deleteList = editViewModel.list.filter { it.check }
+                runBlocking {
+                    viewModel.deleteList(deleteList as MutableList<InfoList>)
+                }
 
+                editViewModel.list = (list as MutableList<InfoList>)
+
+                showContentsAdapter.notifyDataSetChanged()
+            }
+            .setNegativeButton(R.string.check_out_negative, null)
+            .setCancelable(false)
+            .show()
+    }
+
+    //editViewModelの内容をデータベースに反映させる関数
+    private fun updateDatabase(){
+        val list: MutableList<InfoList> = editViewModel.list
 
         runBlocking {
-            viewModel.deleteList(deleteList)
             viewModel.update(list)
-            viewModel.insertList(list)
         }
-        return true
     }
 
     //Undo機能の設定
