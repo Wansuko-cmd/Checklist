@@ -122,7 +122,7 @@ class ShowContentsFragment : Fragment() {
         ).get(EditViewModel::class.java)
 
         //Adapterの初期化
-        showContentsAdapter = ListAdapter(requireContext(), editViewModel)
+        showContentsAdapter = ListAdapter(requireContext(), editViewModel, this)
 
         //recyclerViewの初期化
         this.recyclerView = binding.showContentsRecyclerView.apply{
@@ -258,7 +258,7 @@ class ShowContentsFragment : Fragment() {
     }
 
     //空欄を追加するための処理
-    private fun addElements() {
+    fun addElements() {
 
         snackBar.dismiss()
 
@@ -273,9 +273,12 @@ class ShowContentsFragment : Fragment() {
         runBlocking {
             viewModel.insert(newColumn)
         }
-//        recyclerView!!.scrollToPosition(editViewModel.setNumber(id))
-//        showContentsAdapter.focus = editViewModel.setNumber(id)
-//        showContentsAdapter.notifyItemInserted(editViewModel.nonCheckNumber())
+
+        newList.indexOfFirst { it.id == id }.run{
+            recyclerView!!.scrollToPosition(this)
+            showContentsAdapter.focus = this
+            showContentsAdapter.notifyItemInserted(this)
+        }
     }
 
     private fun deleteElements(){
