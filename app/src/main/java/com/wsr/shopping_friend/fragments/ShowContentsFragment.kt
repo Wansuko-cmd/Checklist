@@ -134,10 +134,7 @@ class ShowContentsFragment : Fragment() {
 
         binding.apply {
 
-            editButton.setOnClickListener{
-                addElements()
-                //showContentsAdapter.notifyDataSetChanged()
-            }
+            editButton.setOnClickListener{ addElements() }
 
             deleteCheckButton.setOnClickListener {
                 AlertDialog.Builder(context)
@@ -146,7 +143,7 @@ class ShowContentsFragment : Fragment() {
                     .setPositiveButton(R.string.check_out_positive) { _, _ ->
                         val list = editViewModel.list.filter { !it.check }
 
-                        editViewModel.updateList()
+                        editViewModel.list = (list as MutableList<InfoList>)
 
                         showContentsAdapter.notifyDataSetChanged()
                     }
@@ -198,9 +195,12 @@ class ShowContentsFragment : Fragment() {
                 }
 
                 override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                    viewHolder.let {
-                        showContentsAdapter.deleteElement(it.adapterPosition)
-                    }
+                    val list = editViewModel.list
+                    val index = viewHolder.adapterPosition
+
+                    list.removeAt(index)
+                    showContentsAdapter.notifyItemRemoved(index)
+                    editViewModel.list = list
                 }
 
                 override fun clearView(
@@ -295,13 +295,15 @@ class ShowContentsFragment : Fragment() {
     //空欄を追加するための処理
     private fun addElements() {
         val id = UUID.randomUUID().toString()
-        val number = showContentsAdapter.itemCount
-        val newColumn = InfoList(id, number, title, false, "")
+        editViewModel.list.maxByOrNull { it.number }?.let{ maxNumList ->
 
-        val newList = editViewModel.list.toMutableList()
-        newList.add(newColumn)
-        editViewModel.list  = newList
-        showContentsAdapter.notifyItemInserted(editViewModel.list.filter { !it.check }.size)
+            val newColumn = InfoList(id, maxNumList.number + 1, title, false, "")
+
+            val newList = editViewModel.list
+            newList.add(newColumn)
+            editViewModel.list  = newList
+            showContentsAdapter.notifyItemInserted(editViewModel.list.filter { !it.check }.size)
+        }
 
 //        runBlocking {
 //            viewModel.insert(newColumn)

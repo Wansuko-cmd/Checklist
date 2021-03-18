@@ -23,7 +23,7 @@ class ListViewHolder(private val binding: AddChecklistBinding): RecyclerView.Vie
                 val newIndex = editViewModel.list.sortedBy { it.number }.sortedBy { it.check }.indexOfFirst { it.id == id }
                 setColor(editViewModel, id)
                 listAdapter.notifyItemMoved(oldIndex, newIndex)
-                editViewModel.updateList()
+                editViewModel.list = editViewModel.list
             }
 
             item.setOnLongClickListener {
