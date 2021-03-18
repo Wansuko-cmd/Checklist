@@ -243,7 +243,7 @@ class ShowContentsFragment : Fragment() {
                     tempList.add(value)
                 }
             }
-            editViewModel.list = tempList
+            editViewModel.initializeList(tempList)
         }
     }
 
@@ -263,17 +263,15 @@ class ShowContentsFragment : Fragment() {
         snackBar.dismiss()
 
         val id = UUID.randomUUID().toString()
-        editViewModel.list.maxByOrNull { it.number }?.let{ maxNumList ->
+        val number = editViewModel.list.maxByOrNull { it.number }?.number?.plus(1) ?: 0
+        val newColumn = InfoList(id, number, title, false, "")
 
-            val newColumn = InfoList(id, maxNumList.number + 1, title, false, "")
-
-            val newList = editViewModel.list
-            newList.add(newColumn)
-            editViewModel.list  = newList
-            showContentsAdapter.notifyItemInserted(editViewModel.list.filter { !it.check }.size)
-            runBlocking {
-                viewModel.insert(newColumn)
-            }
+        val newList = editViewModel.list
+        newList.add(newColumn)
+        editViewModel.list  = newList
+        showContentsAdapter.notifyItemInserted(editViewModel.list.filter { !it.check }.size)
+        runBlocking {
+            viewModel.insert(newColumn)
         }
 //        recyclerView!!.scrollToPosition(editViewModel.setNumber(id))
 //        showContentsAdapter.focus = editViewModel.setNumber(id)
