@@ -15,8 +15,8 @@ android {
         applicationId "com.wsr.shopping_friend"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 10
-        versionName "1.5"
+        versionCode 11
+        versionName "2.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         javaCompileOptions {
             annotationProcessorOptions {
@@ -35,6 +35,11 @@ android {
 
     kotlinOptions {
         jvmTarget = '1.8'
+    }
+
+    //データバインディングを有効化
+    dataBinding {
+        enabled = true
     }
 
     //ViewBindingを有効化

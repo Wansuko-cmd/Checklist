@@ -73,55 +73,43 @@ class ShowTitleFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        //変数の初期化
+        //ActionBarのタイトルの設定
+        (activity as AppCompatActivity).supportActionBar?.run {
+            title = getString(R.string.app_name)
+            setDisplayHomeAsUpEnabled(false)
+        }
+
+        //DBとの接続用のViewModelの初期化
         viewModel = ViewModelProvider(
             this,
             ViewModelProvider.AndroidViewModelFactory(requireActivity().application)
-        ).get(AppViewModel::class.java)
-        mainAdapter = MainAdapter(requireContext())
-
-        //ActionBarのタイトルの設定
-        (activity as AppCompatActivity).supportActionBar?.title = getString(R.string.app_name)
-        
-        //recyclerViewの初期化
-        this.recyclerView = binding.showTitleRecyclerView
-        this.recyclerView?.apply {
-            setHasFixedSize(true)
-            layoutManager = LinearLayoutManager(context)
-            adapter = mainAdapter
+        ).get(AppViewModel::class.java).apply {
+            infoList.observe(viewLifecycleOwner, { list ->
+                list?.let { mainAdapter.setInfoList(it) }
+            })
         }
 
-        //mainAdapterの設定
-        mainAdapter.apply {
+        //Adapterの初期化
+        mainAdapter = MainAdapter().apply {
+
             //タイトルが押されたときの処理
             clickTitleOnListener = { title -> makeShowContents(title) }
 
             //deleteボタンが押された際の処理
-            clickDeleteOnListener = { title, position ->
-                AlertDialog.Builder(context)
-                    .setTitle(R.string.delete_with_title_title)
-                    .setMessage(R.string.delete_with_title_message)
-                    .setPositiveButton(R.string.delete_with_title_positive) { _, _ ->
-                        mainAdapter.notifyItemRemoved(position)
-                        runBlocking {
-                            viewModel.deleteWithTitle(title)
-                        }
-                    }
-                    .setNegativeButton(R.string.delete_with_title_negative, null)
-                    .setCancelable(true)
-                    .show()
-            }
+            clickDeleteOnListener = { title, position -> deleteList(title, position) }
+        }
+        
+        //recyclerViewの初期化
+        this.recyclerView = binding.showTitleRecyclerView.apply {
+            setHasFixedSize(true)
+            layoutManager = LinearLayoutManager(context)
+            adapter = mainAdapter
         }
 
         //fabボタンが押された際の処理
         binding.fab.setOnClickListener {
             renameAlert(requireContext(), makeShowContents, mainAdapter.titleList, "")
         }
-
-        //viewModelが更新された際の処理
-        viewModel.infoList.observe(viewLifecycleOwner, { list ->
-            list?.let { mainAdapter.setInfoList(it) }
-        })
     }
 
     //設定から戻ったときに結果を反映するための処理
@@ -142,5 +130,21 @@ class ShowTitleFragment : Fragment() {
     private val makeShowContents: (String) -> Unit = { title ->
         val action = ShowTitleFragmentDirections.actionTitleFragmentToContentsFragment(title)
         findNavController().navigate(action)
+    }
+
+    //タイトル画面で削除ボタンが押されたときの処理
+    private val deleteList: (String, Int) -> Unit =  { title, position ->
+        AlertDialog.Builder(context)
+            .setTitle(R.string.delete_with_title_title)
+            .setMessage(R.string.delete_with_title_message)
+            .setPositiveButton(R.string.delete_with_title_positive) { _, _ ->
+                mainAdapter.notifyItemRemoved(position)
+                runBlocking {
+                    viewModel.deleteWithTitle(title)
+                }
+            }
+            .setNegativeButton(R.string.delete_with_title_negative, null)
+            .setCancelable(true)
+            .show()
     }
 }

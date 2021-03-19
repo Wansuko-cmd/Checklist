@@ -7,7 +7,6 @@ import com.wsr.shopping_friend.info_list_database.InfoListDao
 import com.wsr.shopping_friend.info_list_database.InfoListDatabase
 import com.wsr.shopping_friend.repository.AppRepository
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 //データベースとやり取りするためのViewModel
@@ -25,10 +24,6 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
     //データを一つずつ挿入するための関数
     suspend fun insert(infoList: InfoList) = withContext(Dispatchers.IO){
         repository.insert(infoList)
-    }
-    //データをリストで挿入するための関数　ただ今保留
-    suspend fun insertList(infoList: MutableList<InfoList>): Boolean = withContext(Dispatchers.IO){
-        repository.insertList(infoList)
     }
 
     //データをアップデートするための関数　ただ今保留

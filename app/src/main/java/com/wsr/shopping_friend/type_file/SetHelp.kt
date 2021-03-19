@@ -9,7 +9,9 @@ import java.util.*
 //ヘルプ画面を用意するための関数
 fun setHelp(context: Context, editViewModel: EditViewModel) {
     val helpList = context.resources.getStringArray(R.array.help)
+    val list = mutableListOf<InfoList>()
     for((count, i) in helpList.withIndex()){
-        editViewModel.insert(InfoList(UUID.randomUUID().toString(), count, "", false, i))
+        list.add(InfoList(UUID.randomUUID().toString(), count, "", false, i))
     }
+    editViewModel.list = list
 }

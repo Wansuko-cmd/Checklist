@@ -1,6 +1,5 @@
 package com.wsr.shopping_friend.adapter
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -10,7 +9,7 @@ import com.wsr.shopping_friend.info_list_database.InfoList
 import com.wsr.shopping_friend.preference.getTextSize
 
 //リストのタイトルを並べるRecyclerViewのためのアダプター
-class MainAdapter(private val context: Context):
+class MainAdapter:
     RecyclerView.Adapter<MainViewHolder>(){
 
     //全てのタイトル名を保存するリスト
@@ -33,12 +32,15 @@ class MainAdapter(private val context: Context):
 
     //インスタンス化したViewHolderの中の値の変更
     override fun onBindViewHolder(holder: MainViewHolder, position: Int) {
-        holder.title.text = titleList[position]
-        holder.title.textSize = getTextSize(context).toFloat()
 
-        //タイトル名をクリックした際の処理
-        holder.title.setOnClickListener {
-            clickTitleOnListener(holder.title.text.toString())
+        holder.title.apply {
+            text = titleList[position]
+            textSize = getTextSize(context).toFloat()
+
+            //タイトル名をクリックした際の処理
+            setOnClickListener {
+                clickTitleOnListener(holder.title.text.toString())
+            }
         }
 
         //deleteボタンを押した際の処理

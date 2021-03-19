@@ -14,10 +14,6 @@ interface InfoListDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(infoList: InfoList)
 
-    //データをリストで挿入するための関数
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertList(infoList: MutableList<InfoList>)
-
     //データをアップデートするための関数
     @Update
     suspend fun update(infoList: MutableList<InfoList>): Int
