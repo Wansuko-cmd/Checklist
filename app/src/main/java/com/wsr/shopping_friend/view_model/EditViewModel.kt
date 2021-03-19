@@ -44,6 +44,6 @@ class EditViewModel() : ViewModel() {
     }
 
     fun initializeList(list: MutableList<InfoList>){
-        _list.postValue(list.sortedBy { it.number }.sortedBy { it.check } as MutableList<InfoList>)
+        _list.postValue(list.sortedBy { it.number }.sortedBy { it.check }.toMutableList())
     }
 }
