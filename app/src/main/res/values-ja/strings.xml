@@ -4,7 +4,6 @@
 
     <string name="title">タイトル</string>
     <string name="check">チェック</string>
-    <string name="memo">メモ</string>
 
     <!--ImageButtonの文字の設定-->
     <string name="add">アイテムを足す</string>
@@ -43,7 +42,6 @@
     <string name="show_contents_recycler_view">チェックリストを確認してください</string>
 
     <!--メニュー画面-->
-    <string name="back">バック</string>
     <string name="help">ヘルプ</string>
     <string name="settings">設定</string>
     <string name="rename_title" >タイトル編集</string>

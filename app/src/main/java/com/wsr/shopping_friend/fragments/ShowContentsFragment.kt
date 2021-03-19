@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -74,6 +75,10 @@ class ShowContentsFragment : Fragment() {
                 }
                 true
             }
+            android.R.id.home ->{
+                findNavController().navigate(R.id.back_to_title_fragment)
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -94,7 +99,10 @@ class ShowContentsFragment : Fragment() {
         title = args.content
 
         //actionbarの設定
-        (activity as AppCompatActivity).supportActionBar?.title = title
+        (activity as AppCompatActivity).supportActionBar?.run{
+            title = title
+            setDisplayHomeAsUpEnabled(true)
+        }
 
         //snackBarの設定
         snackBar = setSnackBar()
@@ -130,6 +138,7 @@ class ShowContentsFragment : Fragment() {
             adapter = showContentsAdapter
         }
 
+        //下のボタンの設定
         binding.apply {
             editButton.setOnClickListener{ addElements() }
 
@@ -139,6 +148,8 @@ class ShowContentsFragment : Fragment() {
         //スワイプでアイテムを消したり動かしたりするための処理
         val itemTouchHelperCallback = ItemTouchHelper(
             object : ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP or ItemTouchHelper.DOWN, ItemTouchHelper.LEFT) {
+
+                //移動させる処理
                 override fun onMove(
                     recyclerView: RecyclerView,
                     viewHolder: RecyclerView.ViewHolder,
@@ -163,6 +174,7 @@ class ShowContentsFragment : Fragment() {
                     return false
                 }
 
+                //スワイプで削除する処理
                 override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
 
                     val list = editViewModel.list
@@ -197,6 +209,7 @@ class ShowContentsFragment : Fragment() {
 
         itemTouchHelperCallback.attachToRecyclerView(recyclerView)
 
+        //LiveDataの内容が反映されるのを待つ処理
         checkSetData = GlobalScope.launch(Dispatchers.Main) {
             if (editViewModel.checkSetData()) showContentsAdapter.notifyDataSetChanged()
         }
@@ -209,10 +222,10 @@ class ShowContentsFragment : Fragment() {
         showContentsAdapter.notifyDataSetChanged()
     }
 
-    override fun onPause() {
+    override fun onStop() {
         snackBar.dismiss()
         updateDatabase()
-        super.onPause()
+        super.onStop()
     }
 
     override fun onDestroyView() {
@@ -238,7 +251,13 @@ class ShowContentsFragment : Fragment() {
                     tempList.add(value)
                 }
             }
-            editViewModel.initializeList(tempList)
+            if (tempList.any { it.item == "" }){
+                val deleteList: MutableList<InfoList> = list.filter { it.item == "" } as MutableList<InfoList>
+                runBlocking {
+                    viewModel.deleteList(deleteList)
+                }
+            }
+            editViewModel.initializeList(tempList.filter { it.item != "" } as MutableList<InfoList>)
         }
     }
 
@@ -276,6 +295,7 @@ class ShowContentsFragment : Fragment() {
         }
     }
 
+    //チェックのついている要素を全て消す処理
     private fun deleteElements(){
         AlertDialog.Builder(context)
             .setTitle(R.string.check_out_title)

@@ -74,7 +74,10 @@ class ShowTitleFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         //ActionBarのタイトルの設定
-        (activity as AppCompatActivity).supportActionBar?.title = getString(R.string.app_name)
+        (activity as AppCompatActivity).supportActionBar?.run {
+            title = getString(R.string.app_name)
+            setDisplayHomeAsUpEnabled(false)
+        }
 
         //DBとの接続用のViewModelの初期化
         viewModel = ViewModelProvider(
@@ -87,7 +90,7 @@ class ShowTitleFragment : Fragment() {
         }
 
         //Adapterの初期化
-        mainAdapter = MainAdapter(requireContext()).apply {
+        mainAdapter = MainAdapter().apply {
 
             //タイトルが押されたときの処理
             clickTitleOnListener = { title -> makeShowContents(title) }

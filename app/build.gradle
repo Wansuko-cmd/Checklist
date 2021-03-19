@@ -15,8 +15,8 @@ android {
         applicationId "com.wsr.shopping_friend"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 10
-        versionName "1.5"
+        versionCode 11
+        versionName "2.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         javaCompileOptions {
             annotationProcessorOptions {

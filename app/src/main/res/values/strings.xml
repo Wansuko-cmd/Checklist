@@ -4,7 +4,6 @@
 
     <string name="title">TITLE</string>
     <string name="check">Check</string>
-    <string name="memo">MEMO</string>
 
     <!--ImageButtonの文字の設定-->
     <string name="add">Add</string>
@@ -43,7 +42,6 @@
     <string name="show_contents_recycler_view">Please check the items</string>
 
     <!--メニュー画面-->
-    <string name="back">back</string>
     <string name="help">help</string>
     <string name="settings">settings</string>
     <string name="rename_title" >rename title</string>

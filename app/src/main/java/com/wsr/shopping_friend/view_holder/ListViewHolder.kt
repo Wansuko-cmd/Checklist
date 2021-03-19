@@ -3,15 +3,16 @@ package com.wsr.shopping_friend.view_holder
 import android.graphics.Color
 import android.widget.EditText
 import androidx.recyclerview.widget.RecyclerView
-import com.wsr.shopping_friend.databinding.AddChecklistBinding
+import com.wsr.shopping_friend.databinding.ChecklistColumnBinding
 import com.wsr.shopping_friend.view_model.EditViewModel
 
 //ListAdapterのためのホルダー
-class ListViewHolder(private val binding: AddChecklistBinding): RecyclerView.ViewHolder(binding.root) {
+class ListViewHolder(private val binding: ChecklistColumnBinding): RecyclerView.ViewHolder(binding.root) {
     val item: EditText = binding.Item
     val check = binding.CheckBox
     val view = binding.root
 
+    //要素の初期設定をする処理
     fun setBind(editViewModel: EditViewModel, id: String) {
         binding.run {
             this.value = editViewModel.list[editViewModel.list.indexOfFirst { it.id == id }]

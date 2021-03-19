@@ -1,8 +1,6 @@
 package com.wsr.shopping_friend.view_model
 
-import android.app.Application
 import android.util.Log
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.wsr.shopping_friend.info_list_database.InfoList
@@ -11,7 +9,7 @@ import kotlinx.coroutines.withTimeout
 import java.lang.Exception
 
 //リストのデータを、並び順とかを加工して保存するためのViewModel
-class EditViewModel() : ViewModel() {
+class EditViewModel : ViewModel() {
 
     //InfoListをデータベースに共有せずに保持するための変数
     private val _list: MutableLiveData<MutableList<InfoList>> = MutableLiveData<MutableList<InfoList>>()
@@ -43,6 +41,7 @@ class EditViewModel() : ViewModel() {
         }
     }
 
+    //LiveDataの中身を初期化するための処理
     fun initializeList(list: MutableList<InfoList>){
         _list.postValue(list.sortedBy { it.number }.sortedBy { it.check }.toMutableList())
     }
