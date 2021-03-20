@@ -287,12 +287,11 @@ class ShowContentsFragment : Fragment() {
         val newList = editViewModel.list
         newList.add(newColumn)
         editViewModel.list  = newList
-        showContentsAdapter.notifyItemInserted(editViewModel.list.filter { !it.check }.size)
         runBlocking {
             viewModel.insert(newColumn)
         }
 
-        newList.indexOfFirst { it.id == id }.run{
+        newList.sortedBy { it.number }.sortedBy { it.check }.indexOfFirst { it.id == id }.run{
             recyclerView!!.scrollToPosition(this)
             showContentsAdapter.focus = this
             showContentsAdapter.notifyItemInserted(this)
