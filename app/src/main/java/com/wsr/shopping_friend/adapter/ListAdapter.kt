@@ -3,6 +3,7 @@ package com.wsr.shopping_friend.adapter
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import androidx.recyclerview.widget.RecyclerView
 import com.wsr.shopping_friend.view_holder.ListViewHolder
 import com.wsr.shopping_friend.databinding.ChecklistColumnBinding
@@ -66,8 +67,9 @@ class ListAdapter(
 
                 //Enterの入力を検出する処理
                 setOnEditorActionListener { _, i, _ ->
-                    //Enterを押したとき、i == 0　となる。EditorInfo.IME_ACTION_DONEは違う値なので注意
-                    if(i == 0 && editViewModel.list.sortedBy { it.check }.size == adapterPosition + 1){
+                    if(
+                        i == EditorInfo.IME_ACTION_DONE ||
+                        (i == EditorInfo.IME_ACTION_NEXT && editViewModel.list.filter { !it.check }.size == adapterPosition + 1)){
                         showContentsFragment.addElements()
                         true
                     }else{
