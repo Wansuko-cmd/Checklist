@@ -19,6 +19,15 @@
             android:dialogTitle="@string/text_size"
             android:defaultValue="medium"/>
 
+        <ListPreference
+            android:key="toolbar_text_theme"
+            android:title="@string/toolbar_text_theme"
+            android:entries="@array/toolbar_text_theme_labels"
+            android:entryValues="@array/toolbar_text_theme_values"
+            android:dialogTitle="@string/toolbar_text_theme"
+            android:defaultValue="black"
+            />
+
         <SwitchPreferenceCompat
             android:key="share_all"
             android:title="@string/share_all_title"

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="toolbar_text_theme_labels">
+        <item>@string/black</item>
+        <item>@string/white</item>
+    </string-array>
+
+    <string-array name="toolbar_text_theme_values">
+        <item>black</item>
+        <item>white</item>
+    </string-array>
+</resources>

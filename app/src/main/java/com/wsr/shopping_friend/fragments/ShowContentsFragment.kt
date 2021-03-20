@@ -20,6 +20,7 @@ import com.wsr.shopping_friend.adapter.ListAdapter
 import com.wsr.shopping_friend.databinding.FragmentShowContentsBinding
 import com.wsr.shopping_friend.info_list_database.InfoList
 import com.wsr.shopping_friend.preference.getShareAll
+import com.wsr.shopping_friend.preference.getToolbarTextTheme
 import com.wsr.shopping_friend.type_file.renameAlert
 import com.wsr.shopping_friend.type_file.setHelp
 import com.wsr.shopping_friend.view_holder.ListViewHolder
@@ -49,40 +50,6 @@ class ShowContentsFragment : Fragment() {
     private lateinit var checkSetData: Job
     private var deleteValue: InfoList? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.show_menu, menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when(item.itemId){
-            R.id.share -> {
-                shareText()
-                true
-            }
-            R.id.rename_title -> {
-                snackBar.dismiss()
-                if (title != "") renameAlert(requireContext(), changeTitle, titleList, title)
-                else{
-                    AlertDialog.Builder(requireContext())
-                        .setMessage(getString(R.string.no_edit_title_message))
-                        .setPositiveButton(getString(R.string.no_edit_title_positive), null)
-                        .show()
-                }
-                true
-            }
-            android.R.id.home ->{
-                findNavController().navigate(R.id.back_to_title_fragment)
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -98,11 +65,8 @@ class ShowContentsFragment : Fragment() {
         //タイトルの初期化
         title = args.content
 
-        //actionbarの設定
-        (activity as AppCompatActivity).supportActionBar?.run{
-            title = title
-            setDisplayHomeAsUpEnabled(true)
-        }
+        //Toolbarの設定
+        setToolbar()
 
         //snackBarの設定
         snackBar = setSnackBar()
@@ -328,6 +292,53 @@ class ShowContentsFragment : Fragment() {
         runBlocking {
             viewModel.update(updateList)
             viewModel.deleteList(deleteList)
+        }
+    }
+
+    //Toolbarの設定
+    private fun setToolbar(){
+        binding.contentsToolbar.also{
+            when(getToolbarTextTheme(requireContext())){
+                "white" -> {
+                    it.setTitleTextColor(Color.WHITE)
+                    it.inflateMenu(R.menu.show_menu_white)
+                    it.setNavigationIcon(R.drawable.ic_back_arrow_white)
+                }
+                else -> {
+                    it.inflateMenu(R.menu.show_menu)
+                    it.setNavigationIcon(R.drawable.ic_back_arrow)
+                }
+            }
+
+            it.title = if (title != "") title else "Help"
+
+            it.setOnClickListener{
+                snackBar.dismiss()
+                if (title != "") renameAlert(requireContext(), changeTitle, titleList, title)
+                else{
+                    AlertDialog.Builder(requireContext())
+                        .setMessage(getString(R.string.no_edit_title_message))
+                        .setPositiveButton(getString(R.string.no_edit_title_positive), null)
+                        .show()
+                }
+            }
+            it.setOnMenuItemClickListener { menuItem ->
+                when(menuItem.itemId){
+                    R.id.share -> {
+                        shareText()
+                    }
+                    R.id.reload -> {
+                        showContentsAdapter.notifyDataSetChanged()
+                    }
+                    android.R.id.home ->{
+                        findNavController().navigate(R.id.back_to_title_fragment)
+                    }
+                }
+                true
+            }
+            it.setNavigationOnClickListener {
+                findNavController().navigate(R.id.back_to_title_fragment)
+            }
         }
     }
 

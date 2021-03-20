@@ -1,4 +1,4 @@
-package com.wsr.shopping_friend.view
+package com.wsr.shopping_friend.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

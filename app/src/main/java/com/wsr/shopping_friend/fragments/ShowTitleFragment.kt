@@ -2,6 +2,7 @@ package com.wsr.shopping_friend.fragments
 
 import android.app.AlertDialog
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
@@ -14,6 +15,7 @@ import com.wsr.shopping_friend.R
 import com.wsr.shopping_friend.adapter.MainAdapter
 import com.wsr.shopping_friend.databinding.FragmentShowTitleBinding
 import com.wsr.shopping_friend.preference.ShowPreference
+import com.wsr.shopping_friend.preference.getToolbarTextTheme
 import com.wsr.shopping_friend.type_file.renameAlert
 import com.wsr.shopping_friend.view_model.AppViewModel
 import kotlinx.coroutines.runBlocking
@@ -41,43 +43,11 @@ class ShowTitleFragment : Fragment() {
         return binding.root
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.title_menu, menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when(item.itemId){
-            //設定画面
-            R.id.settings -> {
-                val intent = Intent(requireActivity(), ShowPreference::class.java)
-                intent.putExtra("Purpose", "settings")
-                startActivity(intent)
-                true
-            }
-            //ヘルプ画面
-            R.id.help -> {
-                val action =
-                    ShowTitleFragmentDirections.actionTitleFragmentToContentsFragment("")
-                findNavController().navigate(action)
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        //ActionBarのタイトルの設定
-        (activity as AppCompatActivity).supportActionBar?.run {
-            title = getString(R.string.app_name)
-            setDisplayHomeAsUpEnabled(false)
-        }
+        //Toolbarの設定
+        setToolbar()
 
         //DBとの接続用のViewModelの初期化
         viewModel = ViewModelProvider(
@@ -146,5 +116,39 @@ class ShowTitleFragment : Fragment() {
             .setNegativeButton(R.string.delete_with_title_negative, null)
             .setCancelable(true)
             .show()
+    }
+
+    //Toolbarの設定
+    private fun setToolbar(){
+        binding.titleToolbar.also{
+
+            when(getToolbarTextTheme(requireContext())){
+                "white" -> {
+                    it.setTitleTextColor(Color.WHITE)
+                    it.inflateMenu(R.menu.title_menu_white)
+                }
+                else ->{
+                    it.inflateMenu(R.menu.title_menu)
+                }
+            }
+
+            it.setOnMenuItemClickListener { menuItem ->
+                when(menuItem.itemId) {
+                    //設定画面
+                    R.id.settings -> {
+                        val intent = Intent(requireActivity(), ShowPreference::class.java)
+                        intent.putExtra("Purpose", "settings")
+                        startActivity(intent)
+                    }
+                    //ヘルプ画面
+                    R.id.help -> {
+                        val action =
+                            ShowTitleFragmentDirections.actionTitleFragmentToContentsFragment("")
+                        findNavController().navigate(action)
+                    }
+                }
+                true
+            }
+        }
     }
 }

@@ -30,6 +30,11 @@ fun getTextSize(context: Context): Int{
     }
 }
 
+fun getToolbarTextTheme(context: Context): String {
+    val pref = PreferenceManager.getDefaultSharedPreferences(context)
+    return pref.getString("toolbar_text_theme", "black") ?: "black"
+}
+
 //デフォルトタイトルを確認するための関数
 fun getDefaultTitle(context: Context): String{
     val pref = PreferenceManager.getDefaultSharedPreferences(context)

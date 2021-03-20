@@ -44,7 +44,7 @@
     <!--メニュー画面-->
     <string name="help">help</string>
     <string name="settings">settings</string>
-    <string name="rename_title" >rename title</string>
+    <string name="reload" >reload</string>
     <string name="share">share</string>
     <string name="list_top">-&#160;</string>
     <string name="no_value">There is no value to share</string>
@@ -52,6 +52,7 @@
     <!--設定画面-->
     <!--バージョン-->
     <string name="setting_version">1.0</string>
+    <string name="application_version">1.0</string>
 
     <!--デフォルトタイトル設定-->
     <string name="default_title">Default title(You Can\'t set Empty.)</string>
@@ -62,6 +63,11 @@
     <string name="small_size">Small</string>
     <string name="medium_size">Medium</string>
     <string name="large_size">Large</string>
+
+    <!--ツールバーの文字の色の設定-->
+    <string name="toolbar_text_theme">Toolbar Text Theme</string>
+    <string name="black">Black</string>
+    <string name="white">White</string>
 
     <!--共有の設定-->
     <string name="share_all_title">Setting of share</string>

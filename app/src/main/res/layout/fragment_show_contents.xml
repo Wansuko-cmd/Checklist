@@ -5,6 +5,16 @@
     android:layout_height="match_parent"
     android:id="@+id/show_contents_fragment">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/contents_toolbar"
+        app:title="@string/app_name"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/dodgerBlue"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        android:focusableInTouchMode="true"
+        app:layout_constraintTop_toTopOf="parent"/>
+
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/check_line"
         android:layout_marginRight="10dp"
@@ -12,7 +22,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/contents_toolbar"
         android:text="@string/check"/>
 
     <androidx.recyclerview.widget.RecyclerView

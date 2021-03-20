@@ -3,15 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/share"
-        android:title="@string/share"
-        android:icon="@drawable/ic_share"
+        android:id="@+id/help"
+        android:title="@string/help"
+        android:icon="@drawable/ic_help_white"
         app:showAsAction="ifRoom"/>
 
     <item
-        android:id="@+id/reload"
-        android:title="@string/reload"
-        android:icon="@drawable/ic_reload"
+        android:id="@+id/settings"
+        android:title="@string/settings"
+        android:icon="@drawable/ic_settings_white"
         app:showAsAction="ifRoom"/>
 
 </menu>
