@@ -128,7 +128,11 @@ class ShowContentsFragment : Fragment() {
         }
 
         //Adapterの初期化
-        showContentsAdapter = ListAdapter(editViewModel, this)
+        showContentsAdapter = ListAdapter(editViewModel, this).apply {
+            scrollToPosition = {
+                recyclerView!!.scrollToPosition(it)
+            }
+        }
 
         //recyclerViewの初期化
         this.recyclerView = binding.showContentsRecyclerView.apply{

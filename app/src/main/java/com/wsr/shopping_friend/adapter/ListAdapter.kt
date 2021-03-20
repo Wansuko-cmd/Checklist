@@ -19,6 +19,8 @@ class ListAdapter(
     //使用する関数、変数の定義
     var focus = -1
 
+    var scrollToPosition: (Int) -> Unit = {}
+
     //ViewHolderのインスタンスを形成
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -47,6 +49,7 @@ class ListAdapter(
                 setColor(editViewModel, id)
                 notifyItemMoved(oldIndex, newIndex)
                 editViewModel.list = editViewModel.list
+                scrollToPosition(oldIndex)
             }
 
             //EditTextに関する処理をする部分
