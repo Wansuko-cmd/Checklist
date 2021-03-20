@@ -2,15 +2,20 @@ package com.wsr.shopping_friend.preference
 
 import android.content.Context
 import androidx.preference.PreferenceManager
+import com.wsr.shopping_friend.BuildConfig
 import com.wsr.shopping_friend.R
 
 //設定のバージョンを確認する関数
 fun checkVersion(context: Context){
     val pref = PreferenceManager.getDefaultSharedPreferences(context)
-    if(pref.getString("version", "1.0") != context.getString(R.string.setting_version)){
+    if(pref.getString("preference_version", "1.0") != context.getString(R.string.setting_version)){
         pref.edit()
             .clear()
             .apply()
+    }
+    pref.edit().apply {
+        putString("app_version", BuildConfig.VERSION_NAME)
+        apply()
     }
 }
 

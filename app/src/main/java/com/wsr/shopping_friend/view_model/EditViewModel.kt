@@ -20,7 +20,7 @@ class EditViewModel : ViewModel() {
             return (_list.value?.toMutableList() ?: mutableListOf())
         }
         set(value) {
-            _list.postValue(value.sortedBy { it.number }.sortedBy { it.check } as MutableList<InfoList>)
+            _list.postValue(value.sortedBy { it.number }.sortedBy { it.check }.toMutableList())
         }
 
     //データの取得が出来るまで待機する関数

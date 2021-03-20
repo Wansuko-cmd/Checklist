@@ -27,9 +27,17 @@
             android:defaultValue="true"/>
 
         <EditTextPreference
-            app:key="version"
-            app:title="version"
+            app:key="preference_version"
+            app:title="preference_version"
             android:defaultValue="@string/setting_version"
             app:isPreferenceVisible="false"/>
+
+        <EditTextPreference
+            app:key="app_version"
+            app:title="Version"
+            android:defaultValue="1.0"
+            app:useSimpleSummaryProvider="true"
+            android:enabled="false"
+            />
 
 </androidx.preference.PreferenceScreen>
