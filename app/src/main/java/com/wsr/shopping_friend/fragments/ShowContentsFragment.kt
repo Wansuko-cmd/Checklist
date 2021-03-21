@@ -169,6 +169,7 @@ class ShowContentsFragment : Fragment() {
                             viewHolder.view.setBackgroundColor(Color.parseColor("#AFEEEE"))
                         }
                     }
+                    showContentsAdapter.notifyDataSetChanged()
                     super.clearView(recyclerView, viewHolder)
                 }
             }
