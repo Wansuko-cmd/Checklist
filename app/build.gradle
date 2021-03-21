@@ -15,8 +15,8 @@ android {
         applicationId "com.wsr.shopping_friend"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 14
-        versionName "2.0.2"
+        versionCode 16
+        versionName "2.0.4"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         javaCompileOptions {
             annotationProcessorOptions {
@@ -108,5 +108,5 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics-ktx'
 
     //ads
-    implementation 'com.google.firebase:firebase-ads:19.7.0'
+    implementation 'com.google.firebase:firebase-ads:19.8.0'
 }

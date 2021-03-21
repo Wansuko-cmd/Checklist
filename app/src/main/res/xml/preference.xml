@@ -44,7 +44,7 @@
         <EditTextPreference
             app:key="app_version"
             app:title="Version"
-            android:defaultValue="1.0"
+            android:defaultValue="@string/application_version"
             app:useSimpleSummaryProvider="true"
             android:enabled="false"
             />

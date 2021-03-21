@@ -47,7 +47,6 @@ class ShowContentsFragment : Fragment() {
     private lateinit var editViewModel: EditViewModel
     private lateinit var showContentsAdapter: ListAdapter
     private lateinit var snackBar: Snackbar
-    private lateinit var checkSetData: Job
     private var deleteValue: InfoList? = null
 
     override fun onCreateView(
@@ -178,8 +177,8 @@ class ShowContentsFragment : Fragment() {
         itemTouchHelperCallback.attachToRecyclerView(recyclerView)
 
         //LiveDataの内容が反映されるのを待つ処理
-        checkSetData = GlobalScope.launch(Dispatchers.Main) {
-            if (editViewModel.checkSetData()) showContentsAdapter.notifyDataSetChanged()
+        GlobalScope.launch(Dispatchers.Main) {
+            editViewModel.checkData({ it != null}){showContentsAdapter.notifyDataSetChanged()}
         }
 
     }
@@ -258,6 +257,9 @@ class ShowContentsFragment : Fragment() {
         newList.sortedBy { it.number }.sortedBy { it.check }.indexOfFirst { it.id == id }.run{
             recyclerView!!.scrollToPosition(this)
             showContentsAdapter.focus = this
+//            runBlocking {
+//                editViewModel.checkData({ list -> list?.any{ it.id == id }}){ showContentsAdapter.notifyItemInserted(this@run) }
+//            }
             showContentsAdapter.notifyItemInserted(this)
         }
     }
@@ -276,7 +278,9 @@ class ShowContentsFragment : Fragment() {
 
                 editViewModel.list = (list as MutableList<InfoList>)
 
-                showContentsAdapter.notifyDataSetChanged()
+                GlobalScope.launch(Dispatchers.Main) {
+                    editViewModel.checkData({ list -> list?.none { it.check } }){ showContentsAdapter.notifyDataSetChanged() }
+                }
             }
             .setNegativeButton(R.string.check_out_negative, null)
             .setCancelable(false)

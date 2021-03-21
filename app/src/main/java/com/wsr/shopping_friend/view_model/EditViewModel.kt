@@ -23,21 +23,21 @@ class EditViewModel : ViewModel() {
             _list.postValue(value.sortedBy { it.number }.sortedBy { it.check }.toMutableList())
         }
 
-    //データの取得が出来るまで待機する関数
-    suspend fun checkSetData(): Boolean {
-        return try {
+    //データが条件を満たすまで待機する関数
+    suspend fun checkData(checker: (MutableList<InfoList>?) -> Boolean?, function: () -> Unit) {
+        try {
             Log.i("ok", "I'll get the title...")
             withTimeout(1000) {
                 while (true) {
-                    if (_list.value != null) break
+                    if (checker(_list.value) == true) break
                     Log.i("I wait for", "getting title...")
                     delay(100)
                 }
-                true
             }
         } catch (e: Exception) {
             Log.e("I missed getting title", "error: $e")
-            false
+        } finally {
+            function()
         }
     }
 

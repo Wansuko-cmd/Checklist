@@ -17,8 +17,8 @@ class MainActivity : AppCompatActivity() {
         checkVersion(this)
 
         //広告
-        val binding: ActivityMainBinding = ActivityMainBinding.inflate(layoutInflater)
+        //val binding: ActivityMainBinding = ActivityMainBinding.inflate(layoutInflater)
         val adRequest: AdRequest = AdRequest.Builder().build()
-        binding.adView.loadAd(adRequest)
+        ActivityMainBinding.inflate(layoutInflater).adView.loadAd(adRequest)
     }
 }
