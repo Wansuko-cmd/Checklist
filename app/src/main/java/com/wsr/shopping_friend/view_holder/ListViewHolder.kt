@@ -17,6 +17,8 @@ class ListViewHolder(private val binding: ChecklistColumnBinding): RecyclerView.
         binding.run {
             this.value = editViewModel.list[editViewModel.list.indexOfFirst { it.id == id }]
             setColor(editViewModel, id)
+            item.setHorizontallyScrolling(false)
+            item.maxLines = Int.MAX_VALUE
         }
     }
 
