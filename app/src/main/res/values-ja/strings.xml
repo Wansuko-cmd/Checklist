@@ -55,7 +55,7 @@
     <string name="application_version">1.0</string>
 
     <!--デフォルトタイトル設定-->
-    <string name="default_title">デフォルトタイトル名（空欄はセットできません）</string>
+    <string name="default_title">デフォルトタイトル名\n(空欄はセットできません)</string>
     <string name="non_title">タイトル名なし</string>
 
     <!--テキストサイズ設定-->
@@ -76,15 +76,13 @@
 
     <!--ヘルプ画面-->
     <string-array name="help">
-        <item>これはヘルプ画面です</item>
         <item>ボックスにチェックをつけると下に移動します</item>
         <item>このアプリでは自動的にセーブされます</item>
         <item>空欄はセーブされません</item>
         <item>ゴミ箱を押すとチェックのついたアイテムが削除されます</item>
         <item>欄を左にスワイプするとそのアイテムを削除します</item>
-        <item>＋を押すと新たにアイテムを追加します</item>
-        <item>アイテムをタップすると入力することが出来ます</item>
+        <item>長押しでチェックのついていない要素を入れ替える事が出来ます</item>
         <item>一番下の要素でエンターを押すと新たにアイテムを作ります</item>
-        <item>デフォルトタイトルは、タイトル名が空欄である時に設定されるものです</item>
+        <item>タイトルが空欄の場合、デフォルトタイトルが設定されます</item>
     </string-array>
 </resources>

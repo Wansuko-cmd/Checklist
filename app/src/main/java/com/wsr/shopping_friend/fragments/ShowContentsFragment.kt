@@ -48,6 +48,7 @@ class ShowContentsFragment : Fragment() {
     private lateinit var showContentsAdapter: ListAdapter
     private lateinit var snackBar: Snackbar
     private var deleteValue: InfoList? = null
+    private var movingChecker: Boolean = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -137,6 +138,8 @@ class ShowContentsFragment : Fragment() {
 
                         editViewModel.list = list
                         showContentsAdapter.notifyItemMoved(fromPosition, toPosition)
+
+                        movingChecker = true
                     }
                     return false
                 }
@@ -169,7 +172,11 @@ class ShowContentsFragment : Fragment() {
                             viewHolder.view.setBackgroundColor(Color.parseColor("#AFEEEE"))
                         }
                     }
-                    showContentsAdapter.notifyDataSetChanged()
+                    if(movingChecker){
+                        showContentsAdapter.notifyDataSetChanged()
+                        movingChecker = false
+                    }
+                    //showContentsAdapter.notifyDataSetChanged()
                     super.clearView(recyclerView, viewHolder)
                 }
             }

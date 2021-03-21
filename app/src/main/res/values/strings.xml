@@ -55,7 +55,7 @@
     <string name="application_version">1.0</string>
 
     <!--デフォルトタイトル設定-->
-    <string name="default_title">Default title(You Can\'t set Empty.)</string>
+    <string name="default_title">Default title\n(You Can\'t set Empty.)</string>
     <string name="non_title">Non-title</string>
 
     <!--テキストサイズ設定-->
@@ -76,14 +76,12 @@
 
     <!--ヘルプ画面-->
     <string-array name="help">
-        <item>This is help screen.</item>
         <item>Check off this item and it goes down.</item>
         <item>This app has automatic save function.</item>
         <item>Empty item won\'t save.</item>
         <item>Push the garbage button and all checked item will disappear.</item>
         <item>Swipe the item left and it will delete.</item>
-        <item>Push + button and a new item will appear.</item>
-        <item>Tap the item when you want to edit.</item>
+        <item>Change the unchecked element\'s position by pushing and move it</item>
         <item>Pushing enter in the bottom item also make a new item.</item>
         <item>Default title will set when you enter empty as list title.</item>
     </string-array>
