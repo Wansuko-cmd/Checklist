@@ -1,4 +1,4 @@
-package com.wsr.shopping_friend.fragments
+package com.wsr.shopping_friend.contents
 
 import android.app.AlertDialog
 import android.content.Intent
@@ -11,26 +11,23 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.ItemTouchHelper
-import androidx.recyclerview.widget.ItemTouchHelper.ACTION_STATE_DRAG
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.wsr.shopping_friend.R
-import com.wsr.shopping_friend.adapter.ListAdapter
 import com.wsr.shopping_friend.databinding.FragmentShowContentsBinding
-import com.wsr.shopping_friend.info_list_database.InfoList
+import com.wsr.shopping_friend.database.InfoList
 import com.wsr.shopping_friend.preference.getShareAll
 import com.wsr.shopping_friend.preference.getToolbarTextTheme
-import com.wsr.shopping_friend.type_file.renameAlert
-import com.wsr.shopping_friend.type_file.setHelp
-import com.wsr.shopping_friend.view_holder.ListViewHolder
-import com.wsr.shopping_friend.view_model.AppViewModel
-import com.wsr.shopping_friend.view_model.EditViewModel
+import com.wsr.shopping_friend.share.renameTitle
+import com.wsr.shopping_friend.share.setHelp
+import com.wsr.shopping_friend.share.view_model.AppViewModel
+import com.wsr.shopping_friend.share.view_model.EditViewModel
 import kotlinx.coroutines.*
 import java.util.*
 
 //リストの中身を見せるためのFragment
-class ShowContentsFragment : Fragment() {
+class ContentsFragment : Fragment() {
 
     //viewBindingを利用するための宣言
     private var _binding: FragmentShowContentsBinding? = null
@@ -39,17 +36,22 @@ class ShowContentsFragment : Fragment() {
     //recyclerViewの定義
     private var recyclerView: RecyclerView? = null
 
-    //使う変数の定義
-    private val args: ShowContentsFragmentArgs by navArgs()
-    private var titleList = mutableListOf<String>()
+    //ShowTitleFragmentから、表示するタイトル名を受け取るための変数
+    private val args: ContentsFragmentArgs by navArgs()
     private lateinit var title: String
-    private lateinit var viewModel: AppViewModel
+
+    //全部のリストのタイトルを集めたリスト
+    private var titleList = mutableListOf<String>()
+
+    //ViewModel
+    private lateinit var appViewModel: AppViewModel
     private lateinit var editViewModel: EditViewModel
-    private lateinit var showContentsAdapter: ListAdapter
+
+    //Adapter
+    private lateinit var contentsAdapter: ContentsAdapter
+
+    //UNDOを表示するためのsnackBar
     private lateinit var snackBar: Snackbar
-    private var deleteValue: InfoList? = null
-    private var movingChecker: Boolean = false
-    private var tempList = mutableListOf<InfoList>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -63,14 +65,26 @@ class ShowContentsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        //タイトルの初期化
+        //ShowTitleFragmentから受け取った、表示するタイトル名を代入
         title = args.content
 
         //Toolbarの設定
         setToolbar()
 
-        //snackBarの設定
+        //UNDO用のsnackBarの設定
         snackBar = setSnackBar()
+
+        //DBとの接続用のViewModelの初期化
+        appViewModel = ViewModelProvider(
+            this,
+            ViewModelProvider.AndroidViewModelFactory(requireActivity().application)
+        ).get(AppViewModel::class.java).apply {
+
+            //editViewModelにLiveDataで流れてきた値を入れる処理
+            infoList.observe(viewLifecycleOwner, { list ->
+                list?.let { setInfoList(it) }
+            })
+        }
 
         //編集用のViewModelの初期化
         editViewModel = ViewModelProvider(
@@ -81,19 +95,10 @@ class ShowContentsFragment : Fragment() {
         //ヘルプを選択した時の処理
         if (title == "") setHelp(requireContext(), editViewModel)
 
-        //DBとの接続用のViewModelの初期化
-        viewModel = ViewModelProvider(
-            this,
-            ViewModelProvider.AndroidViewModelFactory(requireActivity().application)
-        ).get(AppViewModel::class.java).apply {
-            //editViewModelにLiveDataで流れてきた値を入れる処理
-            infoList.observe(viewLifecycleOwner, { list ->
-                list?.let { setInfoList(it) }
-            })
-        }
-
         //Adapterの初期化
-        showContentsAdapter = ListAdapter(editViewModel, this).apply {
+        contentsAdapter = ContentsAdapter(editViewModel, this).apply {
+
+            //指定した位置までスクロールする関数をAdapterのインスタンスに設定
             scrollToPosition = {
                 recyclerView!!.scrollToPosition(it)
             }
@@ -101,109 +106,30 @@ class ShowContentsFragment : Fragment() {
 
         //recyclerViewの初期化
         this.recyclerView = binding.showContentsRecyclerView.apply{
-            setOnClickListener { it.requestFocus() }
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(context)
-            adapter = showContentsAdapter
+            adapter = contentsAdapter
         }
 
         //下のボタンの設定
         binding.apply {
-            editButton.setOnClickListener{ addElements() }
 
+            //要素を追加するボタンの設定
+            addButton.setOnClickListener{ addElements() }
+
+            //チェックのついた要素をすべて削除するボタンの設定
             deleteCheckButton.setOnClickListener { deleteElements() }
         }
 
         //スワイプでアイテムを消したり動かしたりするための処理
-        val itemTouchHelperCallback = ItemTouchHelper(
-            object : ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP or ItemTouchHelper.DOWN, ItemTouchHelper.LEFT) {
+        val itemTouchHelperCallback = ItemTouchHelper(ContentsItemTouchHelper(appViewModel, editViewModel, contentsAdapter, snackBar))
 
-                //移動させる処理
-                override fun onMove(
-                    recyclerView: RecyclerView,
-                    viewHolder: RecyclerView.ViewHolder,
-                    target: RecyclerView.ViewHolder
-                ): Boolean {
-                    if (viewHolder is ListViewHolder
-                        && target is ListViewHolder
-                        && !viewHolder.check.isChecked
-                        && !target.check.isChecked
-                    ) {
-                        //tempList内で変更を保存しておいて、操作終了後にEditViewModelに反映させる
-
-                        val fromPosition = viewHolder.adapterPosition
-                        val toPosition = target.adapterPosition
-
-                        val fromValue = tempList[fromPosition]
-
-                        tempList[fromPosition] = tempList[fromPosition].copy(number = tempList[toPosition].number)
-                        tempList[toPosition] = tempList[toPosition].copy(number = fromValue.number)
-
-                        showContentsAdapter.notifyItemMoved(toPosition, fromPosition)
-
-                        tempList = tempList.sortedBy { it.number }.sortedBy { it.check }.toMutableList()
-
-                        movingChecker = true
-                    }
-                    return false
-                }
-
-                //スワイプで削除する処理
-                override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-
-                    val list = editViewModel.list
-                    val index = viewHolder.adapterPosition
-
-                    list.removeAt(index).let{
-                        deleteValue = it
-                        runBlocking {
-                            viewModel.delete(it)
-                        }
-                    }
-                    showContentsAdapter.notifyItemRemoved(index)
-                    editViewModel.list = list
-                    snackBar.show()
-                }
-
-                override fun onSelectedChanged(
-                    viewHolder: RecyclerView.ViewHolder?,
-                    actionState: Int
-                ) {
-                    super.onSelectedChanged(viewHolder, actionState)
-                    if (actionState == ACTION_STATE_DRAG && viewHolder is ListViewHolder){
-                        viewHolder.view.setBackgroundColor(Color.parseColor("#FFD5EC"))
-                        tempList = editViewModel.list
-                    }
-                }
-
-                override fun clearView(
-                    recyclerView: RecyclerView,
-                    viewHolder: RecyclerView.ViewHolder
-                ) {
-                    if (viewHolder is ListViewHolder){
-                        if (viewHolder.check.isChecked) {
-                            viewHolder.view.setBackgroundColor(Color.parseColor("#FFFFFF"))
-                        } else {
-                            viewHolder.view.setBackgroundColor(Color.parseColor("#AFEEEE"))
-                        }
-                    }
-                    if(movingChecker){
-                        editViewModel.list = tempList
-                        GlobalScope.launch(Dispatchers.Main) {
-                            editViewModel.checkData({ it == tempList }){showContentsAdapter.notifyDataSetChanged()}
-                        }
-                        movingChecker = false
-                    }
-                    super.clearView(recyclerView, viewHolder)
-                }
-            }
-        )
-
+        //上記のコールバックをrecyclerViewに設定
         itemTouchHelperCallback.attachToRecyclerView(recyclerView)
 
         //LiveDataの内容が反映されるのを待つ処理
         GlobalScope.launch(Dispatchers.Main) {
-            editViewModel.checkData({ it != null}){showContentsAdapter.notifyDataSetChanged()}
+            editViewModel.checkData({ it != null}){contentsAdapter.notifyDataSetChanged()}
         }
 
     }
@@ -211,15 +137,17 @@ class ShowContentsFragment : Fragment() {
     //設定から戻ったときに結果を反映するための処理
     override fun onResume() {
         super.onResume()
-        showContentsAdapter.notifyDataSetChanged()
+        contentsAdapter.notifyDataSetChanged()
     }
 
+    //fragmentが止まったときに行う処理
     override fun onStop() {
         snackBar.dismiss()
         updateDatabase()
         super.onStop()
     }
 
+    //fragmentのインスタンスを破棄するときに行う処理
     override fun onDestroyView() {
         super.onDestroyView()
         this.recyclerView?.adapter = null
@@ -228,64 +156,83 @@ class ShowContentsFragment : Fragment() {
     }
 
     //LiveDataの内容を反映させる関数
-    private fun setInfoList(infoList: MutableList<InfoList>) {
+    private fun setInfoList(lists: MutableList<InfoList>) {
 
-        val list = infoList.sortedBy { it.number }
-        for (numOfTitle in list) {
-            if (!titleList.contains(numOfTitle.title)) {
-                titleList.add(numOfTitle.title)
-            }
-        }
+        /*登録されている要素の中で以下の要素のみを抽出してタイトル名を保存するリストに代入
+        *
+        * ・重複していない
+        * ・タイトル名が空ではない
+        *
+        * */
+        titleList = lists
+            .asSequence()
+            .map { it.title }
+            .distinct()
+            .filter { it != "" }
+            .sorted()
+            .toMutableList()
+
         if (editViewModel.list == emptyList<InfoList>()){
-            val tempList = mutableListOf<InfoList>()
-            for (value in list) {
-                if (value.title == title) {
-                    tempList.add(value)
-                }
+
+            //アイテムが空欄の要素が含まれていた時に削除する処理
+            val deleteList: MutableList<InfoList> = lists.filter { it.item == "" } as MutableList<InfoList>
+            runBlocking {
+                appViewModel.deleteList(deleteList)
             }
-            if (tempList.any { it.item == "" }){
-                val deleteList: MutableList<InfoList> = list.filter { it.item == "" } as MutableList<InfoList>
-                runBlocking {
-                    viewModel.deleteList(deleteList)
-                }
-            }
-            editViewModel.initializeList(tempList.filter { it.item != "" } as MutableList<InfoList>)
+
+            //editViewModelのlistを、指定のタイトル名を保有している要素のリストで初期化する処理
+            editViewModel.initializeList(lists.filter { it.item != "" }.filter { it.title == title } as MutableList<InfoList>)
         }
     }
 
     //タイトルが変更された際の処理
     private val changeTitle: (String) -> Unit = { newTitle ->
+
+        //データベースに反映
         runBlocking {
-            viewModel.changeTitle(title, newTitle)
+            appViewModel.changeTitle(title, newTitle)
         }
+
+        //このFragmentのインスタンスの保有するタイトル名を最新のものに変更
         title = newTitle
 
+        //toolbarに最新のタイトルを反映
         binding.contentsToolbar.title = newTitle
+
+        //editViewModelのlistの要素が保有するtitleを変更する処理
+        editViewModel.list = editViewModel.list.map { it.copy(title = newTitle) }.toMutableList()
     }
 
     //空欄を追加するための処理
     fun addElements() {
 
+        //UNDOを表示するsnackBarを非表示にする
         snackBar.dismiss()
 
+        //アイテムが空の新しい要素を生成
         val id = UUID.randomUUID().toString()
         val number = editViewModel.list.maxByOrNull { it.number }?.number?.plus(1) ?: 0
         val newColumn = InfoList(id, number, title, false, "")
 
+        //editViewModelのlistとデータベースに、新しい要素を追加
         val newList = editViewModel.list
         newList.add(newColumn)
         editViewModel.list  = newList
         runBlocking {
-            viewModel.insert(newColumn)
+            appViewModel.insert(newColumn)
         }
 
+        //UIの面で、新しい要素に対して行う処理
         newList.sortedBy { it.number }.sortedBy { it.check }.indexOfFirst { it.id == id }.run{
+
+            //新しい要素までスクロール
             recyclerView!!.scrollToPosition(this)
-            showContentsAdapter.focus = this
-//            runBlocking {
-//                editViewModel.checkData({ list -> list?.any{ it.id == id }}){ showContentsAdapter.notifyItemInserted(this@run) }
-//            }
-            showContentsAdapter.notifyItemInserted(this)
+
+            //新しい要素にfocusを当てる
+            contentsAdapter.focus = this
+
+            //adapterに新しい要素が入ったことを通知
+            contentsAdapter.notifyItemInserted(this)
         }
     }
 
@@ -295,16 +242,22 @@ class ShowContentsFragment : Fragment() {
             .setTitle(R.string.check_out_title)
             .setMessage(R.string.check_out_message)
             .setPositiveButton(R.string.check_out_positive) { _, _ ->
+
+                //削除後にセットするリスト
                 val list = editViewModel.list.filter { !it.check }
+
+                //削除する要素が入ったリスト
                 val deleteList = editViewModel.list.filter { it.check }
+
+                //データベース上にある要素の削除
                 runBlocking {
-                    viewModel.deleteList(deleteList as MutableList<InfoList>)
+                    appViewModel.deleteList(deleteList as MutableList<InfoList>)
                 }
 
+                //editViewModelのlistに、削除後のリストを反映
                 editViewModel.list = (list as MutableList<InfoList>)
-
                 GlobalScope.launch(Dispatchers.Main) {
-                    editViewModel.checkData({ list -> list?.none { it.check } }){ showContentsAdapter.notifyDataSetChanged() }
+                    editViewModel.checkData({ list -> list?.none { it.check } }){ contentsAdapter.notifyDataSetChanged() }
                 }
             }
             .setNegativeButton(R.string.check_out_negative, null)
@@ -316,22 +269,20 @@ class ShowContentsFragment : Fragment() {
     private fun updateDatabase(){
         val list: MutableList<InfoList> = editViewModel.list
 
-        val updateList: MutableList<InfoList> = mutableListOf()
-        val deleteList: MutableList<InfoList> = list.filter { it.item == "" } as MutableList<InfoList>
-
-        for ( i in list.filter { it.item != "" }){
-            updateList.add(InfoList(i.id, i.number, title, i.check, i.item))
-        }
-
+        //アイテムが空ではない要素をデータベースに更新する処理
         runBlocking {
-            viewModel.update(updateList)
-            viewModel.deleteList(deleteList)
+            appViewModel.update(list.filter { it.item != "" } as MutableList<InfoList>)
+            appViewModel.deleteList(list.filter { it.item == "" } as MutableList<InfoList>)
         }
     }
 
     //Toolbarの設定
     private fun setToolbar(){
+
+        //toolbarのテーマカラーを設定する処理
         binding.contentsToolbar.also{
+
+            //設定された値の読み取り
             when(getToolbarTextTheme(requireContext())){
                 "white" -> {
                     it.setTitleTextColor(Color.WHITE)
@@ -344,11 +295,19 @@ class ShowContentsFragment : Fragment() {
                 }
             }
 
+            //タイトルをtoolbarに反映させる処理（ヘルプ画面のときは設定した値を出す）
             it.title = if (title != "") title else getString(R.string.help_title)
 
+            //toolbarに表示されるタイトルをクリックした際の処理
             it.setOnClickListener{
+
+                //UNDOをするためのsnackBarの非表示
                 snackBar.dismiss()
-                if (title != "") renameAlert(requireContext(), changeTitle, titleList, title)
+
+                //タイトルを変更する処理
+                if (title != "") renameTitle(requireContext(), changeTitle, titleList, title)
+
+                //ヘルプ画面だった時
                 else{
                     AlertDialog.Builder(requireContext())
                         .setMessage(getString(R.string.no_edit_title_message))
@@ -356,20 +315,30 @@ class ShowContentsFragment : Fragment() {
                         .show()
                 }
             }
+
+            //アイコンをクリックされたときの処理
             it.setOnMenuItemClickListener { menuItem ->
                 when(menuItem.itemId){
+
+                    //共有処理
                     R.id.share -> {
                         shareText()
                     }
+
+                    //リロード処理
                     R.id.reload -> {
-                        showContentsAdapter.notifyDataSetChanged()
+                        contentsAdapter.notifyDataSetChanged()
                     }
+
+                    //タイトル表示画面に戻る処理
                     android.R.id.home ->{
                         findNavController().navigate(R.id.back_to_title_fragment)
                     }
                 }
                 true
             }
+
+            //戻るボタンを押された際の処理
             it.setNavigationOnClickListener {
                 findNavController().navigate(R.id.back_to_title_fragment)
             }
@@ -378,25 +347,38 @@ class ShowContentsFragment : Fragment() {
 
     //Undo機能の設定
     private fun setSnackBar(): Snackbar {
+
+        //snackBarの設定
         return Snackbar.make(
-            binding.coordinatorLayout,
+            binding.showSnackBarLayout,
             getString(R.string.snack_bar_message),
             Snackbar.LENGTH_INDEFINITE
         )
             .setAction(getString(R.string.snack_bar_action)) {
 
-                deleteValue?.let { value ->
+                editViewModel.deleteValue?.let { value ->
+
+                    //一時的に保存していた要素をeditViewModelのlistに入れなおす
                     val list = editViewModel.list
                     list.add(value)
                     editViewModel.list = list
-                    showContentsAdapter.notifyItemInserted(list.sortedBy { it.number }
-                        .sortedBy { it.check }.indexOf(value))
+
+                    //adapterに要素を入れたことを通知する
+                    contentsAdapter.notifyItemInserted(
+                        list.sortedBy { it.number }
+                            .sortedBy { it.check }
+                            .indexOf(value)
+                    )
+
+                    //データベースに要素を入れる
                     runBlocking {
-                        viewModel.insert(value)
+                        appViewModel.insert(value)
                     }
                 }
+
+                //無事に要素を戻したことを伝えるsnackBarの設定
                 Snackbar.make(
-                    binding.coordinatorLayout,
+                    binding.showSnackBarLayout,
                     getString(R.string.snack_bar_after),
                     Snackbar.LENGTH_SHORT
                 ).show()
@@ -405,16 +387,30 @@ class ShowContentsFragment : Fragment() {
 
     //設定、ヘルプ画面に画面遷移するための処理
     private fun shareText() {
+
+        //共有するテキストを代入する変数
         var text = ""
+
+        //要素の先頭につける文字の設定
         val listTop: String = requireActivity().getString(R.string.list_top)
+
+        //共有方法の設定を読み取る
         val setting = getShareAll(requireContext())
+
+        //textに共有するテキストを代入
         for (i in editViewModel.list){
             if(!i.check || !setting){
                 text += "${listTop}${i.item}\n"
             }
         }
+
+        //共有できる要素が存在する場合の処理
         if(text.length >= 2){
+
+            //最後の改行文字の削除
             text = text.dropLast(1)
+
+            //ユーザの指定したアプリへのintentの処理
             val intent = Intent().apply {
                 action = Intent.ACTION_SEND
                 type = "text/plain"
@@ -422,6 +418,8 @@ class ShowContentsFragment : Fragment() {
             }
             startActivity(intent)
         }
+
+        //共有できる要素が存在しない場合の処理
         else{
             Toast.makeText(requireContext(), requireActivity().getString(R.string.no_value), Toast.LENGTH_LONG).show()
         }

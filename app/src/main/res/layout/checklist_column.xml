@@ -6,7 +6,7 @@
     <data>
         <variable
             name="value"
-            type="com.wsr.shopping_friend.info_list_database.InfoList" />
+            type="com.wsr.shopping_friend.database.InfoList" />
     </data>
 
     <androidx.appcompat.widget.LinearLayoutCompat

@@ -1,16 +1,15 @@
-package com.wsr.shopping_friend.adapter
+package com.wsr.shopping_friend.title
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.wsr.shopping_friend.view_holder.MainViewHolder
-import com.wsr.shopping_friend.databinding.ShowTitleBinding
-import com.wsr.shopping_friend.info_list_database.InfoList
+import com.wsr.shopping_friend.database.InfoList
+import com.wsr.shopping_friend.databinding.ChecklistTitleBinding
 import com.wsr.shopping_friend.preference.getTextSize
 
 //リストのタイトルを並べるRecyclerViewのためのアダプター
-class MainAdapter:
-    RecyclerView.Adapter<MainViewHolder>(){
+class TitleAdapter:
+    RecyclerView.Adapter<TitleViewHolder>(){
 
     //全てのタイトル名を保存するリスト
     var titleList = mutableListOf<String>()
@@ -20,9 +19,9 @@ class MainAdapter:
     var clickDeleteOnListener: (title: String, position: Int) -> Unit = {_, _ ->}
 
     //ViewHolderのインスタンスを形成
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TitleViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        return MainViewHolder(ShowTitleBinding.inflate(inflater, parent, false))
+        return TitleViewHolder(ChecklistTitleBinding.inflate(inflater, parent, false))
     }
 
     //titleListの長さを返す関数
@@ -31,8 +30,9 @@ class MainAdapter:
     }
 
     //インスタンス化したViewHolderの中の値の変更
-    override fun onBindViewHolder(holder: MainViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: TitleViewHolder, position: Int) {
 
+        //要素の文字の部分の設定
         holder.title.apply {
             text = titleList[position]
             textSize = getTextSize(context).toFloat()
@@ -51,13 +51,20 @@ class MainAdapter:
 
     //LiveDataの内容をMainAdapterのインスタンスに反映させる関数
     internal fun setInfoList(lists: MutableList<InfoList>){
-        titleList = mutableListOf()
-        for (numOfTitle in lists){
-            if (!titleList.contains(numOfTitle.title) && numOfTitle.title != ""){
-                titleList.add(numOfTitle.title)
-            }
-        }
-        titleList.sort()
+
+        /*登録されている要素の中で以下の要素のみを抽出してタイトル名を保存するリストに代入
+        *
+        * ・重複していない
+        * ・タイトル名が空ではない
+        *
+        * */
+        titleList = lists
+            .asSequence()
+            .map { it.title }
+            .distinct()
+            .filter { it != "" }
+            .sorted()
+            .toMutableList()
         notifyDataSetChanged()
     }
 }

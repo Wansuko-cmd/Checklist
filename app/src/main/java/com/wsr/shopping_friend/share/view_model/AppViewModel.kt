@@ -1,10 +1,10 @@
-package com.wsr.shopping_friend.view_model
+package com.wsr.shopping_friend.share.view_model
 
 import android.app.Application
 import androidx.lifecycle.*
-import com.wsr.shopping_friend.info_list_database.InfoList
-import com.wsr.shopping_friend.info_list_database.InfoListDao
-import com.wsr.shopping_friend.info_list_database.InfoListDatabase
+import com.wsr.shopping_friend.database.InfoList
+import com.wsr.shopping_friend.database.InfoListDao
+import com.wsr.shopping_friend.database.InfoListDatabase
 import com.wsr.shopping_friend.repository.AppRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -27,7 +27,7 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     //データをアップデートするための関数　ただ今保留
-    suspend fun update(infoList: MutableList<InfoList>): Boolean = withContext(Dispatchers.IO){
+    suspend fun update(infoList: MutableList<InfoList>) = withContext(Dispatchers.IO){
         repository.update(infoList)
     }
 

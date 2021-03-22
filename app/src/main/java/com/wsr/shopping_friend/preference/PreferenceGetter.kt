@@ -30,6 +30,7 @@ fun getTextSize(context: Context): Int{
     }
 }
 
+//ツールバーの文字のテーマを確認するための関数
 fun getToolbarTextTheme(context: Context): String {
     val pref = PreferenceManager.getDefaultSharedPreferences(context)
     return pref.getString("toolbar_text_theme", "black") ?: "black"

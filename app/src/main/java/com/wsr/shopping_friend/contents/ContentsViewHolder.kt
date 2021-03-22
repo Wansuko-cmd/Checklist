@@ -1,14 +1,13 @@
-package com.wsr.shopping_friend.view_holder
+package com.wsr.shopping_friend.contents
 
 import android.graphics.Color
-import android.widget.EditText
 import androidx.recyclerview.widget.RecyclerView
 import com.wsr.shopping_friend.databinding.ChecklistColumnBinding
-import com.wsr.shopping_friend.view_model.EditViewModel
+import com.wsr.shopping_friend.share.view_model.EditViewModel
 
 //ListAdapterのためのホルダー
-class ListViewHolder(private val binding: ChecklistColumnBinding): RecyclerView.ViewHolder(binding.root) {
-    val item: EditText = binding.Item
+class ContentsViewHolder(private val binding: ChecklistColumnBinding): RecyclerView.ViewHolder(binding.root) {
+    val item = binding.Item
     val check = binding.CheckBox
     val view = binding.root
 

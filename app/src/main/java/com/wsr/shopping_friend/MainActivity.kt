@@ -1,9 +1,8 @@
-package com.wsr.shopping_friend.activity
+package com.wsr.shopping_friend
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.google.android.gms.ads.AdRequest
-import com.wsr.shopping_friend.R
 import com.wsr.shopping_friend.databinding.ActivityMainBinding
 import com.wsr.shopping_friend.preference.checkVersion
 
@@ -17,7 +16,6 @@ class MainActivity : AppCompatActivity() {
         checkVersion(this)
 
         //広告
-        //val binding: ActivityMainBinding = ActivityMainBinding.inflate(layoutInflater)
         val adRequest: AdRequest = AdRequest.Builder().build()
         ActivityMainBinding.inflate(layoutInflater).adView.loadAd(adRequest)
     }

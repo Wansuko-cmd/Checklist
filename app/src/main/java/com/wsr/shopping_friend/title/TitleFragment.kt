@@ -1,4 +1,4 @@
-package com.wsr.shopping_friend.fragments
+package com.wsr.shopping_friend.title
 
 import android.app.AlertDialog
 import android.content.Intent
@@ -11,16 +11,15 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.wsr.shopping_friend.R
-import com.wsr.shopping_friend.adapter.MainAdapter
 import com.wsr.shopping_friend.databinding.FragmentShowTitleBinding
 import com.wsr.shopping_friend.preference.ShowPreference
 import com.wsr.shopping_friend.preference.getToolbarTextTheme
-import com.wsr.shopping_friend.type_file.renameAlert
-import com.wsr.shopping_friend.view_model.AppViewModel
+import com.wsr.shopping_friend.share.renameTitle
+import com.wsr.shopping_friend.share.view_model.AppViewModel
 import kotlinx.coroutines.runBlocking
 
 //タイトル名を並べるためのFragment
-class ShowTitleFragment : Fragment() {
+class TitleFragment : Fragment() {
 
     //viewBindingを利用するための宣言
     private var _binding: FragmentShowTitleBinding? = null
@@ -30,8 +29,8 @@ class ShowTitleFragment : Fragment() {
     private var recyclerView: RecyclerView? = null
 
     //使う変数の定義
-    private lateinit var viewModel: AppViewModel
-    private lateinit var mainAdapter: MainAdapter
+    private lateinit var appViewModel: AppViewModel
+    private lateinit var titleAdapter: TitleAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -49,17 +48,19 @@ class ShowTitleFragment : Fragment() {
         setToolbar()
 
         //DBとの接続用のViewModelの初期化
-        viewModel = ViewModelProvider(
+        appViewModel = ViewModelProvider(
             this,
             ViewModelProvider.AndroidViewModelFactory(requireActivity().application)
         ).get(AppViewModel::class.java).apply {
+
+            //adapterにLiveDataで流れてきた値を入れる処理
             infoList.observe(viewLifecycleOwner, { list ->
-                list?.let { mainAdapter.setInfoList(it) }
+                list?.let { titleAdapter.setInfoList(it) }
             })
         }
 
         //Adapterの初期化
-        mainAdapter = MainAdapter().apply {
+        titleAdapter = TitleAdapter().apply {
 
             //タイトルが押されたときの処理
             clickTitleOnListener = { title -> makeShowContents(title) }
@@ -72,22 +73,22 @@ class ShowTitleFragment : Fragment() {
         this.recyclerView = binding.showTitleRecyclerView.apply {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(context)
-            adapter = mainAdapter
+            adapter = titleAdapter
         }
 
         //fabボタンが押された際の処理
         binding.fab.setOnClickListener {
-            renameAlert(requireContext(), makeShowContents, mainAdapter.titleList, "")
+            renameTitle(requireContext(), makeShowContents, titleAdapter.titleList, "")
         }
     }
 
     //設定から戻ったときに結果を反映するための処理
     override fun onResume() {
         super.onResume()
-        mainAdapter.notifyDataSetChanged()
-        requireActivity().reportFullyDrawn()
+        titleAdapter.notifyDataSetChanged()
     }
 
+    //fragmentのインスタンスを破棄するときに行う処理
     override fun onDestroyView() {
         super.onDestroyView()
         this.recyclerView?.adapter = null
@@ -97,7 +98,7 @@ class ShowTitleFragment : Fragment() {
 
     //タイトル名から、チェックリストを表示するための処理
     private val makeShowContents: (String) -> Unit = { title ->
-        val action = ShowTitleFragmentDirections.actionTitleFragmentToContentsFragment(title)
+        val action = TitleFragmentDirections.actionTitleFragmentToContentsFragment(title)
         findNavController().navigate(action)
     }
 
@@ -107,9 +108,13 @@ class ShowTitleFragment : Fragment() {
             .setTitle(R.string.delete_with_title_title)
             .setMessage(R.string.delete_with_title_message)
             .setPositiveButton(R.string.delete_with_title_positive) { _, _ ->
-                mainAdapter.notifyItemRemoved(position)
+
+                //adapterにリストが消えたことを通知
+                titleAdapter.notifyItemRemoved(position)
+
+                //データベースからリストを削除
                 runBlocking {
-                    viewModel.deleteWithTitle(title)
+                    appViewModel.deleteWithTitle(title)
                 }
             }
             .setNegativeButton(R.string.delete_with_title_negative, null)
@@ -121,6 +126,7 @@ class ShowTitleFragment : Fragment() {
     private fun setToolbar(){
         binding.titleToolbar.also{
 
+            //toolbarのテーマカラーを設定する処理
             when(getToolbarTextTheme(requireContext())){
                 "white" -> {
                     it.setTitleTextColor(Color.WHITE)
@@ -131,18 +137,21 @@ class ShowTitleFragment : Fragment() {
                 }
             }
 
+            //アイコンをクリックされたときの処理
             it.setOnMenuItemClickListener { menuItem ->
                 when(menuItem.itemId) {
+
                     //設定画面
                     R.id.settings -> {
                         val intent = Intent(requireActivity(), ShowPreference::class.java)
                         intent.putExtra("Purpose", "settings")
                         startActivity(intent)
                     }
+
                     //ヘルプ画面
                     R.id.help -> {
                         val action =
-                            ShowTitleFragmentDirections.actionTitleFragmentToContentsFragment("")
+                            TitleFragmentDirections.actionTitleFragmentToContentsFragment("")
                         findNavController().navigate(action)
                     }
                 }

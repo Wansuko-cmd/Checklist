@@ -14,7 +14,7 @@
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-1648529608275820~9286028196"/>
         <activity
-            android:name="com.wsr.shopping_friend.activity.MainActivity"
+            android:name="com.wsr.shopping_friend.MainActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/title_fragment"
-        android:name="com.wsr.shopping_friend.fragments.ShowTitleFragment"
+        android:name="com.wsr.shopping_friend.title.TitleFragment"
         android:label="title_fragment"
         tools:layout="@layout/fragment_show_title">
         <action
@@ -17,7 +17,7 @@
 
     <fragment
         android:id="@+id/contents_fragment"
-        android:name="com.wsr.shopping_friend.fragments.ShowContentsFragment"
+        android:name="com.wsr.shopping_friend.contents.ContentsFragment"
         android:label="contents_fragment"
         tools:layout="@layout/fragment_show_contents">
         <action

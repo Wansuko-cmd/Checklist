@@ -1,4 +1,4 @@
-package com.wsr.shopping_friend.info_list_database
+package com.wsr.shopping_friend.database
 
 import android.content.Context
 import androidx.room.Database
