@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.ItemTouchHelper.ACTION_STATE_DRAG
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
@@ -131,7 +132,15 @@ class ShowContentsFragment : Fragment() {
                         val fromPosition = viewHolder.adapterPosition
                         val toPosition = target.adapterPosition
 
+//                        val fromValue = list[fromPosition].copy(number = list[toPosition].number)
+//                        list[fromPosition] = list[toPosition].copy(number = list[fromPosition].number)
+//                        list[toPosition] = fromValue
+
                         val fromValue = list[fromPosition]
+
+
+//                        list[fromPosition] = list[toPosition]
+//                        list[toPosition] = fromValue
                         list[fromPosition] = list[fromPosition].copy(number = list[toPosition].number)
                         list[toPosition] = list[toPosition].copy(number = fromValue.number)
 
@@ -158,6 +167,16 @@ class ShowContentsFragment : Fragment() {
                     showContentsAdapter.notifyItemRemoved(index)
                     editViewModel.list = list
                     snackBar.show()
+                }
+
+                override fun onSelectedChanged(
+                    viewHolder: RecyclerView.ViewHolder?,
+                    actionState: Int
+                ) {
+                    super.onSelectedChanged(viewHolder, actionState)
+                    if (actionState == ACTION_STATE_DRAG && viewHolder is ListViewHolder){
+                        viewHolder.view.setBackgroundColor(Color.parseColor("#FFD5EC"))
+                    }
                 }
 
                 override fun clearView(

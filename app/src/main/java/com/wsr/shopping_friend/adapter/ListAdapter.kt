@@ -60,12 +60,6 @@ class ListAdapter(
                 //設定した文字サイズを反映させる処理
                 textSize = getTextSize(context).toFloat()
 
-                //長押し時に色を変える処理
-                setOnLongClickListener {
-                    view.setBackgroundColor(Color.parseColor("#FFD5EC"))
-                    true
-                }
-
                 //Enterの入力を検出する処理
                 setOnEditorActionListener { _, i, _ ->
                     if(
