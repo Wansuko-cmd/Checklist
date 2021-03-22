@@ -69,7 +69,7 @@ class ContentsAdapter(
                     if(
                         i == EditorInfo.IME_ACTION_DONE ||
                         (i == EditorInfo.IME_ACTION_NEXT && editViewModel.list.filter { !it.check }.size == adapterPosition + 1)){
-                        contentsFragment.addElements()
+                        contentsFragment.addElement()
                         true
                     }else{
                         false

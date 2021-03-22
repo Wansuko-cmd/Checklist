@@ -115,7 +115,7 @@ class ContentsFragment : Fragment() {
         binding.apply {
 
             //要素を追加するボタンの設定
-            addButton.setOnClickListener{ addElements() }
+            addButton.setOnClickListener{ addElement() }
 
             //チェックのついた要素をすべて削除するボタンの設定
             deleteCheckButton.setOnClickListener { deleteElements() }
@@ -204,7 +204,7 @@ class ContentsFragment : Fragment() {
     }
 
     //空欄を追加するための処理
-    fun addElements() {
+    fun addElement() {
 
         //UNDOを表示するsnackBarを非表示にする
         snackBar.dismiss()
