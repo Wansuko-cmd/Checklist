@@ -1,6 +1,5 @@
 package com.wsr.shopping_friend.adapter
 
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
@@ -19,7 +18,6 @@ class ListAdapter(
 
     //使用する関数、変数の定義
     var focus = -1
-    var requireNotify = false
 
     var scrollToPosition: (Int) -> Unit = {}
 

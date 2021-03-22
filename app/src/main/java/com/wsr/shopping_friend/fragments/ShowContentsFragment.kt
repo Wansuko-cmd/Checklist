@@ -49,6 +49,7 @@ class ShowContentsFragment : Fragment() {
     private lateinit var snackBar: Snackbar
     private var deleteValue: InfoList? = null
     private var movingChecker: Boolean = false
+    private var tempList = mutableListOf<InfoList>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -128,26 +129,21 @@ class ShowContentsFragment : Fragment() {
                         && !viewHolder.check.isChecked
                         && !target.check.isChecked
                     ) {
-                        val list = editViewModel.list
+                        //tempList内で変更を保存しておいて、操作終了後にEditViewModelに反映させる
+
                         val fromPosition = viewHolder.adapterPosition
                         val toPosition = target.adapterPosition
 
-//                        val fromValue = list[fromPosition].copy(number = list[toPosition].number)
-//                        list[fromPosition] = list[toPosition].copy(number = list[fromPosition].number)
-//                        list[toPosition] = fromValue
+                        val fromValue = tempList[fromPosition]
 
-                        val fromValue = list[fromPosition]
+                        tempList[fromPosition] = tempList[fromPosition].copy(number = tempList[toPosition].number)
+                        tempList[toPosition] = tempList[toPosition].copy(number = fromValue.number)
 
-
-//                        list[fromPosition] = list[toPosition]
-//                        list[toPosition] = fromValue
-                        list[fromPosition] = list[fromPosition].copy(number = list[toPosition].number)
-                        list[toPosition] = list[toPosition].copy(number = fromValue.number)
-
-                        editViewModel.list = list
                         showContentsAdapter.notifyItemMoved(toPosition, fromPosition)
 
-                        showContentsAdapter.requireNotify = true
+                        tempList = tempList.sortedBy { it.number }.sortedBy { it.check }.toMutableList()
+
+                        movingChecker = true
                     }
                     return false
                 }
@@ -176,6 +172,7 @@ class ShowContentsFragment : Fragment() {
                     super.onSelectedChanged(viewHolder, actionState)
                     if (actionState == ACTION_STATE_DRAG && viewHolder is ListViewHolder){
                         viewHolder.view.setBackgroundColor(Color.parseColor("#FFD5EC"))
+                        tempList = editViewModel.list
                     }
                 }
 
@@ -190,10 +187,13 @@ class ShowContentsFragment : Fragment() {
                             viewHolder.view.setBackgroundColor(Color.parseColor("#AFEEEE"))
                         }
                     }
-//                    if(movingChecker){
-//                        showContentsAdapter.notifyDataSetChanged()
-//                        movingChecker = false
-//                    }
+                    if(movingChecker){
+                        editViewModel.list = tempList
+                        GlobalScope.launch(Dispatchers.Main) {
+                            editViewModel.checkData({ it == tempList }){showContentsAdapter.notifyDataSetChanged()}
+                        }
+                        movingChecker = false
+                    }
                     super.clearView(recyclerView, viewHolder)
                 }
             }
