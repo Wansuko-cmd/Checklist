@@ -6,7 +6,6 @@ import android.graphics.Color
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -137,9 +136,9 @@ class ShowContentsFragment : Fragment() {
                         list[toPosition] = list[toPosition].copy(number = fromValue.number)
 
                         editViewModel.list = list
-                        showContentsAdapter.notifyItemMoved(fromPosition, toPosition)
+                        showContentsAdapter.notifyItemMoved(toPosition, fromPosition)
 
-                        movingChecker = true
+                        showContentsAdapter.requireNotify = true
                     }
                     return false
                 }
@@ -172,11 +171,10 @@ class ShowContentsFragment : Fragment() {
                             viewHolder.view.setBackgroundColor(Color.parseColor("#AFEEEE"))
                         }
                     }
-                    if(movingChecker){
-                        showContentsAdapter.notifyDataSetChanged()
-                        movingChecker = false
-                    }
-                    //showContentsAdapter.notifyDataSetChanged()
+//                    if(movingChecker){
+//                        showContentsAdapter.notifyDataSetChanged()
+//                        movingChecker = false
+//                    }
                     super.clearView(recyclerView, viewHolder)
                 }
             }
@@ -243,7 +241,7 @@ class ShowContentsFragment : Fragment() {
         }
         title = newTitle
 
-        (activity as AppCompatActivity).supportActionBar?.title = newTitle
+        binding.contentsToolbar.title = newTitle
     }
 
     //空欄を追加するための処理
@@ -298,8 +296,13 @@ class ShowContentsFragment : Fragment() {
     //editViewModelの内容をデータベースに反映させる関数
     private fun updateDatabase(){
         val list: MutableList<InfoList> = editViewModel.list
-        val updateList: MutableList<InfoList> = list.filter { it.item != "" } as MutableList<InfoList>
+
+        val updateList: MutableList<InfoList> = mutableListOf()
         val deleteList: MutableList<InfoList> = list.filter { it.item == "" } as MutableList<InfoList>
+
+        for ( i in list.filter { it.item != "" }){
+            updateList.add(InfoList(i.id, i.number, title, i.check, i.item))
+        }
 
         runBlocking {
             viewModel.update(updateList)
@@ -322,7 +325,7 @@ class ShowContentsFragment : Fragment() {
                 }
             }
 
-            it.title = if (title != "") title else "Help"
+            it.title = if (title != "") title else getString(R.string.help_title)
 
             it.setOnClickListener{
                 snackBar.dismiss()

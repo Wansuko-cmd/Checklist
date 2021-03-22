@@ -75,6 +75,7 @@
     <string name="share_all_off">全てのアイテムを共有</string>
 
     <!--ヘルプ画面-->
+    <string name="help_title">ヘルプ</string>
     <string-array name="help">
         <item>ボックスにチェックをつけると下に移動します</item>
         <item>このアプリでは自動的にセーブされます</item>

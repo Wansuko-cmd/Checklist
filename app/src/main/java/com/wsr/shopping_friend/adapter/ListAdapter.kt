@@ -19,6 +19,7 @@ class ListAdapter(
 
     //使用する関数、変数の定義
     var focus = -1
+    var requireNotify = false
 
     var scrollToPosition: (Int) -> Unit = {}
 
