@@ -42,14 +42,8 @@
 
 <h1>アプリの構造（概要）</h1>
 <p>アクティビィティはMainActivityと、設定用のShowPreferenceの二つ</p>
-<p>フラグメントはリストのタイトルを表示するためのShowTitleFragment、リストの内容を表示するためのShowContentsFragment、設定のためのPreferenceFragmentの３つ</p>
-<p>AdapterはShowTitleFragmentのためのMainAdapter、ShowContentsFragmentのためのListAdapterの２つ</p>
+<p>フラグメントはリストのタイトルを表示するためのTitleFragment、リストの内容を表示するためのContentsFragment、設定のためのPreferenceFragmentの３つ</p>
+<p>AdapterはTitleFragmentのためのTitleAdapter、ContentsFragmentのためのContentsAdapterの２つ</p>
 <p>ViewModelはデータベースの中身を繋ぐためのAppViewModel、ShowContentsFragmentで表示順番などを保持するためのEditViewModelの２つ</p>
+<p>基本的にデータの入出力は双方向データバインディングを利用しています。</p>
 <p>あとはところどころソースコードにコメントを書いてますので頑張れ</p>
-
-<h1>ただ今の課題</h1>
-<ul>
-    <li style="color:red;">データベースの修理</li>
-    <li>アプリの起動速度の向上</li>
-    <li>ASOを考える</li>
-</ul>
