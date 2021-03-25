@@ -69,16 +69,11 @@ class ContentsItemTouchHelper(
 
             //移動した要素の、並び順を入れ替える処理
             val fromValue = listForMoving[fromPosition]
-            listForMoving[fromPosition] =
-                listForMoving[fromPosition].copy(number = listForMoving[toPosition].number)
-            listForMoving[toPosition] = listForMoving[toPosition].copy(number = fromValue.number)
+            listForMoving[fromPosition] = listForMoving[toPosition].copy(number = fromValue.number)
+            listForMoving[toPosition] = fromValue.copy(number = listForMoving[toPosition].number)
 
             //移動したことをadapterに通知
             showContentsAdapter.notifyItemMoved(toPosition, fromPosition)
-
-            //編集用のリストに、移動後の状態を記録
-            listForMoving =
-                listForMoving.sortedBy { it.number }.sortedBy { it.check }.toMutableList()
         }
         return false
     }
