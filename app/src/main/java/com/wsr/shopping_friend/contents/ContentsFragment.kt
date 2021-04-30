@@ -214,25 +214,32 @@ class ContentsFragment : Fragment() {
         val number = editViewModel.list.maxByOrNull { it.number }?.number?.plus(1) ?: 0
         val newColumn = InfoList(id, number, title, false, "")
 
-        //editViewModelのlistとデータベースに、新しい要素を追加
+        //editViewModelから現在のリストを入手
         val newList = editViewModel.list
+
+        //新しいカラムを追加
         newList.add(newColumn)
-        editViewModel.list  = newList
+
+        //新しく追加したカラムのインデックス
+        val index = newList
+            .sortedBy { it.number }
+            .sortedBy { it.check }
+            .indexOfFirst { it.id == id }
+
+        //新しい要素までスクロール
+        recyclerView!!.scrollToPosition(index)
+
+        //新しい要素にfocusを当てる
+        contentsAdapter.focus = index
+
+        //adapterに新しい要素が入ったことを通知
+        contentsAdapter.notifyItemInserted(index)
+
+
+        //editViewModelのlistとデータベースに、新しい要素を追加
+        editViewModel.list = newList
         runBlocking {
             appViewModel.insert(newColumn)
-        }
-
-        //UIの面で、新しい要素に対して行う処理
-        newList.sortedBy { it.number }.sortedBy { it.check }.indexOfFirst { it.id == id }.run{
-
-            //新しい要素までスクロール
-            recyclerView!!.scrollToPosition(this)
-
-            //新しい要素にfocusを当てる
-            contentsAdapter.focus = this
-
-            //adapterに新しい要素が入ったことを通知
-            contentsAdapter.notifyItemInserted(this)
         }
     }
 

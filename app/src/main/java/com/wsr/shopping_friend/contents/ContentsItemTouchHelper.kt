@@ -76,7 +76,7 @@ class ContentsItemTouchHelper(
             showContentsAdapter.notifyItemMoved(toPosition, fromPosition)
         }
         return false
-    }
+    }//アイコンを入れる
 
     //スワイプで削除する処理
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
