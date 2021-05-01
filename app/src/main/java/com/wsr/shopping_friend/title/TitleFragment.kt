@@ -44,9 +44,6 @@ class TitleFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        //Toolbarの設定
-        setToolbar()
-
         //DBとの接続用のViewModelの初期化
         appViewModel = ViewModelProvider(
             this,
@@ -85,7 +82,10 @@ class TitleFragment : Fragment() {
     //設定から戻ったときに結果を反映するための処理
     override fun onResume() {
         super.onResume()
+
+        //それぞれの再生成
         titleAdapter.notifyDataSetChanged()
+        setToolbar()
     }
 
     //fragmentのインスタンスを破棄するときに行う処理
@@ -126,6 +126,9 @@ class TitleFragment : Fragment() {
     private fun setToolbar(){
         binding.titleToolbar.also{
 
+            //toolbarのメニューを削除
+            it.menu.clear()
+
             //toolbarのテーマカラーを設定する処理
             when(getToolbarTextTheme(requireContext())){
                 "white" -> {
@@ -133,6 +136,7 @@ class TitleFragment : Fragment() {
                     it.inflateMenu(R.menu.title_menu_white)
                 }
                 else ->{
+                    it.setTitleTextColor(Color.BLACK)
                     it.inflateMenu(R.menu.title_menu)
                 }
             }
