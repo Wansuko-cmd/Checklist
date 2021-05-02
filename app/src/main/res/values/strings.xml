@@ -44,7 +44,6 @@
     <!--メニュー画面-->
     <string name="help">help</string>
     <string name="settings">settings</string>
-    <string name="reload" >reload</string>
     <string name="share">share</string>
     <string name="list_top">-&#160;</string>
     <string name="no_value">There is no value to share</string>

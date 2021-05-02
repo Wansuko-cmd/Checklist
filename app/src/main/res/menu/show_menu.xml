@@ -9,9 +9,9 @@
         app:showAsAction="ifRoom"/>
 
     <item
-        android:id="@+id/reload"
-        android:title="@string/reload"
-        android:icon="@drawable/ic_reload"
+        android:id="@+id/settings"
+        android:title="@string/settings"
+        android:icon="@drawable/ic_settings"
         app:showAsAction="ifRoom"/>
 
 </menu>

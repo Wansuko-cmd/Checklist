@@ -17,12 +17,13 @@ import com.google.android.material.snackbar.Snackbar
 import com.wsr.shopping_friend.R
 import com.wsr.shopping_friend.databinding.FragmentShowContentsBinding
 import com.wsr.shopping_friend.database.InfoList
+import com.wsr.shopping_friend.preference.ShowPreference
 import com.wsr.shopping_friend.preference.getShareAll
 import com.wsr.shopping_friend.preference.getToolbarTextTheme
 import com.wsr.shopping_friend.share.renameTitle
 import com.wsr.shopping_friend.share.setHelp
-import com.wsr.shopping_friend.view_model.AppViewModel
-import com.wsr.shopping_friend.view_model.EditViewModel
+import com.wsr.shopping_friend.share.view_model.AppViewModel
+import com.wsr.shopping_friend.share.view_model.EditViewModel
 import kotlinx.coroutines.*
 import java.util.*
 
@@ -67,9 +68,6 @@ class ContentsFragment : Fragment() {
 
         //ShowTitleFragmentから受け取った、表示するタイトル名を代入
         title = args.content
-
-        //Toolbarの設定
-        setToolbar()
 
         //UNDO用のsnackBarの設定
         snackBar = setSnackBar()
@@ -137,7 +135,10 @@ class ContentsFragment : Fragment() {
     //設定から戻ったときに結果を反映するための処理
     override fun onResume() {
         super.onResume()
+
+        //それぞれの再生成
         contentsAdapter.notifyDataSetChanged()
+        setToolbar()
     }
 
     //fragmentが止まったときに行う処理
@@ -284,9 +285,10 @@ class ContentsFragment : Fragment() {
 
     //Toolbarの設定
     private fun setToolbar(){
-
-        //toolbarのテーマカラーを設定する処理
         binding.contentsToolbar.also{
+
+            //toolbarのメニューを削除
+            it.menu.clear()
 
             //設定された値の読み取り
             when(getToolbarTextTheme(requireContext())){
@@ -296,6 +298,7 @@ class ContentsFragment : Fragment() {
                     it.setNavigationIcon(R.drawable.ic_back_arrow_white)
                 }
                 else -> {
+                    it.setTitleTextColor(Color.BLACK)
                     it.inflateMenu(R.menu.show_menu)
                     it.setNavigationIcon(R.drawable.ic_back_arrow)
                 }
@@ -331,9 +334,11 @@ class ContentsFragment : Fragment() {
                         shareText()
                     }
 
-                    //リロード処理
-                    R.id.reload -> {
-                        contentsAdapter.notifyDataSetChanged()
+                    //設定画面
+                    R.id.settings -> {
+                        val intent = Intent(requireActivity(), ShowPreference::class.java)
+                        intent.putExtra("Purpose", "settings")
+                        startActivity(intent)
                     }
 
                     //タイトル表示画面に戻る処理

@@ -6,7 +6,7 @@ import android.view.inputmethod.EditorInfo
 import androidx.recyclerview.widget.RecyclerView
 import com.wsr.shopping_friend.databinding.ChecklistColumnBinding
 import com.wsr.shopping_friend.preference.getTextSize
-import com.wsr.shopping_friend.view_model.EditViewModel
+import com.wsr.shopping_friend.share.view_model.EditViewModel
 
 //リストの内容を見せるRecyclerViewのためのアダプター
 class ContentsAdapter(

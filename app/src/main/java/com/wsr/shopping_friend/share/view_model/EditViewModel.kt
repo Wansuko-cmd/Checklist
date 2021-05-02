@@ -1,4 +1,4 @@
-package com.wsr.shopping_friend.view_model
+package com.wsr.shopping_friend.share.view_model
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData

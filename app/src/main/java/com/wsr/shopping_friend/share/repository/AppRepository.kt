@@ -1,4 +1,4 @@
-package com.wsr.shopping_friend.repository
+package com.wsr.shopping_friend.share.repository
 
 import androidx.lifecycle.LiveData
 import com.wsr.shopping_friend.database.InfoList

@@ -3,7 +3,7 @@ package com.wsr.shopping_friend.share
 import android.content.Context
 import com.wsr.shopping_friend.R
 import com.wsr.shopping_friend.database.InfoList
-import com.wsr.shopping_friend.view_model.EditViewModel
+import com.wsr.shopping_friend.share.view_model.EditViewModel
 import java.util.*
 
 //ヘルプ画面を用意するための関数

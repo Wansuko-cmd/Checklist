@@ -5,8 +5,8 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.wsr.shopping_friend.database.InfoList
-import com.wsr.shopping_friend.view_model.AppViewModel
-import com.wsr.shopping_friend.view_model.EditViewModel
+import com.wsr.shopping_friend.share.view_model.AppViewModel
+import com.wsr.shopping_friend.share.view_model.EditViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch

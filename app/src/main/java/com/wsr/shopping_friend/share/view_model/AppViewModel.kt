@@ -1,11 +1,11 @@
-package com.wsr.shopping_friend.view_model
+package com.wsr.shopping_friend.share.view_model
 
 import android.app.Application
 import androidx.lifecycle.*
 import com.wsr.shopping_friend.database.InfoList
 import com.wsr.shopping_friend.database.InfoListDao
 import com.wsr.shopping_friend.database.InfoListDatabase
-import com.wsr.shopping_friend.repository.AppRepository
+import com.wsr.shopping_friend.share.repository.AppRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 

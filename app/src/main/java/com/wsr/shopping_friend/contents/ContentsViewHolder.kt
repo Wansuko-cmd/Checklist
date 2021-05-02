@@ -3,7 +3,7 @@ package com.wsr.shopping_friend.contents
 import android.graphics.Color
 import androidx.recyclerview.widget.RecyclerView
 import com.wsr.shopping_friend.databinding.ChecklistColumnBinding
-import com.wsr.shopping_friend.view_model.EditViewModel
+import com.wsr.shopping_friend.share.view_model.EditViewModel
 
 //ListAdapterのためのホルダー
 class ContentsViewHolder(private val binding: ChecklistColumnBinding): RecyclerView.ViewHolder(binding.root) {
