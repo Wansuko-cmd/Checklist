@@ -64,8 +64,8 @@ class ContentsItemTouchHelper(
         ) {
 
             //どこからどこへと移動したのかを代入
-            val fromPosition = viewHolder.adapterPosition
-            val toPosition = target.adapterPosition
+            val fromPosition = viewHolder.bindingAdapterPosition
+            val toPosition = target.bindingAdapterPosition
 
             //移動した要素の、並び順を入れ替える処理
             val fromValue = listForMoving[fromPosition]
@@ -85,7 +85,7 @@ class ContentsItemTouchHelper(
         val listForSwipe = editViewModel.list
 
         //削除する要素のindexを代入
-        val index = viewHolder.adapterPosition
+        val index = viewHolder.bindingAdapterPosition
 
         //データから要素を削除して、一時保存する変数に代入する処理
         listForSwipe.removeAt(index).let {
