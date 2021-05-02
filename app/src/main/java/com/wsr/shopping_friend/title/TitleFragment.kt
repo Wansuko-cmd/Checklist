@@ -15,7 +15,7 @@ import com.wsr.shopping_friend.databinding.FragmentShowTitleBinding
 import com.wsr.shopping_friend.preference.ShowPreference
 import com.wsr.shopping_friend.preference.getToolbarTextTheme
 import com.wsr.shopping_friend.share.renameTitle
-import com.wsr.shopping_friend.share.view_model.AppViewModel
+import com.wsr.shopping_friend.view_model.AppViewModel
 import kotlinx.coroutines.runBlocking
 
 //タイトル名を並べるためのFragment
@@ -75,7 +75,7 @@ class TitleFragment : Fragment() {
 
         //fabボタンが押された際の処理
         binding.fab.setOnClickListener {
-            renameTitle(requireContext(), makeShowContents, titleAdapter.titleList, "")
+            renameTitle(requireContext(), makeShowContents, titleAdapter.titleList)
         }
     }
 

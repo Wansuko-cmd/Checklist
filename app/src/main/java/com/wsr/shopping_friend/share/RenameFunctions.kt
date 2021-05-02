@@ -7,15 +7,21 @@ import com.wsr.shopping_friend.R
 import com.wsr.shopping_friend.preference.getDefaultTitle
 
 //タイトル名を変更する際に呼び出される関数
-fun renameTitle(context: Context, function: (String) -> Unit, titleList: List<String>, setTitle: String){
+fun renameTitle(
+    context: Context,
+    function: (String) -> Unit,
+    titleList: List<String>,
+    setTitle: String = ""
+){
 
     //設定されているデフォルトタイトルの取得
     val defaultTitle = getDefaultTitle(context)
 
     //ダイアログの入力部分を担当するEditTextの設定
-    val editText = EditText(context)
-    editText.setHint(R.string.edit_title_hint)
-    editText.setText(setTitle)
+    val editText = EditText(context).apply{
+        setHint(R.string.edit_title_hint)
+        setText(setTitle)
+    }
 
     //ダイアログの設定
     AlertDialog.Builder(context)

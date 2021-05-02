@@ -1,4 +1,4 @@
-package com.wsr.shopping_friend.share.view_model
+package com.wsr.shopping_friend.view_model
 
 import android.app.Application
 import androidx.lifecycle.*
@@ -16,7 +16,7 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
     private val repository: AppRepository
     var infoList : LiveData<MutableList<InfoList>>
     init{
-        val infoListDao: InfoListDao = InfoListDatabase.getDatabase(application,viewModelScope).infoListDao()
+        val infoListDao: InfoListDao = InfoListDatabase.getDatabase(application).infoListDao()
         repository = AppRepository(infoListDao)
         infoList = repository.infoList
     }

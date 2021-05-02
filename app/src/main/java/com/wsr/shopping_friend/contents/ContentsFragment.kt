@@ -21,8 +21,8 @@ import com.wsr.shopping_friend.preference.getShareAll
 import com.wsr.shopping_friend.preference.getToolbarTextTheme
 import com.wsr.shopping_friend.share.renameTitle
 import com.wsr.shopping_friend.share.setHelp
-import com.wsr.shopping_friend.share.view_model.AppViewModel
-import com.wsr.shopping_friend.share.view_model.EditViewModel
+import com.wsr.shopping_friend.view_model.AppViewModel
+import com.wsr.shopping_friend.view_model.EditViewModel
 import kotlinx.coroutines.*
 import java.util.*
 
@@ -202,7 +202,7 @@ class ContentsFragment : Fragment() {
         binding.contentsToolbar.title = newTitle
 
         //editViewModelのlistの要素が保有するtitleを変更する処理
-        editViewModel.list = editViewModel.list.map { it.copy(title = newTitle) }.toMutableList()
+        editViewModel.changeTitle(newTitle)
     }
 
     //空欄を追加するための処理
@@ -224,7 +224,8 @@ class ContentsFragment : Fragment() {
 
         //新しく追加したカラムのインデックス
         val index = newList
-            .sortedWith(editViewModel.infoListComparator)
+            .sortedBy { it.number }
+            .sortedBy { it.check }
             .indexOfFirst { it.id == id }
 
         //新しい要素までスクロール
@@ -251,11 +252,8 @@ class ContentsFragment : Fragment() {
             .setMessage(R.string.check_out_message)
             .setPositiveButton(R.string.check_out_positive) { _, _ ->
 
-                //削除後にセットするリスト
-                val list = editViewModel.list.filter { !it.check }
-
-                //削除する要素が入ったリスト
-                val deleteList = editViewModel.list.filter { it.check }
+                //削除後にセットするリスト群
+                val (list, deleteList) = editViewModel.list.partition { !it.check }
 
                 //データベース上にある要素の削除
                 runBlocking {
@@ -275,12 +273,12 @@ class ContentsFragment : Fragment() {
 
     //editViewModelの内容をデータベースに反映させる関数
     private fun updateDatabase(){
-        val list: MutableList<InfoList> = editViewModel.list
+        val (list, deleteList) = editViewModel.list.partition { it.item != "" }
 
         //アイテムが空ではない要素をデータベースに更新する処理
         runBlocking {
-            appViewModel.update(list.filter { it.item != "" } as MutableList<InfoList>)
-            appViewModel.deleteList(list.filter { it.item == "" } as MutableList<InfoList>)
+            appViewModel.update(list as MutableList<InfoList>)
+            appViewModel.deleteList(deleteList as MutableList<InfoList>)
         }
     }
 
@@ -373,7 +371,8 @@ class ContentsFragment : Fragment() {
 
                     //adapterに要素を入れたことを通知する
                     contentsAdapter.notifyItemInserted(
-                        list.sortedWith(editViewModel.infoListComparator)
+                        list.sortedBy { it.number }
+                            .sortedBy { it.check }
                             .indexOf(value)
                     )
 

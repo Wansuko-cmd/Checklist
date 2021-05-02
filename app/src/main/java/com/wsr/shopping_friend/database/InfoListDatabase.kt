@@ -17,7 +17,7 @@ abstract class InfoListDatabase : RoomDatabase(){
 
         //データベースのインスタンスを提供する関数
         //インスタンスがなければ形成し、あればそのインスタンスを渡す
-        fun getDatabase(context: Context, scope: CoroutineScope): InfoListDatabase {
+        fun getDatabase(context: Context): InfoListDatabase {
             val tempInstance = INSTANCE
             if (tempInstance != null){
                 return tempInstance

@@ -1,4 +1,4 @@
-package com.wsr.shopping_friend.share.view_model
+package com.wsr.shopping_friend.view_model
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
@@ -20,13 +20,11 @@ class EditViewModel : ViewModel() {
             return (_list.value?.toMutableList() ?: mutableListOf())
         }
         set(value) {
-            _list.postValue(value.sortedWith(infoListComparator).toMutableList())
+            _list.postValue(value.sortedBy { it.number }.sortedBy { it.check }.toMutableList())
         }
 
     //消した要素を一つ保存するための変数（UNDOに使う）
     var deleteValue: InfoList? = null
-
-    val infoListComparator : Comparator<InfoList> = compareBy({ it.number }, { it.check })
 
     //データが条件を満たすまで待機する関数
     suspend fun checkData(checker: (MutableList<InfoList>?) -> Boolean?, function: () -> Unit) {
@@ -58,6 +56,11 @@ class EditViewModel : ViewModel() {
 
     //LiveDataの中身を初期化するための処理
     fun initializeList(list: MutableList<InfoList>){
-        _list.postValue(list.sortedWith(infoListComparator).toMutableList())
+        _list.postValue(list.sortedBy { it.number }.sortedBy { it.check }.toMutableList())
+    }
+
+    //タイトル名を変更するための関数
+    fun changeTitle(newTitle: String){
+        list = list.map { it.copy(title = newTitle) }.toMutableList()
     }
 }

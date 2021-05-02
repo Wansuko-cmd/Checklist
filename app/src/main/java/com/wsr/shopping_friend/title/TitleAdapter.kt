@@ -12,11 +12,11 @@ class TitleAdapter:
     RecyclerView.Adapter<TitleViewHolder>(){
 
     //全てのタイトル名を保存するリスト
-    var titleList = mutableListOf<String>()
+    lateinit var titleList: MutableList<String>
 
     //使用する関数の定義
-    var clickTitleOnListener: (title: String) -> Unit = {}
-    var clickDeleteOnListener: (title: String, position: Int) -> Unit = {_, _ ->}
+    lateinit var clickTitleOnListener: (title: String) -> Unit
+    lateinit var clickDeleteOnListener: (title: String, position: Int) -> Unit
 
     //ViewHolderのインスタンスを形成
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TitleViewHolder {
@@ -45,7 +45,7 @@ class TitleAdapter:
 
         //deleteボタンを押した際の処理
         holder.delete.setOnClickListener {
-            clickDeleteOnListener(titleList[holder.adapterPosition], holder.adapterPosition)
+            clickDeleteOnListener(titleList[holder.bindingAdapterPosition], holder.bindingAdapterPosition)
         }
     }
 
@@ -65,6 +65,7 @@ class TitleAdapter:
             .filter { it != "" }
             .sorted()
             .toMutableList()
+
         notifyDataSetChanged()
     }
 }

@@ -6,7 +6,7 @@ import android.view.inputmethod.EditorInfo
 import androidx.recyclerview.widget.RecyclerView
 import com.wsr.shopping_friend.databinding.ChecklistColumnBinding
 import com.wsr.shopping_friend.preference.getTextSize
-import com.wsr.shopping_friend.share.view_model.EditViewModel
+import com.wsr.shopping_friend.view_model.EditViewModel
 
 //リストの内容を見せるRecyclerViewのためのアダプター
 class ContentsAdapter(
@@ -18,7 +18,7 @@ class ContentsAdapter(
     var focus = -1
 
     //引数で指定された位置までスクロールする関数
-    var scrollToPosition: (Int) -> Unit = {}
+    lateinit var scrollToPosition: (Int) -> Unit
 
     //ViewHolderのインスタンスを形成
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ContentsViewHolder {
@@ -48,7 +48,8 @@ class ContentsAdapter(
                 //チェックが入る前と入った後のIndexを取得
                 val oldIndex = editViewModel.list.indexOfFirst { it.id == id }
                 val newIndex = editViewModel.list
-                    .sortedWith(editViewModel.infoListComparator)
+                    .sortedBy { it.number }
+                    .sortedBy { it.check }
                     .indexOfFirst { it.id == id }
 
                 //指定の位置まで移動させて、editViewModelのLiveDataを更新する
@@ -71,9 +72,8 @@ class ContentsAdapter(
                     if(
                         i == EditorInfo.IME_ACTION_DONE ||
                         (
-                                i == EditorInfo.IME_ACTION_NEXT &&
-                                editViewModel.list
-                                    .count{ !it.check } == bindingAdapterPosition + 1
+                            i == EditorInfo.IME_ACTION_NEXT &&
+                            editViewModel.list.count{ !it.check } == bindingAdapterPosition + 1
                         )
                     ){
                         contentsFragment.addElement()
