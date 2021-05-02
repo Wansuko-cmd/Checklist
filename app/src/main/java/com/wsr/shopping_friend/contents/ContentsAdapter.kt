@@ -47,7 +47,9 @@ class ContentsAdapter(
 
                 //チェックが入る前と入った後のIndexを取得
                 val oldIndex = editViewModel.list.indexOfFirst { it.id == id }
-                val newIndex = editViewModel.list.sortedBy { it.number }.sortedBy { it.check }.indexOfFirst { it.id == id }
+                val newIndex = editViewModel.list
+                    .sortedWith(editViewModel.infoListComparator)
+                    .indexOfFirst { it.id == id }
 
                 //指定の位置まで移動させて、editViewModelのLiveDataを更新する
                 notifyItemMoved(oldIndex, newIndex)
@@ -68,7 +70,12 @@ class ContentsAdapter(
                 setOnEditorActionListener { _, i, _ ->
                     if(
                         i == EditorInfo.IME_ACTION_DONE ||
-                        (i == EditorInfo.IME_ACTION_NEXT && editViewModel.list.filter { !it.check }.size == adapterPosition + 1)){
+                        (
+                                i == EditorInfo.IME_ACTION_NEXT &&
+                                editViewModel.list
+                                    .count{ !it.check } == bindingAdapterPosition + 1
+                        )
+                    ){
                         contentsFragment.addElement()
                         true
                     }else{
@@ -77,7 +84,7 @@ class ContentsAdapter(
                 }
 
                 //focusで指定された所にFocusを当てる処理
-                if(adapterPosition == focus){
+                if(bindingAdapterPosition == focus){
                     requestFocus()
                 }
             }

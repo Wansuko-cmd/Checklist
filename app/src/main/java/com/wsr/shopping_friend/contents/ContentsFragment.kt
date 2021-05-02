@@ -181,7 +181,9 @@ class ContentsFragment : Fragment() {
             }
 
             //editViewModelのlistを、指定のタイトル名を保有している要素のリストで初期化する処理
-            editViewModel.initializeList(lists.filter { it.item != "" }.filter { it.title == title } as MutableList<InfoList>)
+            editViewModel.initializeList(
+                lists.filter { it.item != "" && it.title == title } as MutableList<InfoList>
+            )
         }
     }
 
@@ -222,8 +224,7 @@ class ContentsFragment : Fragment() {
 
         //新しく追加したカラムのインデックス
         val index = newList
-            .sortedBy { it.number }
-            .sortedBy { it.check }
+            .sortedWith(editViewModel.infoListComparator)
             .indexOfFirst { it.id == id }
 
         //新しい要素までスクロール
@@ -372,8 +373,7 @@ class ContentsFragment : Fragment() {
 
                     //adapterに要素を入れたことを通知する
                     contentsAdapter.notifyItemInserted(
-                        list.sortedBy { it.number }
-                            .sortedBy { it.check }
+                        list.sortedWith(editViewModel.infoListComparator)
                             .indexOf(value)
                     )
 
