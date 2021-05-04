@@ -48,8 +48,7 @@ class ContentsAdapter(
                 //チェックが入る前と入った後のIndexを取得
                 val oldIndex = editViewModel.list.indexOfFirst { it.id == id }
                 val newIndex = editViewModel.list
-                    .sortedBy { it.number }
-                    .sortedBy { it.check }
+                    .sortedWith(editViewModel.infoListComparator)
                     .indexOfFirst { it.id == id }
 
                 //指定の位置まで移動させて、editViewModelのLiveDataを更新する

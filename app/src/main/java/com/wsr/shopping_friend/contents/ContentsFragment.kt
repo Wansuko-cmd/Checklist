@@ -225,8 +225,7 @@ class ContentsFragment : Fragment() {
 
         //新しく追加したカラムのインデックス
         val index = newList
-            .sortedBy { it.number }
-            .sortedBy { it.check }
+            .sortedWith(editViewModel.infoListComparator)
             .indexOfFirst { it.id == id }
 
         //新しい要素までスクロール
@@ -376,8 +375,7 @@ class ContentsFragment : Fragment() {
 
                     //adapterに要素を入れたことを通知する
                     contentsAdapter.notifyItemInserted(
-                        list.sortedBy { it.number }
-                            .sortedBy { it.check }
+                        list.sortedWith(editViewModel.infoListComparator)
                             .indexOf(value)
                     )
 

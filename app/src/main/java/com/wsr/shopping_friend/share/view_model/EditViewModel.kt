@@ -20,8 +20,12 @@ class EditViewModel : ViewModel() {
             return (_list.value?.toMutableList() ?: mutableListOf())
         }
         set(value) {
-            _list.postValue(value.sortedBy { it.number }.sortedBy { it.check }.toMutableList())
+            _list.postValue(value.sortedWith(infoListComparator).toMutableList())
         }
+
+    //infoListを並べる際に用いるコンパレーター
+    //チェックのついているものを先頭にして、その中で番号順に並ぶ
+    val infoListComparator : Comparator<InfoList> = compareBy(InfoList::check, InfoList::number)
 
     //消した要素を一つ保存するための変数（UNDOに使う）
     var deleteValue: InfoList? = null
@@ -56,7 +60,7 @@ class EditViewModel : ViewModel() {
 
     //LiveDataの中身を初期化するための処理
     fun initializeList(list: MutableList<InfoList>){
-        _list.postValue(list.sortedBy { it.number }.sortedBy { it.check }.toMutableList())
+        _list.postValue(list.sortedWith(infoListComparator).toMutableList())
     }
 
     //タイトル名を変更するための関数
