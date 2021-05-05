@@ -17,7 +17,6 @@ import com.google.android.material.snackbar.Snackbar
 import com.wsr.shopping_friend.R
 import com.wsr.shopping_friend.databinding.FragmentShowContentsBinding
 import com.wsr.shopping_friend.database.InfoList
-import com.wsr.shopping_friend.preference.ShowPreference
 import com.wsr.shopping_friend.preference.getShareAll
 import com.wsr.shopping_friend.preference.getToolbarTextTheme
 import com.wsr.shopping_friend.share.renameTitle
@@ -228,20 +227,25 @@ class ContentsFragment : Fragment() {
             .sortedWith(editViewModel.infoListComparator)
             .indexOfFirst { it.id == id }
 
-        //新しい要素までスクロール
-        recyclerView!!.scrollToPosition(index)
-
-        //新しい要素にfocusを当てる
-        contentsAdapter.focus = index
-
-        //adapterに新しい要素が入ったことを通知
-        contentsAdapter.notifyItemInserted(index)
-
-
         //editViewModelのlistとデータベースに、新しい要素を追加
         editViewModel.list = newList
         runBlocking {
             appViewModel.insert(newColumn)
+        }
+
+        //LiveDataの内容が反映されるのを待つ処理
+        GlobalScope.launch(Dispatchers.Main) {
+            editViewModel.checkData({ infoList -> infoList?.any{ it.id == id } }){
+
+                //アイテムの追加を通知
+                contentsAdapter.notifyItemInserted(index)
+
+                //新しい要素までスクロール
+                recyclerView!!.scrollToPosition(index)
+
+                //新しい要素にfocusを当てる
+                contentsAdapter.focus = index
+            }
         }
     }
 
@@ -335,9 +339,10 @@ class ContentsFragment : Fragment() {
 
                     //設定画面
                     R.id.settings -> {
-                        val intent = Intent(requireActivity(), ShowPreference::class.java)
-                        intent.putExtra("Purpose", "settings")
-                        startActivity(intent)
+                        contentsAdapter.notifyDataSetChanged()
+//                        val intent = Intent(requireActivity(), ShowPreference::class.java)
+//                        intent.putExtra("Purpose", "settings")
+//                        startActivity(intent)
                     }
 
                     //タイトル表示画面に戻る処理

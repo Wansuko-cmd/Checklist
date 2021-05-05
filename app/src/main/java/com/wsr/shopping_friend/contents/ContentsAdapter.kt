@@ -15,7 +15,7 @@ class ContentsAdapter(
     ) : RecyclerView.Adapter<ContentsViewHolder>() {
 
     //focusを当てる場所を指定するための変数
-    var focus = -1
+    var focus = 1
 
     //引数で指定された位置までスクロールする関数
     lateinit var scrollToPosition: (Int) -> Unit
