@@ -15,7 +15,7 @@ class ContentsAdapter(
     ) : RecyclerView.Adapter<ContentsViewHolder>() {
 
     //focusを当てる場所を指定するための変数
-    var focus = 1
+    var focus = -1
 
     //引数で指定された位置までスクロールする関数
     lateinit var scrollToPosition: (Int) -> Unit
@@ -45,17 +45,24 @@ class ContentsAdapter(
             //チェックが入ったときに入れ替えたり色を付けたりする処理
             check.setOnClickListener {
 
-                //チェックが入る前と入った後のIndexを取得
-                val oldIndex = editViewModel.list.indexOfFirst { it.id == id }
-                val newIndex = editViewModel.list
-                    .sortedWith(editViewModel.infoListComparator)
+                //editViewModelのlistをコピー
+                val list = editViewModel.list
+
+                //チェックが入る前のIndexを取得
+                val oldIndex = list.indexOfFirst { it.id == id }
+
+                //リストの並び順を整える
+                list.sortWith(editViewModel.infoListComparator)
+
+                //チェックが入った後のIndexを取得
+                val newIndex = list
                     .indexOfFirst { it.id == id }
 
                 //指定の位置まで移動させて、editViewModelのLiveDataを更新する
                 notifyItemMoved(oldIndex, newIndex)
-                editViewModel.list = editViewModel.list
+                editViewModel.list = list
 
-                //色の設定と、スクロールの制限
+                //色の設定と、スクロールの移動の制限
                 setColor(editViewModel, id)
                 scrollToPosition(oldIndex)
             }

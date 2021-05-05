@@ -36,7 +36,11 @@ class ContentsItemTouchHelper(
         super.onSelectedChanged(viewHolder, actionState)
 
         //ドラッグ時の処理
-        if (actionState == ItemTouchHelper.ACTION_STATE_DRAG && viewHolder is ContentsViewHolder) {
+        if (
+            actionState == ItemTouchHelper.ACTION_STATE_DRAG &&
+            viewHolder is ContentsViewHolder &&
+            !viewHolder.check.isChecked
+        ) {
 
             //ドラッグされている要素を赤色にする処理
             viewHolder.view.setBackgroundColor(Color.parseColor("#FFD5EC"))
@@ -57,10 +61,11 @@ class ContentsItemTouchHelper(
     ): Boolean {
 
         //移動させようとしている要素にチェックがついていないかを確認
-        if (viewHolder is ContentsViewHolder
-            && target is ContentsViewHolder
-            && !viewHolder.check.isChecked
-            && !target.check.isChecked
+        if (
+            viewHolder is ContentsViewHolder &&
+            target is ContentsViewHolder &&
+            !viewHolder.check.isChecked &&
+            !target.check.isChecked
         ) {
 
             //どこからどこへと移動したのかを代入
@@ -73,10 +78,10 @@ class ContentsItemTouchHelper(
             listForMoving[toPosition] = fromValue.copy(number = listForMoving[toPosition].number)
 
             //移動したことをadapterに通知
-            showContentsAdapter.notifyItemMoved(toPosition, fromPosition)
+            showContentsAdapter.notifyItemMoved(fromPosition, toPosition)
         }
         return false
-    }//アイコンを入れる
+    }
 
     //スワイプで削除する処理
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {

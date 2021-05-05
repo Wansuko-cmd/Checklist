@@ -126,7 +126,7 @@ class ContentsFragment : Fragment() {
 
         //LiveDataの内容が反映されるのを待つ処理
         GlobalScope.launch(Dispatchers.Main) {
-            editViewModel.checkData({ it != null}){contentsAdapter.notifyDataSetChanged()}
+            editViewModel.checkData({ it != null}){ contentsAdapter.notifyDataSetChanged() }
         }
 
     }
