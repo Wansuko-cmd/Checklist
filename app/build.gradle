@@ -9,14 +9,14 @@ plugins{
 
 android {
     compileSdkVersion 30
-    buildToolsVersion "30.0.1"
+    buildToolsVersion "30.0.2"
 
     defaultConfig {
         applicationId "com.wsr.shopping_friend"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 31
-        versionName "2.1.7"
+        versionCode 32
+        versionName "2.1.8"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         javaCompileOptions {
             annotationProcessorOptions {
