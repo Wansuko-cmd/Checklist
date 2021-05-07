@@ -128,12 +128,6 @@ class ContentsFragment : Fragment() {
 
         //上記のコールバックをrecyclerViewに設定
         itemTouchHelperCallback.attachToRecyclerView(recyclerView)
-
-        //LiveDataの内容が反映されるのを待つ処理
-//        GlobalScope.launch(Dispatchers.Main) {
-//            editViewModel.checkData({ it != null}){ contentsAdapter.notifyDataSetChanged() }
-//        }
-
     }
 
     //設定から戻ったときに結果を反映するための処理

@@ -6,9 +6,7 @@ import com.wsr.shopping_friend.database.InfoList
 import com.wsr.shopping_friend.database.InfoListDao
 import com.wsr.shopping_friend.database.InfoListDatabase
 import com.wsr.shopping_friend.share.repository.AppRepository
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 //データベースとやり取りするためのViewModel
 class AppViewModel(application: Application) : AndroidViewModel(application) {

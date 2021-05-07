@@ -1,14 +1,10 @@
 package com.wsr.shopping_friend.share.view_model
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.wsr.shopping_friend.database.InfoList
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
-import kotlinx.coroutines.withTimeout
-import java.lang.Exception
 
 //リストのデータを、並び順とかを加工して保存するためのViewModel
 class EditViewModel : ViewModel() {
