@@ -4,7 +4,9 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.wsr.shopping_friend.database.InfoList
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeout
 import java.lang.Exception
 
@@ -59,7 +61,7 @@ class EditViewModel : ViewModel() {
     }
 
     //LiveDataの中身を初期化するための処理
-    fun initializeList(list: MutableList<InfoList>){
+    suspend fun initializeList(list: MutableList<InfoList>) = withContext(Dispatchers.IO){
         _list.postValue(list.sortedWith(infoListComparator).toMutableList())
     }
 

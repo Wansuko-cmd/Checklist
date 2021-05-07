@@ -8,6 +8,7 @@ import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -79,7 +80,12 @@ class ContentsFragment : Fragment() {
 
             //editViewModelにLiveDataで流れてきた値を入れる処理
             infoList.observe(viewLifecycleOwner, { list ->
-                list?.let { setInfoList(it) }
+                list?.let {
+                    lifecycleScope.launch{
+                        setInfoList(it)
+                        contentsAdapter.notifyDataSetChanged()
+                    }
+                }
             })
         }
 
@@ -102,7 +108,7 @@ class ContentsFragment : Fragment() {
         }
 
         //recyclerViewの初期化
-        this.recyclerView = binding.showContentsRecyclerView.apply{
+        this.recyclerView = binding.showContentsRecyclerView.apply {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(context)
             adapter = contentsAdapter
@@ -112,22 +118,29 @@ class ContentsFragment : Fragment() {
         binding.apply {
 
             //要素を追加するボタンの設定
-            addButton.setOnClickListener{ addElement() }
+            addButton.setOnClickListener { addElement() }
 
             //チェックのついた要素をすべて削除するボタンの設定
             deleteCheckButton.setOnClickListener { deleteElements() }
         }
 
         //スワイプでアイテムを消したり動かしたりするための処理
-        val itemTouchHelperCallback = ItemTouchHelper(ContentsItemTouchHelper(appViewModel, editViewModel, contentsAdapter, snackBar))
+        val itemTouchHelperCallback = ItemTouchHelper(
+            ContentsItemTouchHelper(
+                appViewModel,
+                editViewModel,
+                contentsAdapter,
+                snackBar
+            )
+        )
 
         //上記のコールバックをrecyclerViewに設定
         itemTouchHelperCallback.attachToRecyclerView(recyclerView)
 
-        //LiveDataの内容が反映されるのを待つ処理
-        GlobalScope.launch(Dispatchers.Main) {
-            editViewModel.checkData({ it != null}){ contentsAdapter.notifyDataSetChanged() }
-        }
+//        //LiveDataの内容が反映されるのを待つ処理
+//        GlobalScope.launch(Dispatchers.Main) {
+//            editViewModel.checkData({ it != null }) { contentsAdapter.notifyDataSetChanged() }
+//        }
 
     }
 
@@ -156,7 +169,7 @@ class ContentsFragment : Fragment() {
     }
 
     //LiveDataの内容を反映させる関数
-    private fun setInfoList(lists: MutableList<InfoList>) {
+    private suspend fun setInfoList(lists: MutableList<InfoList>) {
 
         /*登録されている要素の中で以下の要素のみを抽出してタイトル名を保存するリストに代入
         *
@@ -172,13 +185,13 @@ class ContentsFragment : Fragment() {
             .sorted()
             .toMutableList()
 
-        if (editViewModel.list == emptyList<InfoList>()){
+        if (editViewModel.list == emptyList<InfoList>()) {
 
             //アイテムが空欄の要素が含まれていた時に削除する処理
-            val deleteList: MutableList<InfoList> = lists.filter { it.item == "" } as MutableList<InfoList>
-            runBlocking {
-                appViewModel.deleteList(deleteList)
-            }
+            val deleteList: MutableList<InfoList> =
+                lists.filter { it.item == "" } as MutableList<InfoList>
+
+            appViewModel.deleteList(deleteList)
 
             //editViewModelのlistを、指定のタイトル名を保有している要素のリストで初期化する処理
             editViewModel.initializeList(
