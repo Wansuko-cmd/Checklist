@@ -22,7 +22,7 @@ class AppRepository(private val infoListDao: InfoListDao) {
     }
 
     //タイトルを変更するための関数
-    fun changeTitle(oldTitle: String, newTitle: String){
+    suspend fun changeTitle(oldTitle: String, newTitle: String){
         infoListDao.changeTitle(oldTitle, newTitle)
     }
 

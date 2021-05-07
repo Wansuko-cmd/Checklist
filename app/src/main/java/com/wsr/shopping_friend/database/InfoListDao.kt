@@ -20,7 +20,7 @@ interface InfoListDao {
 
     //タイトルのみを変更するための関数
     @Query("UPDATE info_list_table SET 'title' = :newTitle WHERE title = :oldTitle")
-    fun changeTitle(oldTitle: String, newTitle: String)
+    suspend fun changeTitle(oldTitle: String, newTitle: String)
 
     //特定の要素を削除する関数
     @Delete
