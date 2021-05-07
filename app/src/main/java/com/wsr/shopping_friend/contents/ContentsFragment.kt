@@ -8,6 +8,7 @@ import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -79,7 +80,11 @@ class ContentsFragment : Fragment() {
 
             //editViewModelにLiveDataで流れてきた値を入れる処理
             infoList.observe(viewLifecycleOwner, { list ->
-                list?.let { setInfoList(it) }
+                list?.let {
+                    lifecycleScope.launch{
+                        initInfoList(it)
+                    }
+                }
             })
         }
 
@@ -125,9 +130,9 @@ class ContentsFragment : Fragment() {
         itemTouchHelperCallback.attachToRecyclerView(recyclerView)
 
         //LiveDataの内容が反映されるのを待つ処理
-        GlobalScope.launch(Dispatchers.Main) {
-            editViewModel.checkData({ it != null}){ contentsAdapter.notifyDataSetChanged() }
-        }
+//        GlobalScope.launch(Dispatchers.Main) {
+//            editViewModel.checkData({ it != null}){ contentsAdapter.notifyDataSetChanged() }
+//        }
 
     }
 
@@ -156,7 +161,7 @@ class ContentsFragment : Fragment() {
     }
 
     //LiveDataの内容を反映させる関数
-    private fun setInfoList(lists: MutableList<InfoList>) {
+    private suspend fun initInfoList(lists: MutableList<InfoList>) {
 
         /*登録されている要素の中で以下の要素のみを抽出してタイトル名を保存するリストに代入
         *
@@ -172,18 +177,23 @@ class ContentsFragment : Fragment() {
             .sorted()
             .toMutableList()
 
-        if (editViewModel.list == emptyList<InfoList>()){
+        if (editViewModel.list == emptyList<InfoList>()) {
 
             //アイテムが空欄の要素が含まれていた時に削除する処理
-            val deleteList: MutableList<InfoList> = lists.filter { it.item == "" } as MutableList<InfoList>
-            runBlocking {
-                appViewModel.deleteList(deleteList)
-            }
+            val deleteList: MutableList<InfoList> =
+                lists.filter { it.item == "" } as MutableList<InfoList>
+
+            appViewModel.deleteList(deleteList)
 
             //editViewModelのlistを、指定のタイトル名を保有している要素のリストで初期化する処理
-            editViewModel.initializeList(
-                lists.filter { it.item != "" && it.title == title } as MutableList<InfoList>
-            )
+            val setList = editViewModel.setList(
+                lists.filter { it.item != "" && it.title == title } as MutableList<InfoList>)
+
+            //上記の処理をしてから、実際に反映されるまで微妙にずれがあるので、反映されるまで待つ処理
+            while(editViewModel.list != setList){
+                delay(1L)
+            }
+            contentsAdapter.notifyDataSetChanged()
         }
     }
 
@@ -227,26 +237,22 @@ class ContentsFragment : Fragment() {
             .sortedWith(editViewModel.infoListComparator)
             .indexOfFirst { it.id == id }
 
-        //editViewModelのlistとデータベースに、新しい要素を追加
-        editViewModel.list = newList
-        runBlocking {
+        lifecycleScope.launch {
+            //DBに新しい要素を追加
             appViewModel.insert(newColumn)
+
+            //editViewModelのlistとデータベースに、新しい要素を追加
+            editViewModel.setList(newList)
+
+            //アイテムの追加を通知
+            contentsAdapter.notifyItemInserted(index)
         }
 
-        //LiveDataの内容が反映されるのを待つ処理
-        GlobalScope.launch(Dispatchers.Main) {
-            editViewModel.checkData({ infoList -> infoList?.any{ it.id == id } }){
+        //新しい要素までスクロール
+        recyclerView!!.scrollToPosition(index)
 
-                //アイテムの追加を通知
-                contentsAdapter.notifyItemInserted(index)
-
-                //新しい要素までスクロール
-                recyclerView!!.scrollToPosition(index)
-
-                //新しい要素にfocusを当てる
-                contentsAdapter.focus = index
-            }
-        }
+        //新しい要素にfocusを当てる
+        contentsAdapter.focus = index
     }
 
     //チェックのついている要素を全て消す処理
@@ -259,15 +265,13 @@ class ContentsFragment : Fragment() {
                 //削除後にセットするリスト群
                 val (list, deleteList) = editViewModel.list.partition { !it.check }
 
-                //データベース上にある要素の削除
-                runBlocking {
-                    appViewModel.deleteList(deleteList as MutableList<InfoList>)
-                }
+                lifecycleScope.launch {
 
-                //editViewModelのlistに、削除後のリストを反映
-                editViewModel.list = (list as MutableList<InfoList>)
-                GlobalScope.launch(Dispatchers.Main) {
-                    editViewModel.checkData({ list -> list?.none { it.check } }){ contentsAdapter.notifyDataSetChanged() }
+                    //データの削除をそれぞれのViewModelに伝達
+                    appViewModel.deleteList(deleteList as MutableList<InfoList>)
+                    editViewModel.setList(list as MutableList<InfoList>)
+
+                    contentsAdapter.notifyDataSetChanged()
                 }
             }
             .setNegativeButton(R.string.check_out_negative, null)

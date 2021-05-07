@@ -4,7 +4,9 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.wsr.shopping_friend.database.InfoList
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeout
 import java.lang.Exception
 
@@ -30,37 +32,13 @@ class EditViewModel : ViewModel() {
     //消した要素を一つ保存するための変数（UNDOに使う）
     var deleteValue: InfoList? = null
 
-    //データが条件を満たすまで待機する関数
-    suspend fun checkData(checker: (MutableList<InfoList>?) -> Boolean?, function: () -> Unit) {
-        try {
-            Log.i("ok", "I'll get the title...")
-
-            //一秒間の間繰り返す
-            withTimeout(1000) {
-                while (true) {
-
-                    //渡された関数の要件を満たせば抜ける
-                    if (checker(_list.value) == true) break
-
-                    //Logを出して0.1秒待つ
-                    Log.i("I wait for", "getting title...")
-                    delay(100)
-                }
-            }
-        } catch (e: Exception) {
-
-            //失敗時のログの出力
-            Log.e("I missed getting title", "error: $e")
-        } finally {
-
-            //渡された関数の実行
-            function()
+    //コルーチンを用いてLiveDataに値を設定するための処理
+    suspend fun setList(list: MutableList<InfoList>): MutableList<InfoList>{
+        val setList = list.sortedWith(infoListComparator).toMutableList()
+        withContext(Dispatchers.IO) {
+            _list.postValue(setList)
         }
-    }
-
-    //LiveDataの中身を初期化するための処理
-    fun initializeList(list: MutableList<InfoList>){
-        _list.postValue(list.sortedWith(infoListComparator).toMutableList())
+        return setList
     }
 
     //タイトル名を変更するための関数
