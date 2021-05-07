@@ -83,7 +83,6 @@ class ContentsFragment : Fragment() {
                 list?.let {
                     lifecycleScope.launch{
                         initInfoList(it)
-                        contentsAdapter.notifyDataSetChanged()
                     }
                 }
             })
@@ -187,9 +186,14 @@ class ContentsFragment : Fragment() {
             appViewModel.deleteList(deleteList)
 
             //editViewModelのlistを、指定のタイトル名を保有している要素のリストで初期化する処理
-            editViewModel.setLists(
-                lists.filter { it.item != "" && it.title == title } as MutableList<InfoList>
-            )
+            val setList = editViewModel.setList(
+                lists.filter { it.item != "" && it.title == title } as MutableList<InfoList>)
+
+            //上記の処理をしてから、実際に反映されるまで微妙にずれがあるので、反映されるまで待つ処理
+            while(editViewModel.list != setList){
+                delay(1L)
+            }
+            contentsAdapter.notifyDataSetChanged()
         }
     }
 
@@ -234,10 +238,11 @@ class ContentsFragment : Fragment() {
             .indexOfFirst { it.id == id }
 
         lifecycleScope.launch {
+            //DBに新しい要素を追加
             appViewModel.insert(newColumn)
 
             //editViewModelのlistとデータベースに、新しい要素を追加
-            editViewModel.setLists(newList)
+            editViewModel.setList(newList)
 
             //アイテムの追加を通知
             contentsAdapter.notifyItemInserted(index)
@@ -264,7 +269,7 @@ class ContentsFragment : Fragment() {
 
                     //データの削除をそれぞれのViewModelに伝達
                     appViewModel.deleteList(deleteList as MutableList<InfoList>)
-                    editViewModel.setLists(list as MutableList<InfoList>)
+                    editViewModel.setList(list as MutableList<InfoList>)
 
                     contentsAdapter.notifyDataSetChanged()
                 }

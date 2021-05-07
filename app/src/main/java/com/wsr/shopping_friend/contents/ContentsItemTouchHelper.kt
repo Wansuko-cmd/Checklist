@@ -47,7 +47,6 @@ class ContentsItemTouchHelper(
                 //ドラッグされている要素を赤色にする処理
                 viewHolder.view.setBackgroundColor(Color.parseColor("#FFD5EC"))
 
-
                 //処理の内容がドラッグだったことをclearViewに伝える為にtrueを代入
                 dragChecker = true
             }
@@ -93,12 +92,13 @@ class ContentsItemTouchHelper(
         tempList.removeAt(index).let {
             editViewModel.deleteValue = it
             runBlocking {
-                appViewModel.delete(it)
 
+                //それぞれのViewModelに変更を通達
+                appViewModel.delete(it)
+                editViewModel.setList(tempList)
             }
         }
 
-        editViewModel.list = tempList
         //削除したことをadapterに通知
         contentsAdapter.notifyItemRemoved(index)
 
@@ -121,17 +121,21 @@ class ContentsItemTouchHelper(
             }
         }
 
-//        //editViewModelのlistに、変更点を代入。
-//        if (dragChecker) {
-//            GlobalScope.launch(Dispatchers.Main) {
-//
-//                editViewModel.setLists(tempList)
-//                contentsAdapter.notifyDataSetChanged()
-//
-//                //チェッカーを元に戻す
-//                dragChecker = false
-//            }
-//        }
+        if (dragChecker) {
+
+            //runBlockingでは不可
+            GlobalScope.launch(Dispatchers.Main) {
+
+                //editViewModelのリストに変更を通知
+                editViewModel.setList(tempList)
+
+                //Adapterに変更を通知
+                contentsAdapter.notifyDataSetChanged()
+
+                //チェッカーを元に戻す
+                dragChecker = false
+            }
+        }
 
 
         super.clearView(recyclerView, viewHolder)
