@@ -18,6 +18,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.wsr.shopping_friend.R
 import com.wsr.shopping_friend.databinding.FragmentShowContentsBinding
 import com.wsr.shopping_friend.database.InfoList
+import com.wsr.shopping_friend.preference.ShowPreference
 import com.wsr.shopping_friend.preference.getShareAll
 import com.wsr.shopping_friend.preference.getToolbarTextTheme
 import com.wsr.shopping_friend.share.renameTitle
@@ -337,10 +338,10 @@ class ContentsFragment : Fragment() {
 
                     //設定画面
                     R.id.settings -> {
-                        contentsAdapter.notifyDataSetChanged()
-//                        val intent = Intent(requireActivity(), ShowPreference::class.java)
-//                        intent.putExtra("Purpose", "settings")
-//                        startActivity(intent)
+//                        contentsAdapter.notifyDataSetChanged()
+                        val intent = Intent(requireActivity(), ShowPreference::class.java)
+                        intent.putExtra("Purpose", "settings")
+                        startActivity(intent)
                     }
 
                     //タイトル表示画面に戻る処理
@@ -400,27 +401,22 @@ class ContentsFragment : Fragment() {
     //設定、ヘルプ画面に画面遷移するための処理
     private fun shareText() {
 
-        //共有するテキストを代入する変数
-        var text = ""
-
         //要素の先頭につける文字の設定
         val listTop: String = requireActivity().getString(R.string.list_top)
 
         //共有方法の設定を読み取る
         val setting = getShareAll(requireContext())
 
-        //textに共有するテキストを代入
-        for (i in editViewModel.list){
-            if(!i.check || !setting){
-                text += "${listTop}${i.item}\n"
-            }
-        }
+        //共有する内容を選択
+        val items = editViewModel.list
+            .filter { (!it.check or !setting) and it.item.isNotBlank() }
+
 
         //共有できる要素が存在する場合の処理
-        if(text.length >= 2){
+        if( items.isNotEmpty() ){
 
-            //最後の改行文字の削除
-            text = text.dropLast(1)
+            //共有する文章の作成
+            val text = items.joinToString(prefix = listTop, separator = "\n${listTop}") { it.item }
 
             //ユーザの指定したアプリへのintentの処理
             val intent = Intent().apply {
