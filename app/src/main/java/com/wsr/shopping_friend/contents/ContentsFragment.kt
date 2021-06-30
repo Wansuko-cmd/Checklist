@@ -125,7 +125,13 @@ class ContentsFragment : Fragment() {
         }
 
         //スワイプでアイテムを消したり動かしたりするための処理
-        val itemTouchHelperCallback = ItemTouchHelper(ContentsItemTouchHelper(appViewModel, editViewModel, contentsAdapter, snackBar))
+        val itemTouchHelperCallback = ItemTouchHelper(ContentsItemTouchHelper(
+            appViewModel,
+            editViewModel,
+            contentsAdapter,
+            snackBar,
+            lifecycleScope
+        ))
 
         //上記のコールバックをrecyclerViewに設定
         itemTouchHelperCallback.attachToRecyclerView(recyclerView)
@@ -167,8 +173,8 @@ class ContentsFragment : Fragment() {
         titleList = lists
             .asSequence()
             .map { it.title }
-            .distinct()
             .filter { it != "" }
+            .distinct()
             .sorted()
             .toMutableList()
 
@@ -196,9 +202,7 @@ class ContentsFragment : Fragment() {
     private val changeTitle: (String) -> Unit = { newTitle ->
 
         //データベースに反映
-        runBlocking {
-            appViewModel.changeTitle(title, newTitle)
-        }
+        appViewModel.changeTitle(title, newTitle)
 
         //このFragmentのインスタンスの保有するタイトル名を最新のものに変更
         title = newTitle
@@ -232,7 +236,9 @@ class ContentsFragment : Fragment() {
             .sortedWith(editViewModel.infoListComparator)
             .indexOfFirst { it.id == id }
 
-        lifecycleScope.launch {
+        //このコルーチンの処理が終わるまで待つ必要あり
+        runBlocking {
+
             //DBに新しい要素を追加
             appViewModel.insert(newColumn)
 
@@ -279,10 +285,8 @@ class ContentsFragment : Fragment() {
         val (list, deleteList) = editViewModel.list.partition { it.item != "" }
 
         //アイテムが空ではない要素をデータベースに更新する処理
-        runBlocking {
-            appViewModel.update(list as MutableList<InfoList>)
-            appViewModel.deleteList(deleteList as MutableList<InfoList>)
-        }
+        appViewModel.update(list as MutableList<InfoList>)
+        appViewModel.deleteList(deleteList as MutableList<InfoList>)
     }
 
     //Toolbarの設定
@@ -384,9 +388,7 @@ class ContentsFragment : Fragment() {
                     )
 
                     //データベースに要素を入れる
-                    runBlocking {
-                        appViewModel.insert(value)
-                    }
+                    appViewModel.insert(value)
                 }
 
                 //無事に要素を戻したことを伝えるsnackBarの設定
@@ -409,7 +411,7 @@ class ContentsFragment : Fragment() {
 
         //共有する内容を選択
         val items = editViewModel.list
-            .filter { (!it.check or !setting) and it.item.isNotBlank() }
+            .filter { (!it.check or !setting) && it.item.isNotBlank() }
 
 
         //共有できる要素が存在する場合の処理

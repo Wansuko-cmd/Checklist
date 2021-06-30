@@ -14,7 +14,8 @@ class ContentsItemTouchHelper(
     private val appViewModel: AppViewModel,
     private val editViewModel: EditViewModel,
     private val contentsAdapter: ContentsAdapter,
-    private val snackBar: Snackbar
+    private val snackBar: Snackbar,
+    private val lifecycleScope: CoroutineScope
 ) : ItemTouchHelper.SimpleCallback(
         ItemTouchHelper.UP or ItemTouchHelper.DOWN,
         ItemTouchHelper.LEFT
@@ -72,13 +73,19 @@ class ContentsItemTouchHelper(
             val fromPosition = viewHolder.bindingAdapterPosition
             val toPosition = target.bindingAdapterPosition
 
-            //移動した要素の、並び順を入れ替える処理
-            val fromValue = tempList[fromPosition]
-            tempList[fromPosition] = tempList[toPosition].copy(number = fromValue.number)
-            tempList[toPosition] = fromValue.copy(number = tempList[toPosition].number)
+            if(fromPosition != toPosition){
+                //移動した要素の、並び順を入れ替える処理
+                val fromValue = tempList[fromPosition]
 
-            //移動したことをadapterに通知
-            contentsAdapter.notifyItemMoved(fromPosition, toPosition)
+                tempList[fromPosition] = tempList[toPosition].copy(number = fromValue.number)
+                tempList[toPosition] = fromValue.copy(number = tempList[toPosition].number)
+
+                //移動したことをadapterに通知
+                contentsAdapter.notifyItemMoved(fromPosition, toPosition)
+
+            }
+
+
         }
         return false
     }
@@ -91,8 +98,9 @@ class ContentsItemTouchHelper(
 
         tempList.removeAt(index).let {
             editViewModel.deleteValue = it
-            runBlocking {
 
+            //処理を待つ必要あり
+            runBlocking {
                 //それぞれのViewModelに変更を通達
                 appViewModel.delete(it)
                 editViewModel.setList(tempList)
@@ -123,8 +131,7 @@ class ContentsItemTouchHelper(
 
         if (dragChecker) {
 
-            //runBlockingでは不可
-            GlobalScope.launch(Dispatchers.Main) {
+            lifecycleScope.launch {
 
                 //editViewModelのリストに変更を通知
                 editViewModel.setList(tempList)

@@ -113,9 +113,7 @@ class TitleFragment : Fragment() {
                 titleAdapter.notifyItemRemoved(position)
 
                 //データベースからリストを削除
-                runBlocking {
-                    appViewModel.deleteWithTitle(title)
-                }
+                appViewModel.deleteWithTitle(title)
             }
             .setNegativeButton(R.string.delete_with_title_negative, null)
             .setCancelable(true)

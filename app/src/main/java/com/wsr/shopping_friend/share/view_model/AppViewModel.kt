@@ -21,32 +21,32 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     //データを一つずつ挿入するための関数
-    suspend fun insert(infoList: InfoList) = viewModelScope.launch{
+    fun insert(infoList: InfoList) = viewModelScope.launch{
         repository.insert(infoList)
     }
 
     //データをアップデートするための関数　ただ今保留
-    suspend fun update(infoList: MutableList<InfoList>) = viewModelScope.launch{
+    fun update(infoList: MutableList<InfoList>) = viewModelScope.launch{
         repository.update(infoList)
     }
 
     //タイトルのみを変更するための関数
-    suspend fun changeTitle(oldTitle: String, newTitle: String) = viewModelScope.launch{
+    fun changeTitle(oldTitle: String, newTitle: String) = viewModelScope.launch{
         repository.changeTitle(oldTitle, newTitle)
     }
 
     //特定の要素を削除する関数
-    suspend fun delete(infoList: InfoList) = viewModelScope.launch{
+    fun delete(infoList: InfoList) = viewModelScope.launch{
         repository.delete(infoList)
     }
 
     //リストに記載されている要素を削除する関数
-    suspend fun deleteList(infoList: MutableList<InfoList>) = viewModelScope.launch{
+    fun deleteList(infoList: MutableList<InfoList>) = viewModelScope.launch{
         repository.deleteList(infoList)
     }
 
     //タイトル名が一致するものをすべて消すための関数
-    suspend fun deleteWithTitle(title: String) = viewModelScope.launch{
+    fun deleteWithTitle(title: String) = viewModelScope.launch{
         repository.deleteWithTitle(title)
     }
 }

@@ -29,12 +29,10 @@ class EditViewModel : ViewModel() {
     var deleteValue: InfoList? = null
 
     //コルーチンを用いてLiveDataに値を設定するための処理
-    suspend fun setList(list: MutableList<InfoList>): MutableList<InfoList>{
+    suspend fun setList(list: MutableList<InfoList>): MutableList<InfoList> = withContext(Dispatchers.IO){
         val setList = list.sortedWith(infoListComparator).toMutableList()
-        withContext(Dispatchers.IO) {
-            _list.postValue(setList)
-        }
-        return setList
+        _list.postValue(setList)
+        return@withContext setList
     }
 
     //タイトル名を変更するための関数
